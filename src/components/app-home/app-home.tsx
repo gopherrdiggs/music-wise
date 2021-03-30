@@ -54,7 +54,7 @@ export class AppHome {
     let tempKeyTones = [`${this.selectedToneNatural.name}${this.selectedToneAlteration ? this.selectedToneAlteration.symbol : ''}`];
     let toneIndex = this.tones.findIndex(t => t.name.split(' / ').includes(tempKeyTones[0]));
     let toneNaturalIndex = this.toneNaturals.findIndex(t => t.name === this.selectedToneNatural.name);
-    console.log('Tone Index', toneIndex);
+    
     for (let i = 0; i < toneIntervals.length; i++) {
       toneIndex = await this.moveIndex(toneIndex, this.tones.length - 1, toneIntervals[i] === 'H' ? 1 : 2);
       toneNaturalIndex = await this.moveIndex(toneNaturalIndex, this.toneNaturals.length - 1, 1);
@@ -108,7 +108,7 @@ export class AppHome {
   }
 
   async handleToneNaturalSelected(event: any) {
-    this.selectedToneNatural = this.toneNaturals.find(i => i.id === event.detail.value);
+    this.selectedToneNatural = event.detail.value ? this.toneNaturals.find(i => i.id === event.detail.value) : null;
     await this.updateCombinedKeyName();
     await this.generateKeyTones();
     await this.generateKeyChords();
@@ -152,6 +152,7 @@ export class AppHome {
                   <ion-select style={{ width: '100%' }}
                               disabled={!this.selectedToneNatural}
                               onIonChange={(e)=>this.handleToneAlterationSelected(e)}>
+                    <ion-select-option value=''></ion-select-option>
                     {this.toneAlterations.map(toneAlteration =>
                       <ion-select-option value={toneAlteration.id}>{toneAlteration.symbol} ({toneAlteration.name})</ion-select-option>  
                     )}
