@@ -252,12 +252,12 @@
   --ion-card-background: #1e1e1e;
 }
 
-.wrapper-col {
+.flex-col {
   display: flex;
   flex-direction: column;
 }
 
-.wrapper-row {
+.flex-row {
   display: flex;
   flex-direction: row;
 }
@@ -265,7 +265,6 @@
 .tone-interval-pattern-box {
   flex: 1;
   position: relative;
-  /* border: 1px solid gray; */
   align-items: flex-end;
   justify-content: flex-end;
 }
@@ -280,12 +279,34 @@
 .tone-box {
   flex: 1;
   display: flex;
-  /* border: 1px solid gray; */
   align-items: center;
   justify-content: center;
 }
 
 .tone-box-content {
+  font-size: medium;
+  color: var(--ion-color-primary);
+}
+
+.chords-pattern-box {
+  flex: 1;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+
+.chords-pattern-box-content {
+  color: var(--ion-color-medium);
+}
+
+.chords-box {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chords-box-content {
   font-size: medium;
   color: var(--ion-color-primary);
 }

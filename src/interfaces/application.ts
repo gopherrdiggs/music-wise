@@ -1,7 +1,8 @@
 export interface Scale {
   id: string,
   name: string,
-  toneIntervalPattern: string[]
+  toneIntervalPattern: string[],
+  chordPattern: string[]
 }
 
 export interface Tone {

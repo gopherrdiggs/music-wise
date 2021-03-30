@@ -35,15 +35,16 @@ export class AppHome {
     { id: 'sharp', symbol: '♯', name: 'Sharp' }
   ];
   @State() scales: Scale[] = [
-    { id: 'major', name: 'Major', toneIntervalPattern: ['W','W','H','W','W','W','H'] },
-    { id: 'minor', name: 'Minor', toneIntervalPattern: ['W','H','W','W','H','W','W'] }
+    { id: 'major', name: 'Major', toneIntervalPattern: ['W','W','H','W','W','W','H'], chordPattern: ['I','ii','iii','IV','V','vi','vii°'] },
+    { id: 'minor', name: 'Minor', toneIntervalPattern: ['W','H','W','W','H','W','W'], chordPattern: ['i','ii°','III','iv','v','VI','VII'] }
   ];
 
   @State() selectedToneNatural: Tone;
   @State() selectedToneAlteration: ToneAlteration;
   @State() selectedScale: Scale;
   @State() combinedKeyName: string;
-  @State() keyTones: string[];
+  @State() keyTones: string[] = [];
+  @State() keyChords: string[] = [];
 
   async generateKeyTones() {
 
@@ -61,6 +62,30 @@ export class AppHome {
     }
 
     this.keyTones = tempKeyTones;
+  }
+
+  async generateKeyChords() {
+    
+    if (!this.selectedToneNatural || !this.selectedScale) { return; }
+
+    let chordPattern = this.selectedScale.chordPattern;
+    let tempKeyChords = [];
+
+    for (let i = 0; i < chordPattern.length; i++) {
+      tempKeyChords.push(`${this.keyTones[i]}${this.getChordSuffix(chordPattern[i])}`);
+    }
+
+    this.keyChords = tempKeyChords;
+  }
+
+  getChordSuffix(patternName: string) {
+    if (['i','ii','iii','iv','v','vi','vii'].includes(patternName)) {
+      return 'm';
+    }
+    else if (['ii°','vii°'].includes(patternName)) {
+      return 'dim';
+    }
+    return '';
   }
 
   async moveIndex(index: number, maxIndex: number, numMoves: number) {
@@ -86,18 +111,21 @@ export class AppHome {
     this.selectedToneNatural = this.toneNaturals.find(i => i.id === event.detail.value);
     await this.updateCombinedKeyName();
     await this.generateKeyTones();
+    await this.generateKeyChords();
   }
 
   async handleToneAlterationSelected(event: any) {
     this.selectedToneAlteration = this.toneAlterations.find(i => i.id === event.detail.value);
     await this.updateCombinedKeyName();
     await this.generateKeyTones();
+    await this.generateKeyChords();
   }
 
   async handleScaleSelected(event: any) {
     this.selectedScale = this.scales.find(i => i.id === event.detail.value);
     await this.updateCombinedKeyName();
     await this.generateKeyTones();
+    await this.generateKeyChords();
   }
 
   render() {
@@ -146,8 +174,8 @@ export class AppHome {
         </collapsi-card>
         {this.selectedScale &&
           <collapsi-card cardTitle='Tones / Scale'>
-            <div id='tones-section-wrapper' class='wrapper-col' style={{ marginTop: '20px' }}>
-              <div id='tones-interval-pattern-wrapper' class='wrapper-row'>
+            <div id='tones-section-wrapper' class='flex-col' style={{ marginTop: '20px' }}>
+              <div id='tones-interval-pattern-wrapper' class='flex-row'>
                 {this.selectedScale.toneIntervalPattern.map(toneInterval =>
                   <div class='tone-interval-pattern-box'>
                     <div class='tone-interval-pattern-box-content'>
@@ -157,7 +185,7 @@ export class AppHome {
                 )}
                 <div class='tone-interval-pattern-box'></div>
               </div>
-              <div id='tones-wrapper' class='wrapper-row' style={{ height: '80px' }} >
+              <div id='tones-wrapper' class='flex-row' style={{ height: '80px' }} >
                 {this.keyTones.map(keyTone =>  
                   <div class='tone-box'><div class='tone-box-content'>{keyTone}</div></div>
                 )}
@@ -167,6 +195,22 @@ export class AppHome {
         }
         {this.selectedScale &&
           <collapsi-card cardTitle='Chords'>
+            <div id='chords-section-wrapper' class='flex-col' style={{ marginTop: '20px' }}>
+              <div id='chords-pattern-wrapper' class='flex-row'>
+                {this.selectedScale.chordPattern.map(chordNumeral =>
+                  <div class='chords-pattern-box'>
+                    <div class='chords-pattern-box-content'>
+                      {chordNumeral}
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div id='chords-wrapper' class='flex-row' style={{ height: '80px' }} >
+                {this.keyChords.map(chord =>  
+                  <div class='chords-box'><div class='chords-box-content'>{chord}</div></div>
+                )}
+              </div>
+            </div>
           </collapsi-card>
         }
       </ion-content>
