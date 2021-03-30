@@ -17,6 +17,10 @@ export namespace Components {
     }
     interface AppRoot {
     }
+    interface CollapsiCard {
+        "cardTitle": string;
+        "collapsed": boolean;
+    }
     interface ModalHeaderToolbar {
         "backCallback": Function;
         "headerTitle": string;
@@ -41,6 +45,12 @@ declare global {
         prototype: HTMLAppRootElement;
         new (): HTMLAppRootElement;
     };
+    interface HTMLCollapsiCardElement extends Components.CollapsiCard, HTMLStencilElement {
+    }
+    var HTMLCollapsiCardElement: {
+        prototype: HTMLCollapsiCardElement;
+        new (): HTMLCollapsiCardElement;
+    };
     interface HTMLModalHeaderToolbarElement extends Components.ModalHeaderToolbar, HTMLStencilElement {
     }
     var HTMLModalHeaderToolbarElement: {
@@ -51,6 +61,7 @@ declare global {
         "app-header-toolbar": HTMLAppHeaderToolbarElement;
         "app-home": HTMLAppHomeElement;
         "app-root": HTMLAppRootElement;
+        "collapsi-card": HTMLCollapsiCardElement;
         "modal-header-toolbar": HTMLModalHeaderToolbarElement;
     }
 }
@@ -68,6 +79,10 @@ declare namespace LocalJSX {
     interface AppRoot {
         "onDarkThemeEnabledChanged"?: (event: CustomEvent<any>) => void;
     }
+    interface CollapsiCard {
+        "cardTitle"?: string;
+        "collapsed"?: boolean;
+    }
     interface ModalHeaderToolbar {
         "backCallback"?: Function;
         "headerTitle"?: string;
@@ -76,6 +91,7 @@ declare namespace LocalJSX {
         "app-header-toolbar": AppHeaderToolbar;
         "app-home": AppHome;
         "app-root": AppRoot;
+        "collapsi-card": CollapsiCard;
         "modal-header-toolbar": ModalHeaderToolbar;
     }
 }
@@ -86,6 +102,7 @@ declare module "@stencil/core" {
             "app-header-toolbar": LocalJSX.AppHeaderToolbar & JSXBase.HTMLAttributes<HTMLAppHeaderToolbarElement>;
             "app-home": LocalJSX.AppHome & JSXBase.HTMLAttributes<HTMLAppHomeElement>;
             "app-root": LocalJSX.AppRoot & JSXBase.HTMLAttributes<HTMLAppRootElement>;
+            "collapsi-card": LocalJSX.CollapsiCard & JSXBase.HTMLAttributes<HTMLCollapsiCardElement>;
             "modal-header-toolbar": LocalJSX.ModalHeaderToolbar & JSXBase.HTMLAttributes<HTMLModalHeaderToolbarElement>;
         }
     }

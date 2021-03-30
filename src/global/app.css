@@ -251,3 +251,41 @@
 
   --ion-card-background: #1e1e1e;
 }
+
+.wrapper-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.wrapper-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.tone-interval-pattern-box {
+  flex: 1;
+  position: relative;
+  /* border: 1px solid gray; */
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+.tone-interval-pattern-box-content {
+  color: var(--ion-color-medium);
+  position: absolute;
+  bottom: 0;
+  right: -7px;
+}
+
+.tone-box {
+  flex: 1;
+  display: flex;
+  /* border: 1px solid gray; */
+  align-items: center;
+  justify-content: center;
+}
+
+.tone-box-content {
+  font-size: medium;
+  color: var(--ion-color-primary);
+}

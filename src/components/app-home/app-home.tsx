@@ -1,17 +1,174 @@
-import { Component, h } from '@stencil/core';
+import { Component, h, State } from '@stencil/core';
+import { Scale, Tone, ToneAlteration } from '../../interfaces/application';
 
 @Component({
   tag: 'app-home'
 })
 export class AppHome {
+
+  @State() tones: Tone[] = [
+    { id: 'a',  name: "A / B♭♭ / G♯♯" },
+    { id: 'as', name: "A♯ / B♭" },
+    { id: 'b',  name: "B / C♭ / A♯♯" },
+    { id: 'c',  name: "C / D♭♭ / B♯" },
+    { id: 'cs', name: "C♯ / D♭" },
+    { id: 'd',  name: "D / E♭♭ / C♯♯" },
+    { id: 'ds', name: "D♯ / E♭" },
+    { id: 'e',  name: "E / F♭ / D♯♯" },
+    { id: 'f',  name: "F / G♭♭ / E♯" },
+    { id: 'fs', name: "F♯ / G♭" },
+    { id: 'g',  name: "G / A♭♭ / F♯♯" },
+    { id: 'gs', name: "G♯ / A♭" }
+  ]
+
+  @State() toneNaturals: Tone[] = [
+    { id: 'a', name: 'A' },
+    { id: 'b', name: 'B' },
+    { id: 'c', name: 'C' },
+    { id: 'd', name: 'D' },
+    { id: 'e', name: 'E' },
+    { id: 'f', name: 'F' },
+    { id: 'g', name: 'G' }
+  ];
+  @State() toneAlterations: ToneAlteration[] = [
+    { id: 'flat', symbol: '♭', name: 'Flat' },
+    { id: 'sharp', symbol: '♯', name: 'Sharp' }
+  ];
+  @State() scales: Scale[] = [
+    { id: 'major', name: 'Major', toneIntervalPattern: ['W','W','H','W','W','W','H'] },
+    { id: 'minor', name: 'Minor', toneIntervalPattern: ['W','H','W','W','H','W','W'] }
+  ];
+
+  @State() selectedToneNatural: Tone;
+  @State() selectedToneAlteration: ToneAlteration;
+  @State() selectedScale: Scale;
+  @State() combinedKeyName: string;
+  @State() keyTones: string[];
+
+  async generateKeyTones() {
+
+    if (!this.selectedToneNatural || !this.selectedScale) { return; }
+
+    let toneIntervals = this.selectedScale.toneIntervalPattern;
+    let tempKeyTones = [`${this.selectedToneNatural.name}${this.selectedToneAlteration ? this.selectedToneAlteration.symbol : ''}`];
+    let toneIndex = this.tones.findIndex(t => t.name.split(' / ').includes(tempKeyTones[0]));
+    let toneNaturalIndex = this.toneNaturals.findIndex(t => t.name === this.selectedToneNatural.name);
+    console.log('Tone Index', toneIndex);
+    for (let i = 0; i < toneIntervals.length; i++) {
+      toneIndex = await this.moveIndex(toneIndex, this.tones.length - 1, toneIntervals[i] === 'H' ? 1 : 2);
+      toneNaturalIndex = await this.moveIndex(toneNaturalIndex, this.toneNaturals.length - 1, 1);
+      tempKeyTones.push(this.tones[toneIndex].name.split(' / ').find(n => n.includes(this.toneNaturals[toneNaturalIndex].name)));
+    }
+
+    this.keyTones = tempKeyTones;
+  }
+
+  async moveIndex(index: number, maxIndex: number, numMoves: number) {
+    for (let i = 0; i < numMoves; i++) {
+      index++;
+      if (index > maxIndex) {
+        index = 0;
+      }
+    }
+    return index;
+  }
+
+  async updateCombinedKeyName() {
+    if (!this.selectedToneNatural || !this.selectedScale) {
+      this.combinedKeyName = null;
+    }
+    else {
+      this.combinedKeyName = `${this.selectedToneNatural.name}${this.selectedToneAlteration ? this.selectedToneAlteration.symbol : ''} ${this.selectedScale.name}`;
+    }
+  }
+
+  async handleToneNaturalSelected(event: any) {
+    this.selectedToneNatural = this.toneNaturals.find(i => i.id === event.detail.value);
+    await this.updateCombinedKeyName();
+    await this.generateKeyTones();
+  }
+
+  async handleToneAlterationSelected(event: any) {
+    this.selectedToneAlteration = this.toneAlterations.find(i => i.id === event.detail.value);
+    await this.updateCombinedKeyName();
+    await this.generateKeyTones();
+  }
+
+  async handleScaleSelected(event: any) {
+    this.selectedScale = this.scales.find(i => i.id === event.detail.value);
+    await this.updateCombinedKeyName();
+    await this.generateKeyTones();
+  }
+
   render() {
     return [
       <ion-header>
         <app-header-toolbar headerTitle='Scales and Chords' />
       </ion-header>,
-
-      <ion-content class="ion-padding">
-
+      <ion-content>
+        <collapsi-card cardTitle={`Key${this.combinedKeyName ? `: ${this.combinedKeyName}` : ''}`}>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-item>
+                  <ion-select style={{ width: '100%' }}
+                              onIonChange={(e)=>this.handleToneNaturalSelected(e)}>
+                    {this.toneNaturals.map(toneNatural =>
+                      <ion-select-option value={toneNatural.id}>{toneNatural.name}</ion-select-option>  
+                    )}
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+              <ion-col>
+                <ion-item>
+                  <ion-select style={{ width: '100%' }}
+                              disabled={!this.selectedToneNatural}
+                              onIonChange={(e)=>this.handleToneAlterationSelected(e)}>
+                    {this.toneAlterations.map(toneAlteration =>
+                      <ion-select-option value={toneAlteration.id}>{toneAlteration.symbol} ({toneAlteration.name})</ion-select-option>  
+                    )}
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+              <ion-col>
+                <ion-item>
+                  <ion-select style={{ width: '100%' }}
+                              disabled={!this.selectedToneNatural}
+                              onIonChange={(e)=>this.handleScaleSelected(e)}>
+                    {this.scales.map(scale =>
+                      <ion-select-option value={scale.id}>{scale.name}</ion-select-option>  
+                    )}
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </collapsi-card>
+        {this.selectedScale &&
+          <collapsi-card cardTitle='Tones / Scale'>
+            <div id='tones-section-wrapper' class='wrapper-col' style={{ marginTop: '20px' }}>
+              <div id='tones-interval-pattern-wrapper' class='wrapper-row'>
+                {this.selectedScale.toneIntervalPattern.map(toneInterval =>
+                  <div class='tone-interval-pattern-box'>
+                    <div class='tone-interval-pattern-box-content'>
+                      {toneInterval}
+                    </div>
+                  </div>
+                )}
+                <div class='tone-interval-pattern-box'></div>
+              </div>
+              <div id='tones-wrapper' class='wrapper-row' style={{ height: '80px' }} >
+                {this.keyTones.map(keyTone =>  
+                  <div class='tone-box'><div class='tone-box-content'>{keyTone}</div></div>
+                )}
+              </div>
+            </div>
+          </collapsi-card>
+        }
+        {this.selectedScale &&
+          <collapsi-card cardTitle='Chords'>
+          </collapsi-card>
+        }
       </ion-content>
     ];
   }
