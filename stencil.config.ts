@@ -8,6 +8,7 @@ export const config: Config = {
   taskQueue: 'async',
   outputTargets: [{
     copy: [
+      { src: '_redirects' },
       { src: 'app-settings.json' }
     ],
     type: 'www',
