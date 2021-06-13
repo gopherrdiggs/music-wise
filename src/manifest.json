@@ -13,6 +13,6 @@
     "sizes": "512x512",
     "type": "image/png"
   }],
-  "background_color": "#ff006e",
+  "background_color": "#d3d3d3",
   "theme_color": "#ff006e"
 }
