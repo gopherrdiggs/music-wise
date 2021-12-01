@@ -1,16 +1,44 @@
-export interface Scale {
+export interface Chord {
+  id: string,
+  name: string,
+  notes: Note[],
+  extensions?: Chord[]
+}
+
+export interface Note {
+  id: string,
+  name: string,
+  isDiatonic?: boolean,
+  intervalNumericReference?: string,
+  intervalName?: string
+}
+
+export interface NoteAlteration {
+  id: string,
+  symbol: string,
+  name: string
+}
+
+export interface OldScale {
   id: string,
   name: string,
   toneIntervalPattern: string[],
   chordPattern: string[]
 }
 
-export interface Tone {
+export interface Scale {
   id: string,
-  name: string
+  name: string,
+  intervalPattern: string,
+  chordPattern?: string[]
 }
 
-export interface ToneAlias {
+export interface ScaleGroup {
+  name: string,
+  scales: Scale[]
+}
+
+export interface Tone {
   id: string,
   name: string
 }

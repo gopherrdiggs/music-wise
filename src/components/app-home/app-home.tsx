@@ -1,5 +1,5 @@
 import { Component, h, State } from '@stencil/core';
-import { Scale, Tone, ToneAlteration } from '../../interfaces/application';
+import { Note, OldScale, Tone, ToneAlteration } from '../../interfaces/application';
 
 @Component({
   tag: 'app-home'
@@ -34,17 +34,20 @@ export class AppHome {
     { id: 'flat', symbol: '♭', name: 'Flat' },
     { id: 'sharp', symbol: '♯', name: 'Sharp' }
   ];
-  @State() scales: Scale[] = [
+  @State() scales: OldScale[] = [
     { id: 'major', name: 'Major', toneIntervalPattern: ['W','W','H','W','W','W','H'], chordPattern: ['I','ii','iii','IV','V','vi','vii°'] },
     { id: 'minor', name: 'Minor', toneIntervalPattern: ['W','H','W','W','H','W','W'], chordPattern: ['i','ii°','III','iv','v','VI','VII'] }
   ];
 
   @State() selectedToneNatural: Tone;
   @State() selectedToneAlteration: ToneAlteration;
-  @State() selectedScale: Scale;
+  @State() selectedScale: OldScale;
   @State() combinedKeyName: string;
   @State() keyTones: string[] = [];
   @State() keyChords: string[] = [];
+
+  // New stuff
+  @State() keyNotes: Note[];
 
   async generateKeyTones() {
 
@@ -131,10 +134,10 @@ export class AppHome {
   render() {
     return [
       <ion-header>
-        <app-header-toolbar headerTitle='Scales and Chords' />
+        <app-header-toolbar headerTitle='Notes and Chords' />
       </ion-header>,
       <ion-content>
-        <collapsi-card cardTitle={`Key${this.combinedKeyName ? `: ${this.combinedKeyName}` : ''}`}>
+        {/* <collapsi-card cardTitle={`Key${this.combinedKeyName ? `: ${this.combinedKeyName}` : ''}`}>
           <ion-grid>
             <ion-row>
               <ion-col>
@@ -213,7 +216,10 @@ export class AppHome {
               </div>
             </div>
           </collapsi-card>
-        }
+        } */}
+        <key-scale-selector />
+        <scale-notes />
+
       </ion-content>
     ];
   }

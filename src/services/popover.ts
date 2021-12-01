@@ -19,7 +19,8 @@ class PopoverController {
       componentProps: {
         content: menu
       },
-      event: event
+      event: event,
+      showBackdrop: false
     });
 
     await popover.present();
@@ -33,7 +34,7 @@ class PopoverController {
         content: content
       },
       event: event,
-      cssClass: 'popover-medium custom-scrollbar no-padding'
+      cssClass: 'custom-scrollbar no-padding'
     });
 
     await popover.present();

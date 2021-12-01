@@ -21,9 +21,26 @@ export namespace Components {
         "cardTitle": string;
         "collapsed": boolean;
     }
+    interface KeyScaleSelector {
+    }
     interface ModalHeaderToolbar {
         "backCallback": Function;
         "headerTitle": string;
+    }
+    interface NoteBox {
+        "boxColor": string;
+        "isDiatonic": boolean;
+        "isEmphasized": boolean;
+        "isHighlighted": boolean;
+        "isSelected": boolean;
+        "noteName": string;
+        "noteNumber": string;
+        "noteSubtext": string;
+    }
+    interface PopoverMenu {
+        "content": any;
+    }
+    interface ScaleNotes {
     }
 }
 declare global {
@@ -51,18 +68,46 @@ declare global {
         prototype: HTMLCollapsiCardElement;
         new (): HTMLCollapsiCardElement;
     };
+    interface HTMLKeyScaleSelectorElement extends Components.KeyScaleSelector, HTMLStencilElement {
+    }
+    var HTMLKeyScaleSelectorElement: {
+        prototype: HTMLKeyScaleSelectorElement;
+        new (): HTMLKeyScaleSelectorElement;
+    };
     interface HTMLModalHeaderToolbarElement extends Components.ModalHeaderToolbar, HTMLStencilElement {
     }
     var HTMLModalHeaderToolbarElement: {
         prototype: HTMLModalHeaderToolbarElement;
         new (): HTMLModalHeaderToolbarElement;
     };
+    interface HTMLNoteBoxElement extends Components.NoteBox, HTMLStencilElement {
+    }
+    var HTMLNoteBoxElement: {
+        prototype: HTMLNoteBoxElement;
+        new (): HTMLNoteBoxElement;
+    };
+    interface HTMLPopoverMenuElement extends Components.PopoverMenu, HTMLStencilElement {
+    }
+    var HTMLPopoverMenuElement: {
+        prototype: HTMLPopoverMenuElement;
+        new (): HTMLPopoverMenuElement;
+    };
+    interface HTMLScaleNotesElement extends Components.ScaleNotes, HTMLStencilElement {
+    }
+    var HTMLScaleNotesElement: {
+        prototype: HTMLScaleNotesElement;
+        new (): HTMLScaleNotesElement;
+    };
     interface HTMLElementTagNameMap {
         "app-header-toolbar": HTMLAppHeaderToolbarElement;
         "app-home": HTMLAppHomeElement;
         "app-root": HTMLAppRootElement;
         "collapsi-card": HTMLCollapsiCardElement;
+        "key-scale-selector": HTMLKeyScaleSelectorElement;
         "modal-header-toolbar": HTMLModalHeaderToolbarElement;
+        "note-box": HTMLNoteBoxElement;
+        "popover-menu": HTMLPopoverMenuElement;
+        "scale-notes": HTMLScaleNotesElement;
     }
 }
 declare namespace LocalJSX {
@@ -83,16 +128,42 @@ declare namespace LocalJSX {
         "cardTitle"?: string;
         "collapsed"?: boolean;
     }
+    interface KeyScaleSelector {
+        "onKeyAlterationChanged"?: (event: CustomEvent<any>) => void;
+        "onKeyChanged"?: (event: CustomEvent<any>) => void;
+        "onScaleChanged"?: (event: CustomEvent<any>) => void;
+    }
     interface ModalHeaderToolbar {
         "backCallback"?: Function;
         "headerTitle"?: string;
+    }
+    interface NoteBox {
+        "boxColor"?: string;
+        "isDiatonic"?: boolean;
+        "isEmphasized"?: boolean;
+        "isHighlighted"?: boolean;
+        "isSelected"?: boolean;
+        "noteName"?: string;
+        "noteNumber"?: string;
+        "noteSubtext"?: string;
+        "onNoteDeselected"?: (event: CustomEvent<any>) => void;
+        "onNoteSelected"?: (event: CustomEvent<any>) => void;
+    }
+    interface PopoverMenu {
+        "content"?: any;
+    }
+    interface ScaleNotes {
     }
     interface IntrinsicElements {
         "app-header-toolbar": AppHeaderToolbar;
         "app-home": AppHome;
         "app-root": AppRoot;
         "collapsi-card": CollapsiCard;
+        "key-scale-selector": KeyScaleSelector;
         "modal-header-toolbar": ModalHeaderToolbar;
+        "note-box": NoteBox;
+        "popover-menu": PopoverMenu;
+        "scale-notes": ScaleNotes;
     }
 }
 export { LocalJSX as JSX };
@@ -103,7 +174,11 @@ declare module "@stencil/core" {
             "app-home": LocalJSX.AppHome & JSXBase.HTMLAttributes<HTMLAppHomeElement>;
             "app-root": LocalJSX.AppRoot & JSXBase.HTMLAttributes<HTMLAppRootElement>;
             "collapsi-card": LocalJSX.CollapsiCard & JSXBase.HTMLAttributes<HTMLCollapsiCardElement>;
+            "key-scale-selector": LocalJSX.KeyScaleSelector & JSXBase.HTMLAttributes<HTMLKeyScaleSelectorElement>;
             "modal-header-toolbar": LocalJSX.ModalHeaderToolbar & JSXBase.HTMLAttributes<HTMLModalHeaderToolbarElement>;
+            "note-box": LocalJSX.NoteBox & JSXBase.HTMLAttributes<HTMLNoteBoxElement>;
+            "popover-menu": LocalJSX.PopoverMenu & JSXBase.HTMLAttributes<HTMLPopoverMenuElement>;
+            "scale-notes": LocalJSX.ScaleNotes & JSXBase.HTMLAttributes<HTMLScaleNotesElement>;
         }
     }
 }

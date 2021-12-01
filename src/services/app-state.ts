@@ -1,4 +1,5 @@
 import { setDarkTheme } from "../helpers/utils";
+import { Scale } from "../interfaces/application";
 import { LocalStorageService } from "./local-storage";
 import { Log } from "./log";
 import { Switchboard } from "./switchboard";
@@ -8,6 +9,9 @@ interface AppState {
   appVersion: string,
   darkThemeEnabled: boolean,
   showMenu: boolean,
+  currentKey: string,
+  currentKeyAlteration: string,
+  currentScale: Scale,
   viewportSize: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 }
 
@@ -16,6 +20,9 @@ export const enum Actions {
   appVersionChanged = 'appVersionChanged',
   darkThemeEnabledChanged = 'darkThemeEnabledChanged',
   showMenuChanged = 'showMenuChanged',
+  keyChanged = 'keyChanged',
+  keyAlterationChanged = 'keyAlterationChanged',
+  scaleChanged = 'scaleChanged',
   viewportSizeChanged = 'viewportSizeChanged'
 }
 
@@ -73,15 +80,30 @@ class AppStateController {
       Actions.darkThemeEnabledChanged, async (ev) => {
         await this.handleDarkThemeEnabledChanged(ev);
       });
+
+    Switchboard.routeEventToActionHandler(
+      Actions.keyChanged, async (ev) => {
+        await this.handleKeyChanged(ev);
+      });
+
+    Switchboard.routeEventToActionHandler(
+      Actions.keyAlterationChanged, async (ev) => {
+        await this.handleKeyAlterationChanged(ev);
+      });
+
+    Switchboard.routeEventToActionHandler(
+      Actions.scaleChanged, async (ev) => {
+        await this.handleScaleChanged(ev);
+      });
   }
 
-  async saveStateAndExecuteCallbacks(actionName: string) {
+  private async saveStateAndExecuteCallbacks(actionName: string) {
 
     LocalStorageService.set(this.localStorageKeySuffix, this.state);
     Switchboard.executeActionCallbacks(actionName);
   }
 
-  async handleAppVersionChanged(event: any) {
+  private async handleAppVersionChanged(event: any) {
 
     this.state = {...this.state,
       appVersion: event.detail.appVersion
@@ -90,7 +112,7 @@ class AppStateController {
     this.saveStateAndExecuteCallbacks(Actions.appVersionChanged);
   }
 
-  async handleDarkThemeEnabledChanged(event: any) {
+  private async handleDarkThemeEnabledChanged(event: any) {
 
     this.state = {...this.state,
       darkThemeEnabled: event.detail.enabled
@@ -99,7 +121,34 @@ class AppStateController {
     this.saveStateAndExecuteCallbacks(Actions.darkThemeEnabledChanged);
   }
 
-  async handleViewportSizeChanged(event: any, size: 'xs' | 'sm' | 'md' | 'lg' | 'xl') {
+  private async handleKeyChanged(event: any) {
+
+    this.state = {...this.state,
+      currentKey: event.detail.key
+    };
+
+    this.saveStateAndExecuteCallbacks(Actions.keyChanged);
+  }
+
+  private async handleKeyAlterationChanged(event: any) {
+
+    this.state = {...this.state,
+      currentKeyAlteration: event.detail.keyAlteration
+    };
+
+    this.saveStateAndExecuteCallbacks(Actions.keyAlterationChanged);
+  }
+
+  private async handleScaleChanged(event: any) {
+
+    this.state = {...this.state,
+      currentScale: event.detail.scale
+    };
+
+    this.saveStateAndExecuteCallbacks(Actions.scaleChanged);
+  }
+
+  private async handleViewportSizeChanged(event: any, size: 'xs' | 'sm' | 'md' | 'lg' | 'xl') {
 
     if (event.matches) {
 

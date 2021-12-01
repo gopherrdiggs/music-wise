@@ -3,6 +3,7 @@ import { setDarkTheme, styleScrollbar } from '../../helpers/utils';
 import { App } from '../../services/app-state';
 import { LocalStorageService } from '../../services/local-storage';
 import { Switchboard } from '../../services/switchboard';
+import { TheoryService } from '../../services/theory';
 
 @Component({
   tag: 'app-root'
@@ -37,6 +38,7 @@ export class AppRoot {
     // Switchboard configuration for this root element
     Switchboard.setRootElement(this.el);
     await App.registerEventHandlers();
+    await this.setAppStateDefaults();
 
     styleScrollbar(this.menuElem);
   }
@@ -54,6 +56,19 @@ export class AppRoot {
     const appSettingsFile = await fetch('/app-settings.json');
     const appSettingsJson = await appSettingsFile.json();
     LocalStorageService.setLocalStoragePrefix(appSettingsJson['localStoragePrefix']);
+  }
+
+  async setAppStateDefaults() {
+    if (!App.state.currentKey) {
+      this.el.dispatchEvent(new CustomEvent('keyChanged', { detail: { key: 'C' }}));
+    }
+    if (!App.state.currentKeyAlteration) {
+      this.el.dispatchEvent(new CustomEvent('keyAlterationChanged', { detail: { keyAlteration: 'natural' }}));
+    }
+    if (!App.state.currentScale) {
+      let defaultScale = (await TheoryService.getScaleGroups())[0].scales[0];
+      this.el.dispatchEvent(new CustomEvent('scaleChanged', { detail: { scale: defaultScale }}));
+    }
   }
 
   getShowMenu() {
