@@ -1,15 +1,15 @@
-import { Chord, Note, NoteAlteration, ScaleGroup } from "../interfaces/application";
+import { Chord, ChordGroup, Note, NoteAlteration, ScaleGroup } from "../interfaces/application";
 
 class TheoryController {
 
   private notes: Note[] = [
     { id: 'a',  name: "A / B♭♭ / G♯♯" },
-    { id: 'as', name: "A♯ / B♭" },
+    { id: 'as', name: "A♯ / B♭ / C♭♭" },
     { id: 'b',  name: "B / C♭ / A♯♯" },
     { id: 'c',  name: "C / D♭♭ / B♯" },
     { id: 'cs', name: "C♯ / D♭" },
     { id: 'd',  name: "D / E♭♭ / C♯♯" },
-    { id: 'ds', name: "D♯ / E♭" },
+    { id: 'ds', name: "D♯ / E♭ / F♭♭" },
     { id: 'e',  name: "E / F♭ / D♯♯" },
     { id: 'f',  name: "F / G♭♭ / E♯" },
     { id: 'fs', name: "F♯ / G♭" },
@@ -92,6 +92,45 @@ class TheoryController {
     { id: '14', name: 'Major 14th' }
   ]
 
+  private chordGroups: ChordGroup[] = [
+    { name: 'Major', chords: [
+      { id: '', name: 'Major', intervalPattern: '1|3|5' },
+      { id: 'maj6', name: 'Major 6th', intervalPattern: '1|3|5|6' },
+      { id: 'maj7', name: 'Major 7th', intervalPattern: '1|3|5|7' },
+      { id: 'maj9', name: 'Major 9th', intervalPattern: '1|3|5|7|9' }
+    ]},
+    { name: 'Minor', chords: [
+      { id: 'min', name: 'Minor', intervalPattern: '1|♭3|5' },
+      { id: 'min6', name: 'Minor 6th', intervalPattern: '1|♭3|5|6' },
+      { id: 'min7', name: 'Minor 7th', intervalPattern: '1|♭3|5|♭7' },
+      { id: 'min9', name: 'Minor 9th', intervalPattern: '1|♭3|5|♭7|9' }
+    ]},
+    { name: 'Dominant', chords: [
+      { id: 'dom7', name: 'Dominant 7th', intervalPattern: '1|3|5|♭7' },
+      { id: 'dom9', name: 'Dominant 9th', intervalPattern: '1|3|5|♭7|9' },
+      { id: 'dom11', name: 'Dominant 11th', intervalPattern: '1|3|5|♭7|9|11' },
+      { id: 'dom13', name: 'Dominant 13th', intervalPattern: '1|3|5|♭7|9|11|13' }
+    ]},
+    { name: 'Diminished', chords: [
+      { id: 'dim', name: 'Diminished', intervalPattern: '1|♭3|♭5' },
+      { id: 'dim7', name: 'Diminished 7th', intervalPattern: '1|♭3|♭5|♭♭7' },
+      { id: 'min7♭5', name: 'Half Diminished', intervalPattern: '1|♭3|♭5|♭7' }
+    ]},
+    { name: 'Major Add 9', chords: [
+      { id: 'add9', name: 'Major (Add 9)', intervalPattern: '1|3|5|9' },
+      { id: 'min add9', name: 'Minor (Add 9)', intervalPattern: '1|♭3|5|9' },
+      { id: '6 add9', name: 'Major 6 (Add 9)', intervalPattern: '1|3|5|6|9' },
+      { id: 'min6 add9', name: 'Minor 6 (Add 9)', intervalPattern: '1|♭3|5|6|9' }
+    ]},
+    { name: 'Augmented', chords: [
+      { id: 'aug', name: 'Augmented', intervalPattern: '1|3|♯5' }
+    ]},
+    { name: 'Suspended', chords: [
+      { id: 'sus2', name: 'Suspended 2', intervalPattern: '1|2|5' },
+      { id: 'sus4', name: 'Suspended 4', intervalPattern: '1|4|5' }
+    ]}
+  ];
+
   async getNotes() {
     return this.notes;
   }
@@ -127,7 +166,7 @@ class TheoryController {
   }
 
   // Manipulate arrays of reference data to generate 24 notes based on the provided root
-  async generateKeyNotes(rootNatural: string, rootAlteration: string, intervalPattern: string): Promise<Note[]> {
+  async generateKeyNotes(rootNatural: string, rootAlteration: string, intervalPattern: string, numNotes: number = 24): Promise<Note[]> {
 
     if (!rootNatural || !intervalPattern) { throw 'Missing argument.' }
 
@@ -137,27 +176,28 @@ class TheoryController {
     
     let noteNaturalIndex = this.noteNaturals.findIndex(note => note.name === rootNatural);
     let intervalNames = [...this.intervalNoteNames];   // i.e., 1-Unison, b2-Minor 2nd, etc.
-    let intervalName = intervalNames.shift();
+    let interval = intervalNames.shift();
     let scaleIntervals = intervalPattern.split('|');   // e.g., 1|-|2|-|3|4|-|5|-|6|-|7
     let scaleIntervalIndex = 0;
 
     let result: Note[] = [];
 
     // Generate 24 notes (two diatonic octaves plus chromatic/other notes)
-    for (let i = 0; i < 24; i++) {
+    for (let i = 0; i < numNotes; i++) {
 
       let isDiatonic = scaleIntervals[scaleIntervalIndex] != '-';
       let noteName = this.getNoteName(noteIndex, noteNaturalIndex);
 
+      // Add note to result
       result.push({
         name: noteName,
         isDiatonic: isDiatonic,
-        intervalNumericReference: intervalName.id,
-        intervalName: intervalName.name
+        intervalNumericReference: interval.id,
+        intervalName: interval.name
       } as Note);
 
-      if (isDiatonic) {
-        // Shift indices
+      if (!interval.id.includes('♭')) {
+        // Shift index
         noteNaturalIndex++;
         if (noteNaturalIndex >= this.noteNaturals.length) { noteNaturalIndex = 0 }
       }
@@ -167,17 +207,68 @@ class TheoryController {
       if (noteIndex >= this.notes.length) { noteIndex = 0 }
       scaleIntervalIndex++;
       if (scaleIntervalIndex >= scaleIntervals.length) { scaleIntervalIndex = 0 }
-      intervalName = intervalNames.shift();
+      interval = intervalNames.shift();
     }
 
-    console.log('Key notes:', result);
     return result;
   }
 
-  async generateKeyChords(): Promise<Chord[]> {
-    // Take starting note, compute key notes, take 1-3-5 for triad, 1-3-5-b7 for dominant 7th, etc
+  async getChordNotes(scaleNotes: Note[], chordInterval: string): Promise<Note[]> {
 
-    let result: Chord[] = [];
+    let result: Note[] = [];
+
+    let chordIntervals = chordInterval.split('|');
+
+    for (let interval of chordIntervals) {
+
+      // Find the scale note where the interval number (e.g., ♭2) equals the interval specified in the chord
+      let note = scaleNotes.find(n => n.intervalNumericReference == interval);
+      // Account for the note with a combined number of ♯4/♭5
+      if (!note) {
+        note = scaleNotes.find(n => n.intervalNumericReference.includes(interval));
+      }
+
+      if (!note) { continue };
+      result.push({
+        name: note.name,
+        intervalNumericReference: interval
+      } as Note);
+    }
+    return result;
+  }
+
+  async generateKeyChordGroups(rootNatural: string, rootAlteration: string, intervalPattern: string): Promise<ChordGroup[]> {
+
+    let keyNotes = (await this.generateKeyNotes(rootNatural, rootAlteration, intervalPattern, 12))
+                    .filter(n => n.isDiatonic);
+    
+    let result: ChordGroup[] = [];
+
+    for (let note of keyNotes) {
+
+      let chordGroup = { name: `${note.name} Chords` } as ChordGroup;
+      chordGroup.chords = [];
+
+      let noteNatural = note.name.substr(0, 1);
+      let noteAlteration = note.name.length > 1 ? note.name.substr(1, 1) : '';
+      let noteScale = await this.generateKeyNotes(noteNatural, noteAlteration, "1|-|2|-|3|4|-|5|-|6|-|7");
+      
+      for (let group of this.chordGroups) {
+        
+
+        for (let chord of group.chords) {
+
+          chordGroup.chords.push({
+            id: `${note.name}${chord.id}`,
+            name: `${note.name} ${chord.name}`,
+            notes: await this.getChordNotes(noteScale, chord.intervalPattern),
+            intervalPattern: chord.intervalPattern
+          } as Chord);
+        }
+      }
+
+      result.push(chordGroup);
+    }
 
     return result;
   }

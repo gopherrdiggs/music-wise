@@ -5,6 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { Note } from "./interfaces/application";
 export namespace Components {
     interface AppHeaderToolbar {
         "backCallback": Function;
@@ -17,9 +18,18 @@ export namespace Components {
     }
     interface AppRoot {
     }
+    interface ChordBox {
+        "chordName": string;
+        "chordNotes": Note[];
+        "chordNumber": string;
+    }
     interface CollapsiCard {
         "cardTitle": string;
         "collapsed": boolean;
+    }
+    interface KeyChords {
+    }
+    interface KeyNotes {
     }
     interface KeyScaleSelector {
     }
@@ -39,8 +49,6 @@ export namespace Components {
     }
     interface PopoverMenu {
         "content": any;
-    }
-    interface ScaleNotes {
     }
 }
 declare global {
@@ -62,11 +70,29 @@ declare global {
         prototype: HTMLAppRootElement;
         new (): HTMLAppRootElement;
     };
+    interface HTMLChordBoxElement extends Components.ChordBox, HTMLStencilElement {
+    }
+    var HTMLChordBoxElement: {
+        prototype: HTMLChordBoxElement;
+        new (): HTMLChordBoxElement;
+    };
     interface HTMLCollapsiCardElement extends Components.CollapsiCard, HTMLStencilElement {
     }
     var HTMLCollapsiCardElement: {
         prototype: HTMLCollapsiCardElement;
         new (): HTMLCollapsiCardElement;
+    };
+    interface HTMLKeyChordsElement extends Components.KeyChords, HTMLStencilElement {
+    }
+    var HTMLKeyChordsElement: {
+        prototype: HTMLKeyChordsElement;
+        new (): HTMLKeyChordsElement;
+    };
+    interface HTMLKeyNotesElement extends Components.KeyNotes, HTMLStencilElement {
+    }
+    var HTMLKeyNotesElement: {
+        prototype: HTMLKeyNotesElement;
+        new (): HTMLKeyNotesElement;
     };
     interface HTMLKeyScaleSelectorElement extends Components.KeyScaleSelector, HTMLStencilElement {
     }
@@ -92,22 +118,18 @@ declare global {
         prototype: HTMLPopoverMenuElement;
         new (): HTMLPopoverMenuElement;
     };
-    interface HTMLScaleNotesElement extends Components.ScaleNotes, HTMLStencilElement {
-    }
-    var HTMLScaleNotesElement: {
-        prototype: HTMLScaleNotesElement;
-        new (): HTMLScaleNotesElement;
-    };
     interface HTMLElementTagNameMap {
         "app-header-toolbar": HTMLAppHeaderToolbarElement;
         "app-home": HTMLAppHomeElement;
         "app-root": HTMLAppRootElement;
+        "chord-box": HTMLChordBoxElement;
         "collapsi-card": HTMLCollapsiCardElement;
+        "key-chords": HTMLKeyChordsElement;
+        "key-notes": HTMLKeyNotesElement;
         "key-scale-selector": HTMLKeyScaleSelectorElement;
         "modal-header-toolbar": HTMLModalHeaderToolbarElement;
         "note-box": HTMLNoteBoxElement;
         "popover-menu": HTMLPopoverMenuElement;
-        "scale-notes": HTMLScaleNotesElement;
     }
 }
 declare namespace LocalJSX {
@@ -124,9 +146,18 @@ declare namespace LocalJSX {
     interface AppRoot {
         "onDarkThemeEnabledChanged"?: (event: CustomEvent<any>) => void;
     }
+    interface ChordBox {
+        "chordName"?: string;
+        "chordNotes"?: Note[];
+        "chordNumber"?: string;
+    }
     interface CollapsiCard {
         "cardTitle"?: string;
         "collapsed"?: boolean;
+    }
+    interface KeyChords {
+    }
+    interface KeyNotes {
     }
     interface KeyScaleSelector {
         "onKeyAlterationChanged"?: (event: CustomEvent<any>) => void;
@@ -152,18 +183,18 @@ declare namespace LocalJSX {
     interface PopoverMenu {
         "content"?: any;
     }
-    interface ScaleNotes {
-    }
     interface IntrinsicElements {
         "app-header-toolbar": AppHeaderToolbar;
         "app-home": AppHome;
         "app-root": AppRoot;
+        "chord-box": ChordBox;
         "collapsi-card": CollapsiCard;
+        "key-chords": KeyChords;
+        "key-notes": KeyNotes;
         "key-scale-selector": KeyScaleSelector;
         "modal-header-toolbar": ModalHeaderToolbar;
         "note-box": NoteBox;
         "popover-menu": PopoverMenu;
-        "scale-notes": ScaleNotes;
     }
 }
 export { LocalJSX as JSX };
@@ -173,12 +204,14 @@ declare module "@stencil/core" {
             "app-header-toolbar": LocalJSX.AppHeaderToolbar & JSXBase.HTMLAttributes<HTMLAppHeaderToolbarElement>;
             "app-home": LocalJSX.AppHome & JSXBase.HTMLAttributes<HTMLAppHomeElement>;
             "app-root": LocalJSX.AppRoot & JSXBase.HTMLAttributes<HTMLAppRootElement>;
+            "chord-box": LocalJSX.ChordBox & JSXBase.HTMLAttributes<HTMLChordBoxElement>;
             "collapsi-card": LocalJSX.CollapsiCard & JSXBase.HTMLAttributes<HTMLCollapsiCardElement>;
+            "key-chords": LocalJSX.KeyChords & JSXBase.HTMLAttributes<HTMLKeyChordsElement>;
+            "key-notes": LocalJSX.KeyNotes & JSXBase.HTMLAttributes<HTMLKeyNotesElement>;
             "key-scale-selector": LocalJSX.KeyScaleSelector & JSXBase.HTMLAttributes<HTMLKeyScaleSelectorElement>;
             "modal-header-toolbar": LocalJSX.ModalHeaderToolbar & JSXBase.HTMLAttributes<HTMLModalHeaderToolbarElement>;
             "note-box": LocalJSX.NoteBox & JSXBase.HTMLAttributes<HTMLNoteBoxElement>;
             "popover-menu": LocalJSX.PopoverMenu & JSXBase.HTMLAttributes<HTMLPopoverMenuElement>;
-            "scale-notes": LocalJSX.ScaleNotes & JSXBase.HTMLAttributes<HTMLScaleNotesElement>;
         }
     }
 }

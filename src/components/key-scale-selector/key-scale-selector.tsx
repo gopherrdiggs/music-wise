@@ -139,7 +139,7 @@ export class KeyScaleSelector {
               marginLeft: '8px', marginRight: '8px',
               alignItems: 'center', justifyContent: 'start'
             }}>
-              <div style={{ width: '100px', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ minWidth: '80px', display: 'flex', flexDirection: 'column' }}>
                 <div style={{
                   height: '30px', fontSize: '.8em',
                   color: 'var(--ion-color-medium)',
@@ -172,7 +172,7 @@ export class KeyScaleSelector {
 
           </ion-col>
           <ion-col>
-            <div style={{ marginLeft: '8px', marginRight: '8px' }}>
+            <div style={{ marginLeft: '8px', marginRight: '8px', minWidth: '150px' }}>
               <div style={{
                 height: '30px', fontSize: '.8em',
                 color: 'var(--ion-color-medium)',

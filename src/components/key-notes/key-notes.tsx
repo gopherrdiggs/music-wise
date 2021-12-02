@@ -4,9 +4,9 @@ import { App } from "../../services/app-state";
 import { TheoryService } from "../../services/theory";
 
 @Component({
-  tag: 'scale-notes'
+  tag: 'key-notes'
 })
-export class ScaleNotes {
+export class KeyNotes {
 
   @State() selectedKey: string;
   @State() selectedKeyAlteration: string;
@@ -25,21 +25,18 @@ export class ScaleNotes {
 
   @Listen('keyChanged', { target: 'body' })
   async handleKeyChanged(event: any) {
-    console.log('Key changed', event);
     this.selectedKey = event.detail.key;
     await this.updateNotes();
   }
 
   @Listen('keyAlterationChanged', { target: 'body' })
   async handleKeyAlterationChanged(event: any) {
-    console.log('Key Alteration changed', event);
     this.selectedKeyAlteration = event.detail.keyAlteration;
     await this.updateNotes();
   }
 
   @Listen('scaleChanged', { target: 'body' })
   async handleScaleChanged(event: any) {
-    console.log('Scale changed', event);
     this.selectedScale = event.detail.scale;
     await this.updateNotes();
   }
@@ -50,7 +47,7 @@ export class ScaleNotes {
 
     this.notes = await TheoryService.generateKeyNotes(
       this.selectedKey,
-      this.selectedKeyAlteration == 'natural' ? '' : await TheoryService.getNoteAlterationSymbol(this.selectedKeyAlteration),
+      this.selectedKeyAlteration == 'natural' ? '' : TheoryService.getNoteAlterationSymbol(this.selectedKeyAlteration),
       this.selectedScale.intervalPattern);
   }
 

@@ -218,7 +218,8 @@ export class AppHome {
           </collapsi-card>
         } */}
         <key-scale-selector />
-        <scale-notes />
+        <key-notes />
+        <key-chords />
 
       </ion-content>
     ];

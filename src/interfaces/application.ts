@@ -1,8 +1,14 @@
 export interface Chord {
   id: string,
   name: string,
-  notes: Note[],
-  extensions?: Chord[]
+  number?: string,
+  notes?: Note[],
+  intervalPattern?: string
+}
+
+export interface ChordGroup {
+  name: string,
+  chords: Chord[]
 }
 
 export interface Note {
