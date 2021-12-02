@@ -52,7 +52,6 @@ export class KeyChords {
       this.selectedScale.intervalPattern
     );
 
-    console.log('Chord groups', this.chordGroups);
 
     let tempChords: Chord[] = [];
     for (let i=0; i < this.selectedScale.chordPattern.length; i++) {
@@ -72,7 +71,7 @@ export class KeyChords {
           return c.name.endsWith('Diminished');
         }
       });
-      console.log('Chord', chord);
+      
       tempChords.push({
         ...chord, 
         number: this.selectedScale.chordPattern[i]
