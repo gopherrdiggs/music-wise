@@ -134,7 +134,7 @@ export class AppHome {
   render() {
     return [
       <ion-header>
-        <app-header-toolbar headerTitle='Notes and Chords' />
+        <app-header-toolbar headerTitle='Music Theory' />
       </ion-header>,
       <ion-content>
         <key-scale-selector />

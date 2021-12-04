@@ -35,6 +35,7 @@ export namespace Components {
     }
     interface GuitarFretNote {
         "fretNumber": number;
+        "isNut": boolean;
         "noteColor": string;
         "noteName": string;
         "stringNumber": number;
@@ -44,6 +45,8 @@ export namespace Components {
         "noteColor": string;
         "noteName": string;
         "stringSize": 'small' | 'medium' | 'large';
+    }
+    interface GuitarNut {
     }
     interface GuitarSection {
     }
@@ -128,6 +131,12 @@ declare global {
         prototype: HTMLGuitarFretStringElement;
         new (): HTMLGuitarFretStringElement;
     };
+    interface HTMLGuitarNutElement extends Components.GuitarNut, HTMLStencilElement {
+    }
+    var HTMLGuitarNutElement: {
+        prototype: HTMLGuitarNutElement;
+        new (): HTMLGuitarNutElement;
+    };
     interface HTMLGuitarSectionElement extends Components.GuitarSection, HTMLStencilElement {
     }
     var HTMLGuitarSectionElement: {
@@ -186,6 +195,7 @@ declare global {
         "guitar-fret": HTMLGuitarFretElement;
         "guitar-fret-note": HTMLGuitarFretNoteElement;
         "guitar-fret-string": HTMLGuitarFretStringElement;
+        "guitar-nut": HTMLGuitarNutElement;
         "guitar-section": HTMLGuitarSectionElement;
         "key-chords": HTMLKeyChordsElement;
         "key-notes": HTMLKeyNotesElement;
@@ -228,6 +238,7 @@ declare namespace LocalJSX {
     }
     interface GuitarFretNote {
         "fretNumber"?: number;
+        "isNut"?: boolean;
         "noteColor"?: string;
         "noteName"?: string;
         "stringNumber"?: number;
@@ -237,6 +248,8 @@ declare namespace LocalJSX {
         "noteColor"?: string;
         "noteName"?: string;
         "stringSize"?: 'small' | 'medium' | 'large';
+    }
+    interface GuitarNut {
     }
     interface GuitarSection {
     }
@@ -266,6 +279,8 @@ declare namespace LocalJSX {
         "onNoteSelected"?: (event: CustomEvent<any>) => void;
     }
     interface NotesSection {
+        "onKeyNotesChanged"?: (event: CustomEvent<any>) => void;
+        "onScaleNotesChanged"?: (event: CustomEvent<any>) => void;
     }
     interface PopoverMenu {
         "content"?: any;
@@ -280,6 +295,7 @@ declare namespace LocalJSX {
         "guitar-fret": GuitarFret;
         "guitar-fret-note": GuitarFretNote;
         "guitar-fret-string": GuitarFretString;
+        "guitar-nut": GuitarNut;
         "guitar-section": GuitarSection;
         "key-chords": KeyChords;
         "key-notes": KeyNotes;
@@ -303,6 +319,7 @@ declare module "@stencil/core" {
             "guitar-fret": LocalJSX.GuitarFret & JSXBase.HTMLAttributes<HTMLGuitarFretElement>;
             "guitar-fret-note": LocalJSX.GuitarFretNote & JSXBase.HTMLAttributes<HTMLGuitarFretNoteElement>;
             "guitar-fret-string": LocalJSX.GuitarFretString & JSXBase.HTMLAttributes<HTMLGuitarFretStringElement>;
+            "guitar-nut": LocalJSX.GuitarNut & JSXBase.HTMLAttributes<HTMLGuitarNutElement>;
             "guitar-section": LocalJSX.GuitarSection & JSXBase.HTMLAttributes<HTMLGuitarSectionElement>;
             "key-chords": LocalJSX.KeyChords & JSXBase.HTMLAttributes<HTMLKeyChordsElement>;
             "key-notes": LocalJSX.KeyNotes & JSXBase.HTMLAttributes<HTMLKeyNotesElement>;

@@ -147,7 +147,12 @@ class TheoryController {
     return this.scaleGroups;
   }
 
-  getNoteName(noteIndex: number, noteNaturalIndex: number) {
+  async getNoteIndex(noteNameWithAlteration: string) {
+
+    return this.notes.findIndex(note => note.name.split(' / ').includes(noteNameWithAlteration));
+  }
+
+  async getNoteName(noteIndex: number, noteNaturalIndex: number) {
 
     if (noteNaturalIndex > this.noteNaturals.length + 1) {
       noteNaturalIndex = 0;
@@ -156,7 +161,7 @@ class TheoryController {
     return this.notes[noteIndex].name.split(' / ').find(n => n.includes(this.noteNaturals[noteNaturalIndex].name));
   }
 
-  getNoteAlterationSymbol(alterationIdOrName: string) {
+  async getNoteAlterationSymbol(alterationIdOrName: string) {
 
     let noteAlt = this.noteAlterations.find(a => a.id == alterationIdOrName.toLowerCase());
 
@@ -170,8 +175,7 @@ class TheoryController {
 
     if (!rootNatural || !intervalPattern) { throw 'Missing argument.' }
 
-    let rootNote = `${rootNatural}${rootAlteration}`;
-    let noteIndex = this.notes.findIndex(note => note.name.split(' / ').includes(rootNote));
+    let noteIndex = await this.getNoteIndex(`${rootNatural}${rootAlteration}`);
     if (noteIndex < 0) { throw 'Invalid root note.' }
     
     let noteNaturalIndex = this.noteNaturals.findIndex(note => note.name === rootNatural);
@@ -186,7 +190,7 @@ class TheoryController {
     for (let i = 0; i < numNotes; i++) {
 
       let isDiatonic = scaleIntervals[scaleIntervalIndex] != '-';
-      let noteName = this.getNoteName(noteIndex, noteNaturalIndex);
+      let noteName = await this.getNoteName(noteIndex, noteNaturalIndex);
 
       // Add note to result
       result.push({

@@ -52,6 +52,7 @@ export class GuitarSection {
                     alignItems: 'center', 
                     margin: '24px 44px', 
                     overflowX: 'scroll' }}>
+        <guitar-nut />
         <guitar-fret fretNumber={1} />
         <guitar-fret fretNumber={2} />
         <guitar-fret fretNumber={3} showFretMarker />

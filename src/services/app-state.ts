@@ -1,5 +1,5 @@
 import { setDarkTheme } from "../helpers/utils";
-import { Scale } from "../interfaces/application";
+import { Note, Scale } from "../interfaces/application";
 import { LocalStorageService } from "./local-storage";
 import { Log } from "./log";
 import { Switchboard } from "./switchboard";
@@ -12,6 +12,9 @@ interface AppState {
   currentKey: string,
   currentKeyAlteration: string,
   currentScale: Scale,
+  keyNotes: Note[],
+  scaleNotes: Note[],
+  guitarTuning: string[],
   viewportSize: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 }
 
@@ -22,7 +25,10 @@ export const enum Actions {
   showMenuChanged = 'showMenuChanged',
   keyChanged = 'keyChanged',
   keyAlterationChanged = 'keyAlterationChanged',
+  keyNotesChanged = 'keyNotesChanged',
   scaleChanged = 'scaleChanged',
+  scaleNotesChanged = 'scaleNotesChanged',
+  guitarTuningChanged = 'guitarTuningChanged',
   viewportSizeChanged = 'viewportSizeChanged'
 }
 
@@ -41,10 +47,21 @@ class AppStateController {
         
         this.state = savedState;
       }
+      await this.setDefaults();
     }
     catch (error) {
 
       Log.error(`Error getting initial app state: ${error.message}`);
+    }
+  }
+
+  async setDefaults() {
+
+    if (!this.state.guitarTuning) {
+
+      this.state = {...this.state,
+        guitarTuning: ['E','A','D','G','B','E']
+      };
     }
   }
 
@@ -95,6 +112,21 @@ class AppStateController {
       Actions.scaleChanged, async (ev) => {
         await this.handleScaleChanged(ev);
       });
+
+    Switchboard.routeEventToActionHandler(
+      Actions.keyNotesChanged, async (ev) => {
+        await this.handleKeyNotesChanged(ev);
+      });
+  
+    Switchboard.routeEventToActionHandler(
+      Actions.scaleNotesChanged, async (ev) => {
+        await this.handleScaleNotesChanged(ev);
+      });
+
+    Switchboard.routeEventToActionHandler(
+      Actions.guitarTuningChanged, async (ev) => {
+        await this.handleGuitarTuningChanged(ev);
+      });
   }
 
   private async saveStateAndExecuteCallbacks(actionName: string) {
@@ -143,6 +175,33 @@ class AppStateController {
 
     this.state = {...this.state,
       currentScale: event.detail.scale
+    };
+
+    this.saveStateAndExecuteCallbacks(Actions.scaleChanged);
+  }
+
+  private async handleKeyNotesChanged(event: any) {
+
+    this.state = {...this.state,
+      keyNotes: event.detail.keyNotes
+    };
+
+    this.saveStateAndExecuteCallbacks(Actions.scaleChanged);
+  }
+
+  private async handleScaleNotesChanged(event: any) {
+
+    this.state = {...this.state,
+      scaleNotes: event.detail.scaleNotes
+    };
+
+    this.saveStateAndExecuteCallbacks(Actions.scaleChanged);
+  }
+
+  private async handleGuitarTuningChanged(event: any) {
+
+    this.state = {...this.state,
+      guitarTuning: event.detail.tuning
     };
 
     this.saveStateAndExecuteCallbacks(Actions.scaleChanged);

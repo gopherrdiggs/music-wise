@@ -48,7 +48,7 @@ export class ChordsSection {
 
     this.chordGroups = await TheoryService.generateKeyChordGroups(
       this.selectedKey,
-      this.selectedKeyAlteration == 'natural' ? '' : TheoryService.getNoteAlterationSymbol(this.selectedKeyAlteration),
+      this.selectedKeyAlteration == 'natural' ? '' : await TheoryService.getNoteAlterationSymbol(this.selectedKeyAlteration),
       this.selectedScale.intervalPattern
     );
 

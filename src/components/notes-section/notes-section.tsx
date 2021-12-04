@@ -1,4 +1,4 @@
-import { Component, h, Listen, State } from "@stencil/core";
+import { Component, h, Event, EventEmitter, Listen, State } from "@stencil/core";
 import { Note, Scale } from "../../interfaces/application";
 import { App } from "../../services/app-state";
 import { TheoryService } from "../../services/theory";
@@ -7,6 +7,9 @@ import { TheoryService } from "../../services/theory";
   tag: 'notes-section'
 })
 export class NotesSection {
+
+  @Event() keyNotesChanged: EventEmitter;
+  @Event() scaleNotesChanged: EventEmitter;
 
   @State() selectedKey: string;
   @State() selectedKeyAlteration: string;
@@ -47,8 +50,17 @@ export class NotesSection {
 
     this.notes = await TheoryService.generateKeyNotes(
       this.selectedKey,
-      this.selectedKeyAlteration == 'natural' ? '' : TheoryService.getNoteAlterationSymbol(this.selectedKeyAlteration),
+      this.selectedKeyAlteration == 'natural' ? '' : await TheoryService.getNoteAlterationSymbol(this.selectedKeyAlteration),
       this.selectedScale.intervalPattern);
+
+    if (this.notes && this.notes.length > 11) {
+      this.keyNotesChanged.emit({
+        keyNotes: this.notes.slice(0,12)
+      })
+      this.scaleNotesChanged.emit({
+        scaleNotes: this.notes.filter(n => n.isDiatonic).slice(0,7)
+      });
+    }
   }
 
   render() {
