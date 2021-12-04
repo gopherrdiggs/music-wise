@@ -4,9 +4,9 @@ import { App } from "../../services/app-state";
 import { TheoryService } from "../../services/theory";
 
 @Component({
-  tag: 'key-chords'
+  tag: 'chords-section'
 })
-export class KeyChords {
+export class ChordsSection {
 
   @State() selectedKey: string;
   @State() selectedKeyAlteration: string;
@@ -91,7 +91,7 @@ export class KeyChords {
         </h1>
       </div>,
       <div style={{ display: 'flex', flexDirection: 'row', 
-                    margin: '16px', 
+                    margin: '16px 44px', 
                     overflowX: 'scroll' }}>
         {this.chords.map(chord =>
           <chord-box chordNumber={chord.number}

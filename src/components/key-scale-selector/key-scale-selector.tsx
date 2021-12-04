@@ -136,7 +136,7 @@ export class KeyScaleSelector {
           <ion-col sizeXs='12' sizeSm='4' sizeMd='3' sizeLg='3' sizeXl='3' >
             <div style={{
               display: 'flex', flexDirection: 'row',
-              marginLeft: '8px', marginRight: '8px',
+              marginLeft: '26px', marginRight: '26px',
               alignItems: 'center', justifyContent: 'start'
             }}>
               <div style={{ minWidth: '80px', display: 'flex', flexDirection: 'column' }}>
@@ -147,21 +147,21 @@ export class KeyScaleSelector {
                 }}>
                   Key
                 </div>
-                <ion-item lines='none' style={{ border: '2px solid gray', borderRadius: '4px' }}
+                <ion-item button detail={false} lines='none' style={{ border: '2px solid gray', borderRadius: '4px' }}
                   onClick={(e) => this.handleRootClicked(e)}>
-                  <ion-input value={this.selectedKey} />
+                  <ion-input readonly value={this.selectedKey} />
                   <ion-icon slot='end' color='medium' style={{ width: '15px' }} name='caret-down' />
                 </ion-item>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <div style={{ height: '30px' }}></div>
-                <ion-item lines='none' style={{ "--min-height": "0" }}>
+                <ion-item button detail={false} lines='none' style={{ "--min-height": "0" }}>
                   <ion-label style={{ margin: '0' }}>Sharp</ion-label>
                   <ion-checkbox slot="start" style={{ "--border-radius": '2px', margin: '2px 8px 2px 0' }}
                     onClick={() => this.handleSharpSelected()}
                     checked={this.isRootSharp} />
                 </ion-item>
-                <ion-item lines='none' style={{ "--min-height": "0" }}>
+                <ion-item button detail={false} lines='none' style={{ "--min-height": "0" }}>
                   <ion-label style={{ margin: '0' }}>Flat</ion-label>
                   <ion-checkbox slot="start" style={{ "--border-radius": '2px', margin: '2px 8px 2px 0' }}
                     onClick={() => this.handleFlatSelected()}
@@ -180,9 +180,9 @@ export class KeyScaleSelector {
               }}>
                 Scale
               </div>
-              <ion-item lines='none' style={{ border: '2px solid gray', borderRadius: '4px', maxWidth: '500px' }}
+              <ion-item button detail={false} lines='none' style={{ border: '2px solid gray', borderRadius: '4px', maxWidth: '500px' }}
                 onClick={(e) => this.handleScaleClicked(e)}>
-                <ion-input value={this.selectedScale ? this.selectedScale.name : null} placeholder='Select' />
+                <ion-input readonly value={this.selectedScale ? this.selectedScale.name : null} placeholder='Select' />
                 <ion-icon slot='end' color='medium' style={{ width: '15px' }} name='caret-down' />
               </ion-item>
             </div>

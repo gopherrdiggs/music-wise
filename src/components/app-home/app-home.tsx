@@ -137,90 +137,10 @@ export class AppHome {
         <app-header-toolbar headerTitle='Notes and Chords' />
       </ion-header>,
       <ion-content>
-        {/* <collapsi-card cardTitle={`Key${this.combinedKeyName ? `: ${this.combinedKeyName}` : ''}`}>
-          <ion-grid>
-            <ion-row>
-              <ion-col>
-                <ion-item>
-                  <ion-select style={{ width: '100%' }}
-                              onIonChange={(e)=>this.handleToneNaturalSelected(e)}>
-                    {this.toneNaturals.map(toneNatural =>
-                      <ion-select-option value={toneNatural.id}>{toneNatural.name}</ion-select-option>  
-                    )}
-                  </ion-select>
-                </ion-item>
-              </ion-col>
-              <ion-col>
-                <ion-item>
-                  <ion-select style={{ width: '100%' }}
-                              disabled={!this.selectedToneNatural}
-                              onIonChange={(e)=>this.handleToneAlterationSelected(e)}>
-                    <ion-select-option value=''></ion-select-option>
-                    {this.toneAlterations.map(toneAlteration =>
-                      <ion-select-option value={toneAlteration.id}>{toneAlteration.symbol} ({toneAlteration.name})</ion-select-option>  
-                    )}
-                  </ion-select>
-                </ion-item>
-              </ion-col>
-              <ion-col>
-                <ion-item>
-                  <ion-select style={{ width: '100%' }}
-                              disabled={!this.selectedToneNatural}
-                              onIonChange={(e)=>this.handleScaleSelected(e)}>
-                    {this.scales.map(scale =>
-                      <ion-select-option value={scale.id}>{scale.name}</ion-select-option>  
-                    )}
-                  </ion-select>
-                </ion-item>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </collapsi-card>
-        {this.selectedScale &&
-          <collapsi-card cardTitle='Tones / Scale'>
-            <div id='tones-section-wrapper' class='flex-col' style={{ marginTop: '20px' }}>
-              <div id='tones-interval-pattern-wrapper' class='flex-row'>
-                {this.selectedScale.toneIntervalPattern.map(toneInterval =>
-                  <div class='tone-interval-pattern-box'>
-                    <div class='tone-interval-pattern-box-content'>
-                      {toneInterval}
-                    </div>
-                  </div>
-                )}
-                <div class='tone-interval-pattern-box'></div>
-              </div>
-              <div id='tones-wrapper' class='flex-row' style={{ height: '80px' }} >
-                {this.keyTones.map(keyTone =>  
-                  <div class='tone-box'><div class='tone-box-content'>{keyTone}</div></div>
-                )}
-              </div>
-            </div>
-          </collapsi-card>
-        }
-        {this.selectedScale &&
-          <collapsi-card cardTitle='Chords'>
-            <div id='chords-section-wrapper' class='flex-col' style={{ marginTop: '20px' }}>
-              <div id='chords-pattern-wrapper' class='flex-row'>
-                {this.selectedScale.chordPattern.map(chordNumeral =>
-                  <div class='chords-pattern-box'>
-                    <div class='chords-pattern-box-content'>
-                      {chordNumeral}
-                    </div>
-                  </div>
-                )}
-              </div>
-              <div id='chords-wrapper' class='flex-row' style={{ height: '80px' }} >
-                {this.keyChords.map(chord =>  
-                  <div class='chords-box'><div class='chords-box-content'>{chord}</div></div>
-                )}
-              </div>
-            </div>
-          </collapsi-card>
-        } */}
         <key-scale-selector />
-        <key-notes />
-        <key-chords />
-
+        <notes-section />
+        <chords-section />
+        <guitar-section />
       </ion-content>
     ];
   }

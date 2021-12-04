@@ -23,9 +23,29 @@ export namespace Components {
         "chordNotes": Note[];
         "chordNumber": string;
     }
+    interface ChordsSection {
+    }
     interface CollapsiCard {
         "cardTitle": string;
         "collapsed": boolean;
+    }
+    interface GuitarFret {
+        "fretNumber": number;
+        "showFretMarker": boolean;
+    }
+    interface GuitarFretNote {
+        "fretNumber": number;
+        "noteColor": string;
+        "noteName": string;
+        "stringNumber": number;
+        "stringSize": 'small' | 'medium' | 'large';
+    }
+    interface GuitarFretString {
+        "noteColor": string;
+        "noteName": string;
+        "stringSize": 'small' | 'medium' | 'large';
+    }
+    interface GuitarSection {
     }
     interface KeyChords {
     }
@@ -46,6 +66,8 @@ export namespace Components {
         "noteName": string;
         "noteNumber": string;
         "noteSubtext": string;
+    }
+    interface NotesSection {
     }
     interface PopoverMenu {
         "content": any;
@@ -76,11 +98,41 @@ declare global {
         prototype: HTMLChordBoxElement;
         new (): HTMLChordBoxElement;
     };
+    interface HTMLChordsSectionElement extends Components.ChordsSection, HTMLStencilElement {
+    }
+    var HTMLChordsSectionElement: {
+        prototype: HTMLChordsSectionElement;
+        new (): HTMLChordsSectionElement;
+    };
     interface HTMLCollapsiCardElement extends Components.CollapsiCard, HTMLStencilElement {
     }
     var HTMLCollapsiCardElement: {
         prototype: HTMLCollapsiCardElement;
         new (): HTMLCollapsiCardElement;
+    };
+    interface HTMLGuitarFretElement extends Components.GuitarFret, HTMLStencilElement {
+    }
+    var HTMLGuitarFretElement: {
+        prototype: HTMLGuitarFretElement;
+        new (): HTMLGuitarFretElement;
+    };
+    interface HTMLGuitarFretNoteElement extends Components.GuitarFretNote, HTMLStencilElement {
+    }
+    var HTMLGuitarFretNoteElement: {
+        prototype: HTMLGuitarFretNoteElement;
+        new (): HTMLGuitarFretNoteElement;
+    };
+    interface HTMLGuitarFretStringElement extends Components.GuitarFretString, HTMLStencilElement {
+    }
+    var HTMLGuitarFretStringElement: {
+        prototype: HTMLGuitarFretStringElement;
+        new (): HTMLGuitarFretStringElement;
+    };
+    interface HTMLGuitarSectionElement extends Components.GuitarSection, HTMLStencilElement {
+    }
+    var HTMLGuitarSectionElement: {
+        prototype: HTMLGuitarSectionElement;
+        new (): HTMLGuitarSectionElement;
     };
     interface HTMLKeyChordsElement extends Components.KeyChords, HTMLStencilElement {
     }
@@ -112,6 +164,12 @@ declare global {
         prototype: HTMLNoteBoxElement;
         new (): HTMLNoteBoxElement;
     };
+    interface HTMLNotesSectionElement extends Components.NotesSection, HTMLStencilElement {
+    }
+    var HTMLNotesSectionElement: {
+        prototype: HTMLNotesSectionElement;
+        new (): HTMLNotesSectionElement;
+    };
     interface HTMLPopoverMenuElement extends Components.PopoverMenu, HTMLStencilElement {
     }
     var HTMLPopoverMenuElement: {
@@ -123,12 +181,18 @@ declare global {
         "app-home": HTMLAppHomeElement;
         "app-root": HTMLAppRootElement;
         "chord-box": HTMLChordBoxElement;
+        "chords-section": HTMLChordsSectionElement;
         "collapsi-card": HTMLCollapsiCardElement;
+        "guitar-fret": HTMLGuitarFretElement;
+        "guitar-fret-note": HTMLGuitarFretNoteElement;
+        "guitar-fret-string": HTMLGuitarFretStringElement;
+        "guitar-section": HTMLGuitarSectionElement;
         "key-chords": HTMLKeyChordsElement;
         "key-notes": HTMLKeyNotesElement;
         "key-scale-selector": HTMLKeyScaleSelectorElement;
         "modal-header-toolbar": HTMLModalHeaderToolbarElement;
         "note-box": HTMLNoteBoxElement;
+        "notes-section": HTMLNotesSectionElement;
         "popover-menu": HTMLPopoverMenuElement;
     }
 }
@@ -150,10 +214,31 @@ declare namespace LocalJSX {
         "chordName"?: string;
         "chordNotes"?: Note[];
         "chordNumber"?: string;
+        "onChordSelected"?: (event: CustomEvent<any>) => void;
+    }
+    interface ChordsSection {
     }
     interface CollapsiCard {
         "cardTitle"?: string;
         "collapsed"?: boolean;
+    }
+    interface GuitarFret {
+        "fretNumber"?: number;
+        "showFretMarker"?: boolean;
+    }
+    interface GuitarFretNote {
+        "fretNumber"?: number;
+        "noteColor"?: string;
+        "noteName"?: string;
+        "stringNumber"?: number;
+        "stringSize"?: 'small' | 'medium' | 'large';
+    }
+    interface GuitarFretString {
+        "noteColor"?: string;
+        "noteName"?: string;
+        "stringSize"?: 'small' | 'medium' | 'large';
+    }
+    interface GuitarSection {
     }
     interface KeyChords {
     }
@@ -180,6 +265,8 @@ declare namespace LocalJSX {
         "onNoteDeselected"?: (event: CustomEvent<any>) => void;
         "onNoteSelected"?: (event: CustomEvent<any>) => void;
     }
+    interface NotesSection {
+    }
     interface PopoverMenu {
         "content"?: any;
     }
@@ -188,12 +275,18 @@ declare namespace LocalJSX {
         "app-home": AppHome;
         "app-root": AppRoot;
         "chord-box": ChordBox;
+        "chords-section": ChordsSection;
         "collapsi-card": CollapsiCard;
+        "guitar-fret": GuitarFret;
+        "guitar-fret-note": GuitarFretNote;
+        "guitar-fret-string": GuitarFretString;
+        "guitar-section": GuitarSection;
         "key-chords": KeyChords;
         "key-notes": KeyNotes;
         "key-scale-selector": KeyScaleSelector;
         "modal-header-toolbar": ModalHeaderToolbar;
         "note-box": NoteBox;
+        "notes-section": NotesSection;
         "popover-menu": PopoverMenu;
     }
 }
@@ -205,12 +298,18 @@ declare module "@stencil/core" {
             "app-home": LocalJSX.AppHome & JSXBase.HTMLAttributes<HTMLAppHomeElement>;
             "app-root": LocalJSX.AppRoot & JSXBase.HTMLAttributes<HTMLAppRootElement>;
             "chord-box": LocalJSX.ChordBox & JSXBase.HTMLAttributes<HTMLChordBoxElement>;
+            "chords-section": LocalJSX.ChordsSection & JSXBase.HTMLAttributes<HTMLChordsSectionElement>;
             "collapsi-card": LocalJSX.CollapsiCard & JSXBase.HTMLAttributes<HTMLCollapsiCardElement>;
+            "guitar-fret": LocalJSX.GuitarFret & JSXBase.HTMLAttributes<HTMLGuitarFretElement>;
+            "guitar-fret-note": LocalJSX.GuitarFretNote & JSXBase.HTMLAttributes<HTMLGuitarFretNoteElement>;
+            "guitar-fret-string": LocalJSX.GuitarFretString & JSXBase.HTMLAttributes<HTMLGuitarFretStringElement>;
+            "guitar-section": LocalJSX.GuitarSection & JSXBase.HTMLAttributes<HTMLGuitarSectionElement>;
             "key-chords": LocalJSX.KeyChords & JSXBase.HTMLAttributes<HTMLKeyChordsElement>;
             "key-notes": LocalJSX.KeyNotes & JSXBase.HTMLAttributes<HTMLKeyNotesElement>;
             "key-scale-selector": LocalJSX.KeyScaleSelector & JSXBase.HTMLAttributes<HTMLKeyScaleSelectorElement>;
             "modal-header-toolbar": LocalJSX.ModalHeaderToolbar & JSXBase.HTMLAttributes<HTMLModalHeaderToolbarElement>;
             "note-box": LocalJSX.NoteBox & JSXBase.HTMLAttributes<HTMLNoteBoxElement>;
+            "notes-section": LocalJSX.NotesSection & JSXBase.HTMLAttributes<HTMLNotesSectionElement>;
             "popover-menu": LocalJSX.PopoverMenu & JSXBase.HTMLAttributes<HTMLPopoverMenuElement>;
         }
     }

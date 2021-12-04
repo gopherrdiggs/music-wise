@@ -2,7 +2,8 @@ import { Component, h, Event, EventEmitter, Prop } from "@stencil/core";
 import { PopoverService } from "../../services/popover";
 
 @Component({
-  tag: 'note-box'
+  tag: 'note-box',
+  styleUrl: 'note-box.css'
 })
 export class NoteBox {
 
@@ -55,13 +56,15 @@ export class NoteBox {
                       display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           {this.noteNumber}
         </div>
-        <div style={{ color: this.isEmphasized ? 'var(--ion-color-dark)' : 'var(--ion-color-medium-tint)', 
+        <div class="ion-activatable ripple-parent"
+             style={{ color: this.isEmphasized ? 'var(--ion-color-dark)' : 'var(--ion-color-medium-tint)', 
                       fontSize: this.isEmphasized ? '1.5em' : '1em',
                       fontWeight: this.isEmphasized ? 'bold' : 'normal',
                       padding: '24px', border: '2px solid gray', 
                       height: '60px',
                       display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           {this.noteName}
+          <ion-ripple-effect />
         </div>
         <div style={{ color: 'var(--ion-color-medium)', 
                       fontSize: '.6em',

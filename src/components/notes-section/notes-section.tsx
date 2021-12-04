@@ -4,9 +4,9 @@ import { App } from "../../services/app-state";
 import { TheoryService } from "../../services/theory";
 
 @Component({
-  tag: 'key-notes'
+  tag: 'notes-section'
 })
-export class KeyNotes {
+export class NotesSection {
 
   @State() selectedKey: string;
   @State() selectedKeyAlteration: string;
@@ -61,7 +61,7 @@ export class KeyNotes {
         </h1>
       </div>,
       <div style={{ display: 'flex', flexDirection: 'row', 
-                    margin: '16px', 
+                    margin: '16px 44px', 
                     overflowX: 'scroll' }}>
         {this.notes.map(note =>
           <note-box noteNumber={note.intervalNumericReference}
