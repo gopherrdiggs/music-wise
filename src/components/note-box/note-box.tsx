@@ -1,4 +1,5 @@
-import { Component, h, Event, EventEmitter, Prop } from "@stencil/core";
+import { Component, h, Event, EventEmitter, Prop, State } from "@stencil/core";
+import { App } from "../../services/app-state";
 import { PopoverService } from "../../services/popover";
 
 @Component({
@@ -13,12 +14,22 @@ export class NoteBox {
   @Prop() noteNumber: string = '';
   @Prop() noteName: string;
   @Prop() noteSubtext: string;
-  @Prop() boxColor: string;
   @Prop() isDiatonic: boolean;
   @Prop() isSelected: boolean;
   @Prop() isHighlighted: boolean;
   @Prop() isEmphasized: boolean;
+
+  @State() boxColor: string;
+
+  selectedKey: string;
   
+  async componentWillLoad() {
+    this.selectedKey = App.state.currentKey
+    this.boxColor = this.noteName == this.selectedKey
+      ? 'var(--ion-color-secondary)'
+      : this.isDiatonic ? 'var(--ion-color-tertiary)' : 'var(--ion-color-light)'
+  }
+
   async handleBoxClicked(event: any) {
 
     let content = <div style={{ padding: '8px'}}>
@@ -57,9 +68,10 @@ export class NoteBox {
           {this.noteNumber}
         </div>
         <div class="ion-activatable ripple-parent"
-             style={{ color: this.isEmphasized ? 'var(--ion-color-dark)' : 'var(--ion-color-medium-tint)', 
-                      fontSize: this.isEmphasized ? '1.5em' : '1em',
-                      fontWeight: this.isEmphasized ? 'bold' : 'normal',
+             style={{ backgroundColor: this.boxColor,
+                      color: this.isDiatonic ? 'var(--ion-color-tertiary-contrast)' : 'var(--ion-color-light-contrast)', 
+                      fontSize: this.isDiatonic ? '1.5em' : '1em',
+                      fontWeight: this.isDiatonic ? 'bold' : 'normal',
                       padding: '24px', border: '2px solid gray', 
                       height: '60px',
                       display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

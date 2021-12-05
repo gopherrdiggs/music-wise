@@ -61,7 +61,6 @@ export namespace Components {
         "headerTitle": string;
     }
     interface NoteBox {
-        "boxColor": string;
         "isDiatonic": boolean;
         "isEmphasized": boolean;
         "isHighlighted": boolean;
@@ -267,7 +266,6 @@ declare namespace LocalJSX {
         "headerTitle"?: string;
     }
     interface NoteBox {
-        "boxColor"?: string;
         "isDiatonic"?: boolean;
         "isEmphasized"?: boolean;
         "isHighlighted"?: boolean;
