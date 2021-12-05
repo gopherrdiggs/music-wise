@@ -14,10 +14,8 @@ export class NoteBox {
   @Prop() noteNumber: string = '';
   @Prop() noteName: string;
   @Prop() noteSubtext: string;
-  @Prop() isDiatonic: boolean;
-  @Prop() isSelected: boolean;
-  @Prop() isHighlighted: boolean;
-  @Prop() isEmphasized: boolean;
+  @Prop({ mutable: true }) isDiatonic: boolean;
+  @Prop({ mutable: true }) isSelected: boolean;
 
   @State() boxColor: string;
 
@@ -26,20 +24,26 @@ export class NoteBox {
   async componentWillLoad() {
     this.selectedKey = App.state.currentKey
     this.boxColor = this.noteName == this.selectedKey
-      ? 'var(--ion-color-secondary)'
-      : this.isDiatonic ? 'var(--ion-color-tertiary)' : 'var(--ion-color-light)'
+      ? 'secondary'
+      : this.isDiatonic 
+        ? 'tertiary' 
+        : 'light'
   }
 
   async handleBoxClicked(event: any) {
 
     let content = <div style={{ padding: '8px'}}>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <ion-button color='light'>
+        <ion-button color='light' 
+                    onClick={()=>this.handleNoteColorSelected()} >
           <ion-icon slot='icon-only' name='close-circle-outline' />
         </ion-button>
-        <ion-button color='primary' style={{ width: '55px' }} />
-        <ion-button color='secondary' style={{ width: '55px' }} />
-        <ion-button color='tertiary' style={{ width: '55px' }} />
+        <ion-button color='primary' style={{ width: '55px' }}
+                    onClick={()=>this.handleNoteColorSelected('primary')} />
+        <ion-button color='secondary' style={{ width: '55px' }}
+                    onClick={()=>this.handleNoteColorSelected('secondary')} />
+        <ion-button color='tertiary' style={{ width: '55px' }}
+                    onClick={()=>this.handleNoteColorSelected('tertiary')} />
       </div>
     </div>;
 
@@ -55,6 +59,28 @@ export class NoteBox {
     await popover.present();
   }
 
+  async handleNoteColorSelected(color?: 'primary' | 'secondary' | 'tertiary') {
+
+    console.log('Color', color);
+    if (!color) {
+      
+      this.boxColor = 'light';
+      this.noteDeselected.emit({
+        noteName: this.noteName
+      });
+    }
+    else {
+
+      this.boxColor = color;
+      this.noteSelected.emit({
+        noteName: this.noteName,
+        color: color
+      });
+    }
+
+    await PopoverService.dismiss();
+  }
+
   render() {
     return [
       <div style={{ width: '60px', 
@@ -68,8 +94,8 @@ export class NoteBox {
           {this.noteNumber}
         </div>
         <div class="ion-activatable ripple-parent"
-             style={{ backgroundColor: this.boxColor,
-                      color: this.isDiatonic ? 'var(--ion-color-tertiary-contrast)' : 'var(--ion-color-light-contrast)', 
+             style={{ backgroundColor: `var(--ion-color-${this.boxColor})`,
+                      color: `var(--ion-color-${this.boxColor}-contrast)`, 
                       fontSize: this.isDiatonic ? '1.5em' : '1em',
                       fontWeight: this.isDiatonic ? 'bold' : 'normal',
                       padding: '24px', border: '2px solid gray', 

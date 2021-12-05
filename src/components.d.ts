@@ -62,8 +62,6 @@ export namespace Components {
     }
     interface NoteBox {
         "isDiatonic": boolean;
-        "isEmphasized": boolean;
-        "isHighlighted": boolean;
         "isSelected": boolean;
         "noteName": string;
         "noteNumber": string;
@@ -267,8 +265,6 @@ declare namespace LocalJSX {
     }
     interface NoteBox {
         "isDiatonic"?: boolean;
-        "isEmphasized"?: boolean;
-        "isHighlighted"?: boolean;
         "isSelected"?: boolean;
         "noteName"?: string;
         "noteNumber"?: string;

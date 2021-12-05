@@ -79,8 +79,7 @@ export class NotesSection {
           <note-box noteNumber={note.intervalNumericReference}
                     noteName={note.name}
                     noteSubtext={note.intervalName}
-                    isDiatonic={note.isDiatonic}
-                    isEmphasized={note.isDiatonic} />
+                    isDiatonic={note.isDiatonic} />
         )}
       </div>
     ]

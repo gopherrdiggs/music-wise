@@ -38,15 +38,18 @@ export class GuitarFretNote {
   }
 
   @Listen('noteDeselected', { target: 'body' })
-  async handleNoteDeselected(_event: any) {
-    // Event from note-box
-    await this.updateNote();
+  async handleNoteDeselected(event: any) {
+    if (event.detail.noteName == this.noteName) {
+      this.showButton = false;
+    }
   }
 
   @Listen('noteSelected', { target: 'body' })
-  async handleNoteSelected(_event: any) {
-    // Event from note-box
-    await this.updateNote();
+  async handleNoteSelected(event: any) {
+    if (event.detail.noteName == this.noteName) {
+      this.noteColor = event.detail.color;
+      this.showButton = true;
+    }
   }
 
   @Listen('keyNotesChanged', { target: 'body' })
@@ -131,7 +134,8 @@ export class GuitarFretNote {
         }
         {this.showButton &&
           <ion-button color={this.noteColor} size='small' shape='round'
-                      style={{ padding: '0px', margin: '0px', height: '22px' }}>
+                      style={{ padding: '0px', margin: '0px', 
+                               height: '22px', width: '40px' }}>
           {this.noteName}
           </ion-button>
         }
