@@ -141,6 +141,7 @@ export class AppHome {
         <notes-section />
         <chords-section />
         <guitar-section />
+        <div style={{ height: '50px' }} />
       </ion-content>
     ];
   }
