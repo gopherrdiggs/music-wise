@@ -1,4 +1,4 @@
-import { Component, h, Event, EventEmitter, Prop, State } from "@stencil/core";
+import { Component, h, Event, EventEmitter, Listen, Prop, State } from "@stencil/core";
 import { App } from "../../services/app-state";
 import { PopoverService } from "../../services/popover";
 
@@ -28,6 +28,19 @@ export class NoteBox {
       : this.isDiatonic 
         ? 'tertiary' 
         : 'light'
+  }
+
+  @Listen('chordDeselected', { target: 'body' })
+  async handleChordDeselected(_event: any) {
+
+  }
+
+  @Listen('chordSelected', { target: 'body' })
+  async handleChordSelected(event: any) {
+
+    if (event.detail.notes.find(n => n.name == this.noteName)) {
+      this.boxColor = event.detail.color;
+    }
   }
 
   async handleBoxClicked(event: any) {

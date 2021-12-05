@@ -221,6 +221,7 @@ declare namespace LocalJSX {
         "chordName"?: string;
         "chordNotes"?: Note[];
         "chordNumber"?: string;
+        "onChordDeselected"?: (event: CustomEvent<any>) => void;
         "onChordSelected"?: (event: CustomEvent<any>) => void;
     }
     interface ChordsSection {

@@ -1,7 +1,7 @@
 {
   "name": "music-wise",
   "short_name": "music-wise",
-  "version": "0.0.1",
+  "version": "0.9.0",
   "start_url": "/",
   "display": "standalone",
   "icons": [{

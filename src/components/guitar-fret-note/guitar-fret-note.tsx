@@ -60,12 +60,13 @@ export class GuitarFretNote {
     await this.updateNote();
   }
 
-  // @Listen('scaleNotesChanged', { target: 'body' })
-  // async handleScaleNotesChanged(event: any) {
-  //   console.log('Handling changes')
-  //   this.scaleNotes = event.detail.scaleNotes;
-  //   await this.updateNote();
-  // }
+  @Listen('chordSelected', { target: 'body' })
+  async handleChordSelected(event: any) {
+
+    if (event.detail.notes.find(n => n.name == this.noteName)) {
+      this.noteColor = event.detail.color;
+    }
+  }
 
   async updateNote() {
 
