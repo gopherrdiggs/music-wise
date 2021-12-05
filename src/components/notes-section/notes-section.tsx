@@ -76,7 +76,9 @@ export class NotesSection {
                     margin: '16px 44px', 
                     overflowX: 'scroll' }}>
         {this.notes.map(note =>
-          <note-box noteNumber={note.intervalNumericReference}
+          <note-box id={`${note.id}${note.isDiatonic}`} 
+                    key={`${note.id}${note.isDiatonic}`} 
+                    noteNumber={note.intervalNumericReference}
                     noteName={note.name}
                     noteSubtext={note.intervalName}
                     isDiatonic={note.isDiatonic} />

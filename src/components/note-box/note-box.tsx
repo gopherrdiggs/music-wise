@@ -22,12 +22,23 @@ export class NoteBox {
   selectedKey: string;
   
   async componentWillLoad() {
-    this.selectedKey = App.state.currentKey
-    this.boxColor = this.noteName == this.selectedKey
-      ? 'secondary'
-      : this.isDiatonic 
-        ? 'tertiary' 
-        : 'light'
+    await this.updateNote();
+  }
+
+  @Listen('keyChanged', { target: 'body' })
+  async handleKeyChanged(event: any) {
+    this.selectedKey = event.detail.key;
+    await this.updateNote();
+  }
+
+  @Listen('keyAlterationChanged', { target: 'body' })
+  async handleKeyAlterationChanged(_event: any) {
+    await this.updateNote();
+  }
+
+  @Listen('scaleChanged', { target: 'body' })
+  async handleScaleChanged(_event: any) {
+    await this.updateNote();
   }
 
   @Listen('chordDeselected', { target: 'body' })
@@ -41,6 +52,15 @@ export class NoteBox {
     if (event.detail.notes.find(n => n.name == this.noteName)) {
       this.boxColor = event.detail.color;
     }
+  }
+
+  async updateNote() {
+    this.selectedKey = App.state.currentKey
+    this.boxColor = this.noteName == this.selectedKey
+      ? 'secondary'
+      : this.isDiatonic 
+        ? 'tertiary' 
+        : 'light';
   }
 
   async handleBoxClicked(event: any) {

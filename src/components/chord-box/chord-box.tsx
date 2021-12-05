@@ -1,4 +1,4 @@
-import { Component, h, Event, EventEmitter, Prop, State } from "@stencil/core";
+import { Component, h, Event, EventEmitter, Listen, Prop, State } from "@stencil/core";
 import { Note } from "../../interfaces/application";
 import { PopoverService } from "../../services/popover";
 
@@ -16,6 +16,21 @@ export class ChordBox {
   @Prop() chordNotes: Note[]; // = 'C • E • G';
 
   @State() boxColor: string;
+
+  @Listen('keyChanged', { target: 'body' })
+  async handleKeyChanged(_event: any) {
+    this.boxColor = 'light';
+  }
+
+  @Listen('keyAlterationChanged', { target: 'body' })
+  async handleKeyAlterationChanged(_event: any) {
+    this.boxColor = 'light';
+  }
+
+  @Listen('scaleChanged', { target: 'body' })
+  async handleScaleChanged(_event: any) {
+    this.boxColor = 'light';
+  }
 
   async handleBoxClicked(event: any) {
 
