@@ -69,6 +69,14 @@ export namespace Components {
     }
     interface NotesSection {
     }
+    interface PianoKey {
+        "isBlack": boolean;
+        "keyNumber": number;
+    }
+    interface PianoKeyGroup {
+    }
+    interface PianoSection {
+    }
     interface PopoverMenu {
         "content": any;
     }
@@ -176,6 +184,24 @@ declare global {
         prototype: HTMLNotesSectionElement;
         new (): HTMLNotesSectionElement;
     };
+    interface HTMLPianoKeyElement extends Components.PianoKey, HTMLStencilElement {
+    }
+    var HTMLPianoKeyElement: {
+        prototype: HTMLPianoKeyElement;
+        new (): HTMLPianoKeyElement;
+    };
+    interface HTMLPianoKeyGroupElement extends Components.PianoKeyGroup, HTMLStencilElement {
+    }
+    var HTMLPianoKeyGroupElement: {
+        prototype: HTMLPianoKeyGroupElement;
+        new (): HTMLPianoKeyGroupElement;
+    };
+    interface HTMLPianoSectionElement extends Components.PianoSection, HTMLStencilElement {
+    }
+    var HTMLPianoSectionElement: {
+        prototype: HTMLPianoSectionElement;
+        new (): HTMLPianoSectionElement;
+    };
     interface HTMLPopoverMenuElement extends Components.PopoverMenu, HTMLStencilElement {
     }
     var HTMLPopoverMenuElement: {
@@ -200,6 +226,9 @@ declare global {
         "modal-header-toolbar": HTMLModalHeaderToolbarElement;
         "note-box": HTMLNoteBoxElement;
         "notes-section": HTMLNotesSectionElement;
+        "piano-key": HTMLPianoKeyElement;
+        "piano-key-group": HTMLPianoKeyGroupElement;
+        "piano-section": HTMLPianoSectionElement;
         "popover-menu": HTMLPopoverMenuElement;
     }
 }
@@ -277,6 +306,14 @@ declare namespace LocalJSX {
         "onKeyNotesChanged"?: (event: CustomEvent<any>) => void;
         "onScaleNotesChanged"?: (event: CustomEvent<any>) => void;
     }
+    interface PianoKey {
+        "isBlack"?: boolean;
+        "keyNumber"?: number;
+    }
+    interface PianoKeyGroup {
+    }
+    interface PianoSection {
+    }
     interface PopoverMenu {
         "content"?: any;
     }
@@ -298,6 +335,9 @@ declare namespace LocalJSX {
         "modal-header-toolbar": ModalHeaderToolbar;
         "note-box": NoteBox;
         "notes-section": NotesSection;
+        "piano-key": PianoKey;
+        "piano-key-group": PianoKeyGroup;
+        "piano-section": PianoSection;
         "popover-menu": PopoverMenu;
     }
 }
@@ -322,6 +362,9 @@ declare module "@stencil/core" {
             "modal-header-toolbar": LocalJSX.ModalHeaderToolbar & JSXBase.HTMLAttributes<HTMLModalHeaderToolbarElement>;
             "note-box": LocalJSX.NoteBox & JSXBase.HTMLAttributes<HTMLNoteBoxElement>;
             "notes-section": LocalJSX.NotesSection & JSXBase.HTMLAttributes<HTMLNotesSectionElement>;
+            "piano-key": LocalJSX.PianoKey & JSXBase.HTMLAttributes<HTMLPianoKeyElement>;
+            "piano-key-group": LocalJSX.PianoKeyGroup & JSXBase.HTMLAttributes<HTMLPianoKeyGroupElement>;
+            "piano-section": LocalJSX.PianoSection & JSXBase.HTMLAttributes<HTMLPianoSectionElement>;
             "popover-menu": LocalJSX.PopoverMenu & JSXBase.HTMLAttributes<HTMLPopoverMenuElement>;
         }
     }
