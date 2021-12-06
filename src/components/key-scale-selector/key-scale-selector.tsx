@@ -103,7 +103,7 @@ export class KeyScaleSelector {
       </ion-content>
     </div>;
 
-    await PopoverService.showMenu(event, menu, 'medium');
+    await PopoverService.showMenu(event, menu);
   }
 
   async handleScaleSelected(scale: Scale) {
