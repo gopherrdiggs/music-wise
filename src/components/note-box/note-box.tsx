@@ -22,6 +22,7 @@ export class NoteBox {
   selectedKey: string;
   
   async componentWillLoad() {
+    this.selectedKey = App.state.currentKey
     await this.updateNote();
   }
 
@@ -41,6 +42,20 @@ export class NoteBox {
     await this.updateNote();
   }
 
+  @Listen('noteDeselected', { target: 'body' })
+  async handleNoteDeselected(event: any) {
+    if (event.detail.noteName == this.noteName) {
+      this.boxColor = 'light';
+    }
+  }
+
+  @Listen('noteSelected', { target: 'body' })
+  async handleNoteSelected(event: any) {
+    if (event.detail.noteName == this.noteName) {
+      this.boxColor = event.detail.color;
+    }
+  }
+
   @Listen('chordDeselected', { target: 'body' })
   async handleChordDeselected(_event: any) {
 
@@ -55,7 +70,7 @@ export class NoteBox {
   }
 
   async updateNote() {
-    this.selectedKey = App.state.currentKey
+    
     this.boxColor = this.noteName == this.selectedKey
       ? 'secondary'
       : this.isDiatonic 

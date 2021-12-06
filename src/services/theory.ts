@@ -36,13 +36,13 @@ class TheoryController {
     { "name": "7 Tone Scales",
       "scales": [
         { "id": "major", "name": "Major (Ionian)", "intervalPattern": "1|-|2|-|3|4|-|5|-|6|-|7", "chordPattern": ['I','ii','iii','IV','V','vi','vii°'] },
-        { "id": "melodicMinorAsc", "name": "Melodic Minor Ascending (Ionian ♭3)", "intervalPattern": "1|-|2|♭3|-|4|-|5|-|6|-|7", "chordPattern": ['i', 'ii', 'III+', 'IV', 'V', 'vi°', 'vii°'] },
+        { "id": "aeolian", "name": "Natural Minor (Aeolian), Melodic Minor Desc.", "intervalPattern": "1|-|2|♭3|-|4|-|5|♭6|-|♭7|-", "chordPattern": ['i','ii°','III','iv','v','VI','VII'] },
+        { "id": "melodicMinorAsc", "name": "Melodic Minor Asc. (Ionian ♭3)", "intervalPattern": "1|-|2|♭3|-|4|-|5|-|6|-|7", "chordPattern": ['i', 'ii', 'III+', 'IV', 'V', 'vi°', 'vii°'] },
         { "id": "harmonicMinor", "name": "Harmonic Minor (Aeolian ♯7)", "intervalPattern": "1|-|2|♭3|-|4|-|5|♭6|-|-|7", "chordPattern": ['i', 'ii°', 'III+', 'iv', 'V', 'VI', 'vii°'] },
         { "id": "dorian", "name": "Dorian (Alt. Minor)", "intervalPattern": "1|-|2|♭3|-|4|-|5|-|6|♭7|-", "chordPattern": ['i','ii','III','IV','v','vi°', 'VII'] },
         { "id": "phrygian", "name": "Phrygian (Alt. Minor)", "intervalPattern": "1|♭2|-|♭3|-|4|-|5|♭6|-|♭7|-", "chordPattern": ['i','II','III','iv','v°','VI', 'vii'] },
         { "id": "lydian", "name": "Lydian (Alt. Major)", "intervalPattern": "1|-|2|-|3|-|♯4|5|-|6|-|7", "chordPattern": ['I','II', 'iii', 'iv°', 'V', 'vi', 'vii'] },
         { "id": "mixolydian", "name": "Mixolydian (Alt. Major)", "intervalPattern": "1|-|2|-|3|4|-|5|-|6|♭7|-" , "chordPattern": ['I', 'ii', 'iii°', 'IV', 'v', 'vi', 'VII'] },
-        { "id": "aeolian", "name": "Natural Minor (Aeolian), Melodic Minor Descending", "intervalPattern": "1|-|2|♭3|-|4|-|5|♭6|-|♭7|-", "chordPattern": ['i','ii°','III','iv','v','VI','VII'] },
         { "id": "locrian", "name": "Locrian (Diminished)", "intervalPattern": "1|♭2|-|♭3|-|4|♭5|-|♭6|-|♭7|-", "chordPattern": ['i°', 'II', 'iii', 'iv', 'V', 'VI', 'vii'] }
       ]},
     { "name": "5 Tone Scales (Pentatonic)",
