@@ -10,6 +10,7 @@ export class GuitarSection {
   @State() selectedKey: string;
   @State() selectedKeyAlteration: string;
   @State() selectedScale: Scale;
+  @State() isCollapsed: boolean;
 
   async componentWillLoad() {
     this.selectedKey = App.state.currentKey;
@@ -39,15 +40,21 @@ export class GuitarSection {
     // await this.updateChords();
   }
 
+  async handleSectionHeaderClicked() {
+    this.isCollapsed = !this.isCollapsed;
+  }
+
   render() {
     return [
       <div style={{ backgroundColor: 'rgba(var(--ion-color-tertiary-rgb),.1)',
-                    margin: '40px 16px 16px 40px' }} >
+                    margin: '40px 16px 16px 40px' }}
+           onClick={()=>this.handleSectionHeaderClicked()} >
         <h1 style={{ color: 'var(--ion-color-tertiary)',
-                     transform: 'translate(-8px, -20px)' }}>
+                     transform: this.isCollapsed ? 'none' : 'translate(-8px, -20px)' }}>
           GUITAR
         </h1>
       </div>,
+      !this.isCollapsed &&
       <div style={{ display: 'flex', flexDirection: 'row', 
                     alignItems: 'center', 
                     margin: '24px 44px', 

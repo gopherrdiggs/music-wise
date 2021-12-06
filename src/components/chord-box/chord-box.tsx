@@ -15,7 +15,7 @@ export class ChordBox {
   @Prop() chordName: string;
   @Prop() chordNotes: Note[]; // = 'C • E • G';
 
-  @State() boxColor: string;
+  @State() boxColor: string = 'light';
 
   @Listen('keyChanged', { target: 'body' })
   async handleKeyChanged(_event: any) {
