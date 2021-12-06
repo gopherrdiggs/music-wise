@@ -30,7 +30,7 @@ export class PianoKey {
   async handleNoteDeselected(event: any) {
     if (event.detail.noteName == this.noteName) {
       this.noteColor = this.isBlack
-      ? 'medium-shade'
+      ? 'medium'
       : 'light';
     }
   }
@@ -97,7 +97,7 @@ export class PianoKey {
     }
     else {
       this.noteColor = this.isBlack
-        ? 'medium-shade'
+        ? 'medium'
         : 'light';
     }
   }
@@ -126,9 +126,9 @@ export class PianoKey {
                     backgroundColor: `var(--ion-color-${this.noteColor})`,
                     color: `var(--ion-color-${this.noteColor}-contrast)`,
                     borderRadius: '0 0 5px 5px',
-                    '-webkit-box-shadow': '1px 1px 1px 2px rgba(0,0,0,0.75)',
-                    '-moz-box-shadow': '1px 1px 1px 2px rgba(0,0,0,0.75)',
-                    'box-shadow': '1px 1px 1px 2px rgba(0,0,0,0.75)',
+                    '-webkit-box-shadow': '1px 1px 1px 2px rgba(0,0,0,0.5)',
+                    '-moz-box-shadow': '1px 1px 1px 2px rgba(0,0,0,0.5)',
+                    'box-shadow': '1px 1px 1px 2px rgba(0,0,0,0.5)',
                     display: 'flex', alignItems: 'end', justifyContent: 'center',
                     paddingBottom: '10px' }} >
         {this.noteName}
