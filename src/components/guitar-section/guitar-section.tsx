@@ -58,6 +58,7 @@ export class GuitarSection {
       <div style={{ display: 'flex', flexDirection: 'row', 
                     alignItems: 'center', 
                     margin: '24px 44px', 
+                    paddingBottom: '20px',
                     overflowX: 'scroll' }}>
         <guitar-nut />
         <guitar-fret fretNumber={1} />

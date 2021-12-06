@@ -99,6 +99,7 @@ export class ChordsSection {
       !this.isCollapsed &&
       <div style={{ display: 'flex', flexDirection: 'row', 
                     margin: '16px 44px', 
+                    paddingBottom: '20px',
                     overflowX: 'scroll' }}>
         {this.chords.map(chord =>
           <chord-box chordNumber={chord.number}

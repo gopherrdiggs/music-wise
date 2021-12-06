@@ -11,7 +11,8 @@ export class GuitarFret {
   render() {
     return [
       <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <div style={{ backgroundColor: '#aaa', color: 'f0f0f0',
+        <div style={{ backgroundColor: 'var(--ion-color-medium)', 
+                      color: 'var(--ion-color-medium-contrast)',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       height: '20',
                       'border-top-left-radius': '15px',
@@ -24,7 +25,8 @@ export class GuitarFret {
         <guitar-fret-note fretNumber={this.fretNumber} stringNumber={4} stringSize='medium' />
         <guitar-fret-note fretNumber={this.fretNumber} stringNumber={5} stringSize='large' />
         <guitar-fret-note fretNumber={this.fretNumber} stringNumber={6} stringSize='large' />
-        <div style={{ backgroundColor: '#aaa', color: 'f0f0f0',
+        <div style={{ backgroundColor: 'var(--ion-color-medium)', 
+                      color: 'var(--ion-color-medium-contrast)',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       height: '20',
                       'border-bottom-left-radius': '15px',

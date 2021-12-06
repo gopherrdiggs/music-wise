@@ -81,6 +81,7 @@ export class NotesSection {
       !this.isCollapsed &&
       <div style={{ display: 'flex', flexDirection: 'row', 
                     margin: '16px 44px', 
+                    paddingBottom: '20px',
                     overflowX: 'scroll' }}>
         {this.notes.map(note =>
           <note-box id={`${note.id}${note.isDiatonic}`} 
