@@ -103,7 +103,7 @@ export class KeyScaleSelector {
       </ion-content>
     </div>;
 
-    await PopoverService.showMenu(event, menu);
+    await PopoverService.showMenu(event, menu, 'medium');
   }
 
   async handleScaleSelected(scale: Scale) {
@@ -133,7 +133,7 @@ export class KeyScaleSelector {
     return [
       <ion-grid>
         <ion-row>
-          <ion-col sizeXs='12' sizeSm='4' sizeMd='3' sizeLg='3' sizeXl='3' >
+          <ion-col sizeXs='12' sizeSm='4' sizeMd='4' sizeLg='3' sizeXl='3' >
             <div style={{
               display: 'flex', flexDirection: 'row',
               marginLeft: '26px', marginRight: '26px',
@@ -147,8 +147,9 @@ export class KeyScaleSelector {
                 }}>
                   Key
                 </div>
-                <ion-item button detail={false} lines='none' style={{ border: '2px solid gray', borderRadius: '4px' }}
-                  onClick={(e) => this.handleRootClicked(e)}>
+                <ion-item button detail={false} lines='none' 
+                          style={{ border: '2px solid gray', borderRadius: '4px' }}
+                          onClick={(e) => this.handleRootClicked(e)}>
                   <ion-input readonly value={this.selectedKey} />
                   <ion-icon slot='end' color='medium' style={{ width: '15px' }} name='caret-down' />
                 </ion-item>
@@ -172,7 +173,7 @@ export class KeyScaleSelector {
 
           </ion-col>
           <ion-col>
-            <div style={{ marginLeft: '8px', marginRight: '8px', minWidth: '150px' }}>
+            <div style={{ marginLeft: '28px', marginRight: '8px', minWidth: '150px' }}>
               <div style={{
                 height: '30px', fontSize: '.8em',
                 color: 'var(--ion-color-medium)',

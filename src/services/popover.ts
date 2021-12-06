@@ -12,7 +12,7 @@ class PopoverController {
     return popoverController.dismiss(data, role);
   }
 
-  async showMenu(event: any, menu: HTMLElement) {
+  async showMenu(event: any, menu: HTMLElement, width: 'auto' | 'medium' | 'large' = 'auto') {
 
     const popover = await this.create({
       component: 'popover-menu',
@@ -20,7 +20,8 @@ class PopoverController {
         content: menu
       },
       event: event,
-      showBackdrop: false
+      showBackdrop: false,
+      cssClass: `popover-wrapper-${width}`
     });
 
     await popover.present();
