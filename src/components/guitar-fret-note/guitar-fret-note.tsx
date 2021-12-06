@@ -128,7 +128,7 @@ export class GuitarFretNote {
           <ion-button color={this.noteColor} size='small' shape='round'
                       style={{ padding: '0px', margin: '0px', 
                                height: '22px', width: '40px' }}>
-          {this.noteName}
+          {this.noteName.replace('♭', '\u266D').replace('♯', '\u266F')}
           </ion-button>
         }
       </div>

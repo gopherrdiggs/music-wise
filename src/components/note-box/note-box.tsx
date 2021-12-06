@@ -149,7 +149,7 @@ export class NoteBox {
                       padding: '24px', border: '2px solid gray', 
                       height: '60px',
                       display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          {this.noteName}
+          {this.noteName.replace('♭', '\u266D').replace('♯', '\u266F')}
           <ion-ripple-effect />
         </div>
         <div style={{ color: 'var(--ion-color-medium)', 

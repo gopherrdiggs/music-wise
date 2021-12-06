@@ -101,7 +101,7 @@ export class ChordBox {
                       padding: '24px', border: '2px solid gray', 
                       height: '80px', textAlign: 'center',
                       display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          {this.chordName}
+          {this.chordName.replace('♭', '\u266D').replace('♯', '\u266F')}
           <ion-ripple-effect />
         </div>
         <div style={{ color: 'var(--ion-color-medium)', 

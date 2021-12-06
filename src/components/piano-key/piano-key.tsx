@@ -131,7 +131,7 @@ export class PianoKey {
                     'box-shadow': '1px 1px 1px 2px rgba(0,0,0,0.5)',
                     display: 'flex', alignItems: 'end', justifyContent: 'center',
                     paddingBottom: '10px' }} >
-        {this.noteName}
+        {this.noteName.replace('♭', '\u266D').replace('♯', '\u266F')}
         <ion-ripple-effect />
       </div>
     ]
