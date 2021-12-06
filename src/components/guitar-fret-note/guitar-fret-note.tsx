@@ -10,30 +10,24 @@ export class GuitarFretNote {
 
   @Prop() fretNumber: number;
   @Prop() stringNumber: number;
-  @Prop({ mutable: true }) noteName: string;
   @Prop({ mutable: true }) noteColor: string = 'tertiary';
   @Prop() stringSize: 'small' | 'medium' | 'large' = 'medium';
   @Prop() isNut: boolean;
-
+  
+  @State() noteName: string;
+  @State() isDiatonic: boolean;
   @State() showButton: boolean;
 
   selectedKey: string;
   keyNotes: Note[] = [];
-  scaleNotes: Note[] = [];
   currentTuning: string[];
   allNotes: Note[] = [];
-  noteNaturals: Note[] = [];
 
   async componentWillLoad() {
     this.selectedKey = App.state.currentKey
     this.keyNotes = App.state.keyNotes;
-    this.scaleNotes = App.state.scaleNotes;
     this.currentTuning = App.state.guitarTuning;
     this.allNotes = await TheoryService.getNotes();
-    this.noteNaturals = await TheoryService.getNoteNaturals();
-  }
-
-  async componentDidLoad() {
     await this.updateNote();
   }
 
@@ -55,7 +49,6 @@ export class GuitarFretNote {
   @Listen('keyNotesChanged', { target: 'body' })
   async handleKeyNotesChanged(event: any) {
     this.keyNotes = event.detail.keyNotes;
-    this.scaleNotes = event.detail.keyNotes.filter(n => n.isDiatonic).slice(0.7)
     this.selectedKey = this.keyNotes[0].name;
     await this.updateNote();
   }
@@ -70,10 +63,7 @@ export class GuitarFretNote {
 
   async updateNote() {
 
-    if (!this.keyNotes || !this.scaleNotes || !this.selectedKey || !this.currentTuning) { return }
-
-    // Use fret and string number, along with scale notes and current tuning
-    // to determine which note this is and what is visible state should be.
+    if (!this.allNotes || !this.keyNotes || !this.selectedKey || !this.currentTuning) { return }
 
     let stringStartNote;
 
@@ -86,9 +76,9 @@ export class GuitarFretNote {
       case 6: { stringStartNote = this.currentTuning[0]; break; }
     }
     
-    // Find the index of ALL notes that matches what the natural note name would be
+    // Find the index of ALL notes that matches what the standard open note name would be for the string
     let allNotesIndex = await TheoryService.getNoteIndex(stringStartNote);
-    // Get index of key notes where key note matches one of the possible all note names
+    // Get index of key notes where key note matches one of the possible all note names for the current fret/string note
     let keyNotesIndex = this.keyNotes.findIndex(k => this.allNotes[allNotesIndex].name.split(' / ').includes(k.name));
     // Get the key notes array in position based on starting (open string) note
     for (;keyNotesIndex > 0; keyNotesIndex--) {
@@ -100,12 +90,13 @@ export class GuitarFretNote {
     }
 
     this.noteName = this.keyNotes[0].name;
+    this.isDiatonic = this.keyNotes[0].isDiatonic;
     
     if (this.noteName == this.selectedKey) {
       this.noteColor = 'secondary';
       this.showButton = true;
     }
-    else if (this.scaleNotes.find(s => s.name == this.noteName)) {
+    else if (this.isDiatonic) {
       this.noteColor = 'tertiary';
       this.showButton = true;
     }

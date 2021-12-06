@@ -21,7 +21,7 @@ export class PianoKeyGroup {
           <piano-key keyNumber={2} isBlack style={{ position: 'relative', left: '85px' }} />
           <piano-key keyNumber={4} isBlack style={{ position: 'relative', left: '125px' }} />
           <piano-key keyNumber={7} isBlack style={{ position: 'relative', left: '195px' }} />
-          <piano-key keyNumber={9} isBlack style={{ position: 'relative', left: '228px' }} />
+          <piano-key keyNumber={9} isBlack style={{ position: 'relative', left: '227px' }} />
           <piano-key keyNumber={11} isBlack style={{ position: 'relative', left: '260px' }} />
         </div>
       </div>

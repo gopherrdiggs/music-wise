@@ -37,7 +37,6 @@ export namespace Components {
         "fretNumber": number;
         "isNut": boolean;
         "noteColor": string;
-        "noteName": string;
         "stringNumber": number;
         "stringSize": 'small' | 'medium' | 'large';
     }
@@ -267,7 +266,6 @@ declare namespace LocalJSX {
         "fretNumber"?: number;
         "isNut"?: boolean;
         "noteColor"?: string;
-        "noteName"?: string;
         "stringNumber"?: number;
         "stringSize"?: 'small' | 'medium' | 'large';
     }
