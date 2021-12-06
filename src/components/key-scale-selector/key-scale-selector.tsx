@@ -156,17 +156,29 @@ export class KeyScaleSelector {
               </div>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <div style={{ height: '30px' }}></div>
-                <ion-item button detail={false} lines='none' style={{ "--min-height": "0" }}>
-                  <ion-label style={{ margin: '0' }}>Sharp</ion-label>
-                  <ion-checkbox slot="start" style={{ "--border-radius": '2px', margin: '2px 8px 2px 0' }}
-                    onClick={() => this.handleSharpSelected()}
-                    checked={this.isRootSharp} />
+                <ion-item button detail={false} lines='none' 
+                          style={{ '--min-height': '0',
+                                    margin: '6px 0' }}>
+                  <ion-label style={{ margin: '0 0 0 6px' }}>
+                    Sharp
+                  </ion-label>
+                  <ion-checkbox slot="start" 
+                                style={{ "--border-radius": '2px', 
+                                         margin: '0' }}
+                                onClick={() => this.handleSharpSelected()}
+                                checked={this.isRootSharp} />
                 </ion-item>
-                <ion-item button detail={false} lines='none' style={{ "--min-height": "0" }}>
-                  <ion-label style={{ margin: '0' }}>Flat</ion-label>
-                  <ion-checkbox slot="start" style={{ "--border-radius": '2px', margin: '2px 8px 2px 0' }}
-                    onClick={() => this.handleFlatSelected()}
-                    checked={this.isRootFlat} />
+                <ion-item button detail={false} lines='none' 
+                          style={{ '--min-height': '0',
+                                    margin: '6px 0' }}>
+                  <ion-label style={{ margin: '0 0 0 6px' }}>
+                    Flat
+                  </ion-label>
+                  <ion-checkbox slot="start" 
+                                style={{ "--border-radius": '2px', 
+                                         margin: '0' }}
+                                onClick={() => this.handleFlatSelected()}
+                                checked={this.isRootFlat} />
                 </ion-item>
               </div>
             </div>
