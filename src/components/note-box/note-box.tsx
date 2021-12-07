@@ -34,11 +34,13 @@ export class NoteBox {
 
   @Listen('keyAlterationChanged', { target: 'body' })
   async handleKeyAlterationChanged(_event: any) {
+    this.selectedKey = App.state.currentKey;
     await this.updateNote();
   }
 
   @Listen('scaleChanged', { target: 'body' })
   async handleScaleChanged(_event: any) {
+    this.selectedKey = App.state.currentKey;
     await this.updateNote();
   }
 
@@ -149,7 +151,7 @@ export class NoteBox {
                       padding: '24px', border: '2px solid gray', 
                       height: '60px',
                       display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          {this.noteName.replace('♭', '\u266D').replace('♯', '\u266F')}
+          {this.noteName}
           <ion-ripple-effect />
         </div>
         <div style={{ color: 'var(--ion-color-medium)', 

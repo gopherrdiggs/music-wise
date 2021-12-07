@@ -25,13 +25,6 @@ export interface NoteAlteration {
   name: string
 }
 
-export interface OldScale {
-  id: string,
-  name: string,
-  toneIntervalPattern: string[],
-  chordPattern: string[]
-}
-
 export interface Scale {
   id: string,
   name: string,

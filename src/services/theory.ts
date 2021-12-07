@@ -200,6 +200,7 @@ class TheoryController {
         intervalName: interval.name
       } as Note);
 
+      // ♯
       if (!interval.id.includes('♭')) {
         // Shift index
         noteNaturalIndex++;
