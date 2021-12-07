@@ -56,7 +56,7 @@ export class NotesSection {
 
     if (this.notes && this.notes.length > 11) {
       this.keyNotesChanged.emit({
-        keyNotes: this.notes.slice(0,12)
+        keyNotes: this.notes
       })
       this.scaleNotesChanged.emit({
         scaleNotes: this.notes.filter(n => n.isDiatonic).slice(0,7)
@@ -83,13 +83,8 @@ export class NotesSection {
                     margin: '16px 44px', 
                     paddingBottom: '20px',
                     overflowX: 'scroll' }}>
-        {this.notes.map(note =>
-          <note-box id={`${note.id}${note.isDiatonic}`} 
-                    key={`${note.id}${note.isDiatonic}`} 
-                    noteNumber={note.intervalNumericReference}
-                    noteName={note.name}
-                    noteSubtext={note.intervalName}
-                    isDiatonic={note.isDiatonic} />
+        {this.notes.map((_note, indx) =>
+          <note-box keyNoteIndex={indx} />
         )}
       </div>
     ]

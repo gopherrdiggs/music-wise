@@ -21,9 +21,13 @@ export class PianoKey {
   
   async componentWillLoad() {
     this.selectedKey = App.state.currentKey
-    this.keyNotes = App.state.keyNotes;
+    await this.refreshKeyNotes();
     this.allNotes = await TheoryService.getNotes();
     await this.updateNote();
+  }
+
+  async refreshKeyNotes() {
+    this.keyNotes = App.state.keyNotes.slice(0,12);
   }
 
   @Listen('noteDeselected', { target: 'body' })
@@ -44,7 +48,7 @@ export class PianoKey {
 
   @Listen('keyNotesChanged', { target: 'body' })
   async handleKeyNotesChanged(event: any) {
-    this.keyNotes = event.detail.keyNotes;
+    this.keyNotes = event.detail.keyNotes.slice(0,12);
     this.selectedKey = this.keyNotes[0].name;
     await this.updateNote();
   }

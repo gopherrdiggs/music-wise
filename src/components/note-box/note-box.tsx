@@ -1,4 +1,5 @@
 import { Component, h, Event, EventEmitter, Listen, Prop, State } from "@stencil/core";
+import { Note } from "../../interfaces/application";
 import { App } from "../../services/app-state";
 import { PopoverService } from "../../services/popover";
 
@@ -11,36 +12,27 @@ export class NoteBox {
   @Event() noteSelected: EventEmitter;
   @Event() noteDeselected: EventEmitter;
 
-  @Prop() noteNumber: string = '';
-  @Prop() noteName: string;
-  @Prop() noteSubtext: string;
-  @Prop({ mutable: true }) isDiatonic: boolean;
-  @Prop({ mutable: true }) isSelected: boolean;
+  @Prop() keyNoteIndex: number;
 
+  @State() isDiatonic: boolean;
+  @State() noteNumber: string = '';
+  @State() noteName: string;
+  @State() noteSubtext: string;
   @State() boxColor: string;
 
   selectedKey: string;
+  keyNotes: Note[] = [];
   
   async componentWillLoad() {
     this.selectedKey = App.state.currentKey
+    this.keyNotes = App.state.keyNotes;
     await this.updateNote();
   }
 
-  @Listen('keyChanged', { target: 'body' })
-  async handleKeyChanged(event: any) {
-    this.selectedKey = event.detail.key;
-    await this.updateNote();
-  }
-
-  @Listen('keyAlterationChanged', { target: 'body' })
-  async handleKeyAlterationChanged(_event: any) {
+  @Listen('keyNotesChanged', { target: 'body' })
+  async handleKeyNotesChanged(event: any) {
     this.selectedKey = App.state.currentKey;
-    await this.updateNote();
-  }
-
-  @Listen('scaleChanged', { target: 'body' })
-  async handleScaleChanged(_event: any) {
-    this.selectedKey = App.state.currentKey;
+    this.keyNotes = event.detail.keyNotes;
     await this.updateNote();
   }
 
@@ -72,7 +64,11 @@ export class NoteBox {
   }
 
   async updateNote() {
-    
+  
+    this.noteNumber = this.keyNotes[this.keyNoteIndex].intervalNumericReference;
+    this.noteName = this.keyNotes[this.keyNoteIndex].name;
+    this.noteSubtext = this.keyNotes[this.keyNoteIndex].intervalName;
+    this.isDiatonic = this.keyNotes[this.keyNoteIndex].isDiatonic;
     this.boxColor = this.noteName == this.selectedKey
       ? 'secondary'
       : this.isDiatonic 

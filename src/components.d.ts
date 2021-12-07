@@ -60,11 +60,7 @@ export namespace Components {
         "headerTitle": string;
     }
     interface NoteBox {
-        "isDiatonic": boolean;
-        "isSelected": boolean;
-        "noteName": string;
-        "noteNumber": string;
-        "noteSubtext": string;
+        "keyNoteIndex": number;
     }
     interface NotesSection {
     }
@@ -292,11 +288,7 @@ declare namespace LocalJSX {
         "headerTitle"?: string;
     }
     interface NoteBox {
-        "isDiatonic"?: boolean;
-        "isSelected"?: boolean;
-        "noteName"?: string;
-        "noteNumber"?: string;
-        "noteSubtext"?: string;
+        "keyNoteIndex"?: number;
         "onNoteDeselected"?: (event: CustomEvent<any>) => void;
         "onNoteSelected"?: (event: CustomEvent<any>) => void;
     }
