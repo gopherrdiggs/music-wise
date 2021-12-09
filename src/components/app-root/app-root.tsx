@@ -59,16 +59,21 @@ export class AppRoot {
   }
 
   async setAppStateDefaults() {
-    if (!App.state.currentKey) {
+    console.log('Setting app defaults')
+    if (!App.state.currentKey
+        || !App.state.currentKeyAlteration
+        || !App.state.currentScale
+        || !App.state.keyNotes) {
       this.el.dispatchEvent(new CustomEvent('keyChanged', { detail: { key: 'C' }}));
-    }
-    if (!App.state.currentKeyAlteration) {
       this.el.dispatchEvent(new CustomEvent('keyAlterationChanged', { detail: { keyAlteration: 'natural' }}));
-    }
-    if (!App.state.currentScale) {
       let defaultScale = (await TheoryService.getScaleGroups())[0].scales[0];
       this.el.dispatchEvent(new CustomEvent('scaleChanged', { detail: { scale: defaultScale }}));
-    }
+      let notes = await TheoryService.generateKeyNotes(
+        'C', 'natural', defaultScale.intervalPattern
+      );
+      this.el.dispatchEvent(new CustomEvent('keyNotesChanged', { detail: notes }));
+      this.el.dispatchEvent(new CustomEvent('scaleNotesChanged', { detail: notes.filter(n => n.isDiatonic).slice(0,7) }));
+    } 
   }
 
   getShowMenu() {

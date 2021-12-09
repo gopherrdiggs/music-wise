@@ -40,18 +40,9 @@ export namespace Components {
         "stringNumber": number;
         "stringSize": 'small' | 'medium' | 'large';
     }
-    interface GuitarFretString {
-        "noteColor": string;
-        "noteName": string;
-        "stringSize": 'small' | 'medium' | 'large';
-    }
     interface GuitarNut {
     }
     interface GuitarSection {
-    }
-    interface KeyChords {
-    }
-    interface KeyNotes {
     }
     interface KeyScaleSelector {
     }
@@ -125,12 +116,6 @@ declare global {
         prototype: HTMLGuitarFretNoteElement;
         new (): HTMLGuitarFretNoteElement;
     };
-    interface HTMLGuitarFretStringElement extends Components.GuitarFretString, HTMLStencilElement {
-    }
-    var HTMLGuitarFretStringElement: {
-        prototype: HTMLGuitarFretStringElement;
-        new (): HTMLGuitarFretStringElement;
-    };
     interface HTMLGuitarNutElement extends Components.GuitarNut, HTMLStencilElement {
     }
     var HTMLGuitarNutElement: {
@@ -142,18 +127,6 @@ declare global {
     var HTMLGuitarSectionElement: {
         prototype: HTMLGuitarSectionElement;
         new (): HTMLGuitarSectionElement;
-    };
-    interface HTMLKeyChordsElement extends Components.KeyChords, HTMLStencilElement {
-    }
-    var HTMLKeyChordsElement: {
-        prototype: HTMLKeyChordsElement;
-        new (): HTMLKeyChordsElement;
-    };
-    interface HTMLKeyNotesElement extends Components.KeyNotes, HTMLStencilElement {
-    }
-    var HTMLKeyNotesElement: {
-        prototype: HTMLKeyNotesElement;
-        new (): HTMLKeyNotesElement;
     };
     interface HTMLKeyScaleSelectorElement extends Components.KeyScaleSelector, HTMLStencilElement {
     }
@@ -212,11 +185,8 @@ declare global {
         "collapsi-card": HTMLCollapsiCardElement;
         "guitar-fret": HTMLGuitarFretElement;
         "guitar-fret-note": HTMLGuitarFretNoteElement;
-        "guitar-fret-string": HTMLGuitarFretStringElement;
         "guitar-nut": HTMLGuitarNutElement;
         "guitar-section": HTMLGuitarSectionElement;
-        "key-chords": HTMLKeyChordsElement;
-        "key-notes": HTMLKeyNotesElement;
         "key-scale-selector": HTMLKeyScaleSelectorElement;
         "modal-header-toolbar": HTMLModalHeaderToolbarElement;
         "note-box": HTMLNoteBoxElement;
@@ -265,18 +235,9 @@ declare namespace LocalJSX {
         "stringNumber"?: number;
         "stringSize"?: 'small' | 'medium' | 'large';
     }
-    interface GuitarFretString {
-        "noteColor"?: string;
-        "noteName"?: string;
-        "stringSize"?: 'small' | 'medium' | 'large';
-    }
     interface GuitarNut {
     }
     interface GuitarSection {
-    }
-    interface KeyChords {
-    }
-    interface KeyNotes {
     }
     interface KeyScaleSelector {
         "onKeyAlterationChanged"?: (event: CustomEvent<any>) => void;
@@ -316,11 +277,8 @@ declare namespace LocalJSX {
         "collapsi-card": CollapsiCard;
         "guitar-fret": GuitarFret;
         "guitar-fret-note": GuitarFretNote;
-        "guitar-fret-string": GuitarFretString;
         "guitar-nut": GuitarNut;
         "guitar-section": GuitarSection;
-        "key-chords": KeyChords;
-        "key-notes": KeyNotes;
         "key-scale-selector": KeyScaleSelector;
         "modal-header-toolbar": ModalHeaderToolbar;
         "note-box": NoteBox;
@@ -343,11 +301,8 @@ declare module "@stencil/core" {
             "collapsi-card": LocalJSX.CollapsiCard & JSXBase.HTMLAttributes<HTMLCollapsiCardElement>;
             "guitar-fret": LocalJSX.GuitarFret & JSXBase.HTMLAttributes<HTMLGuitarFretElement>;
             "guitar-fret-note": LocalJSX.GuitarFretNote & JSXBase.HTMLAttributes<HTMLGuitarFretNoteElement>;
-            "guitar-fret-string": LocalJSX.GuitarFretString & JSXBase.HTMLAttributes<HTMLGuitarFretStringElement>;
             "guitar-nut": LocalJSX.GuitarNut & JSXBase.HTMLAttributes<HTMLGuitarNutElement>;
             "guitar-section": LocalJSX.GuitarSection & JSXBase.HTMLAttributes<HTMLGuitarSectionElement>;
-            "key-chords": LocalJSX.KeyChords & JSXBase.HTMLAttributes<HTMLKeyChordsElement>;
-            "key-notes": LocalJSX.KeyNotes & JSXBase.HTMLAttributes<HTMLKeyNotesElement>;
             "key-scale-selector": LocalJSX.KeyScaleSelector & JSXBase.HTMLAttributes<HTMLKeyScaleSelectorElement>;
             "modal-header-toolbar": LocalJSX.ModalHeaderToolbar & JSXBase.HTMLAttributes<HTMLModalHeaderToolbarElement>;
             "note-box": LocalJSX.NoteBox & JSXBase.HTMLAttributes<HTMLNoteBoxElement>;
