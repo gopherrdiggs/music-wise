@@ -59,7 +59,7 @@ export class AppRoot {
   }
 
   async setAppStateDefaults() {
-    console.log('Setting app defaults')
+    
     if (!App.state.currentKey
         || !App.state.currentKeyAlteration
         || !App.state.currentScale

@@ -6,12 +6,12 @@ class TheoryController {
     { id: 'a',  name: "A / B♭♭ / G♯♯" },
     { id: 'as', name: "A♯ / B♭ / C♭♭" },
     { id: 'b',  name: "B / C♭ / A♯♯" },
-    { id: 'c',  name: "C / D♭♭ / B♯" },
+    { id: 'c',  name: "C / B♯ / D♭♭" },
     { id: 'cs', name: "C♯ / D♭" },
     { id: 'd',  name: "D / E♭♭ / C♯♯" },
     { id: 'ds', name: "D♯ / E♭ / F♭♭" },
     { id: 'e',  name: "E / F♭ / D♯♯" },
-    { id: 'f',  name: "F / G♭♭ / E♯" },
+    { id: 'f',  name: "F / E♯ / G♭♭" },
     { id: 'fs', name: "F♯ / G♭" },
     { id: 'g',  name: "G / A♭♭ / F♯♯" },
     { id: 'gs', name: "G♯ / A♭" }
@@ -180,8 +180,8 @@ class TheoryController {
     
     let noteNaturalIndex = this.noteNaturals.findIndex(note => note.name === rootNatural);
     let intervalNames = [...this.intervalNoteNames];   // i.e., 1-Unison, b2-Minor 2nd, etc.
-    let interval = intervalNames.shift();
-    let scaleIntervals = intervalPattern.split('|');   // e.g., 1|-|2|-|3|4|-|5|-|6|-|7
+    //let interval = intervalNames.shift();
+    let scaleIntervals = intervalPattern.split('|');   // e.g., 1|-|2|-|3|4|-|5|-|6|-|7 for major
     let scaleIntervalIndex = 0;
 
     let result: Note[] = [];
@@ -196,12 +196,23 @@ class TheoryController {
       result.push({
         name: noteName,
         isDiatonic: isDiatonic,
-        intervalNumericReference: interval.id,
-        intervalName: interval.name
+        intervalNumericReference: intervalNames[0].id,
+        intervalName: intervalNames[0].name
       } as Note);
 
-      // ♯
-      if (!interval.id.includes('♭')) {
+      // If the next interval can be either sharp or flat...
+      if (intervalNames[1].id.includes('/')) {
+        // ...choose which it is based on the selected scale interval pattern
+        if (['♭', '-'].includes(scaleIntervals[scaleIntervalIndex + 1])) {
+          intervalNames[1].id = intervalNames[1].id.split('/')[1]; // flat
+        }
+        else {
+          intervalNames[1].id = intervalNames[1].id.split('/')[0]; // sharp
+        }
+      }
+
+      // ♯ 
+      if (!intervalNames[0].id.includes('♭') && !intervalNames[1].id.includes('♯')) {
         // Shift index
         noteNaturalIndex++;
         if (noteNaturalIndex >= this.noteNaturals.length) { noteNaturalIndex = 0 }
@@ -212,7 +223,7 @@ class TheoryController {
       if (noteIndex >= this.notes.length) { noteIndex = 0 }
       scaleIntervalIndex++;
       if (scaleIntervalIndex >= scaleIntervals.length) { scaleIntervalIndex = 0 }
-      interval = intervalNames.shift();
+      intervalNames.push(intervalNames.shift());
     }
 
     return result;
