@@ -180,10 +180,18 @@ class TheoryController {
     if (noteIndex < 0) { throw 'Invalid root note.' }
     
     let noteNaturalIndex = this.noteNaturals.findIndex(note => note.name === rootNatural);
-    let intervalNames = [...this.intervalNoteNames];   // i.e., 1-Unison, b2-Minor 2nd, etc.
-    //let interval = intervalNames.shift();
     let scaleIntervals = intervalPattern.split('|');   // e.g., 1|-|2|-|3|4|-|5|-|6|-|7 for major
     let scaleIntervalIndex = 0;
+    let intervalNames = [...this.intervalNoteNames];   // i.e., 1-Unison, b2-Minor 2nd, etc.
+    // Set intervals 6 and 18 to either sharp or flat based on scale interval pattern
+    if (scaleIntervals[6].includes('♯')) {
+      intervalNames[6].id = '♯4';
+      intervalNames[18].id = '♯11';
+    }
+    else {
+      intervalNames[6].id = '♭5';
+      intervalNames[18].id = '♭12';
+    }
 
     let result: Note[] = [];
 
@@ -201,17 +209,6 @@ class TheoryController {
         intervalName: intervalNames[0].name
       } as Note);
 
-      // If the next interval can be either sharp or flat...
-      if (intervalNames[1].id.includes('/')) {
-        // ...choose which it is based on the selected scale interval pattern
-        if (['♭', '-'].includes(scaleIntervals[scaleIntervalIndex + 1])) {
-          intervalNames[1].id = intervalNames[1].id.split('/')[1]; // flat
-        }
-        else {
-          intervalNames[1].id = intervalNames[1].id.split('/')[0]; // sharp
-        }
-      }
-
       // If current interval is flat or next interval is sharp...
       if (!intervalNames[0].id.includes('♭') && !intervalNames[1].id.includes('♯')) {
         // ...shift index for note natural
@@ -224,6 +221,7 @@ class TheoryController {
       if (noteIndex >= this.notes.length) { noteIndex = 0 }
       scaleIntervalIndex++;
       if (scaleIntervalIndex >= scaleIntervals.length) { scaleIntervalIndex = 0 }
+      // Rotate intervalNames array
       intervalNames.push(intervalNames.shift());
     }
 

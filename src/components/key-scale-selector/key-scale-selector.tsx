@@ -107,7 +107,6 @@ export class KeyScaleSelector {
   }
 
   async handleScaleSelected(scale: Scale) {
-
     this.selectedScale = scale;
     this.scaleChanged.emit({
       scale: scale

@@ -1,8 +1,10 @@
-import { Component, h, Element, Event, EventEmitter, State } from '@stencil/core';
+import { Component, h, Listen, Element, Event, EventEmitter, State } from '@stencil/core';
 import { setDarkTheme, styleScrollbar } from '../../helpers/utils';
+import { Scale } from '../../interfaces/application';
 import { App } from '../../services/app-state';
 import { LocalStorageService } from '../../services/local-storage';
 import { Switchboard } from '../../services/switchboard';
+import { TheoryService } from '../../services/theory';
 
 @Component({
   tag: 'app-root'
@@ -12,6 +14,7 @@ export class AppRoot {
   @Element() el;
 
   @Event() darkThemeEnabledChanged: EventEmitter;
+  @Event() keyNotesChanged: EventEmitter;
 
   @State() showMenu: boolean;
   @State() viewportSize: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -20,12 +23,26 @@ export class AppRoot {
 
   menuElem: HTMLIonMenuElement;
 
+  selectedKey: string;
+  selectedKeyAlteration: 'natural' | 'flat' | 'sharp';
+  selectedScale: Scale;
+
   async componentWillLoad() {
 
     await this.loadAppManifest();
     await this.loadAppSettings();
     await App.initialize();
     await Switchboard.observeDomChanges({});
+    
+    if (!this.selectedKey) {
+      this.selectedKey = App.state.currentKey;
+    }
+    if (!this.selectedKeyAlteration) {
+      this.selectedKeyAlteration = App.state.currentKeyAlteration;
+    }
+    if (!this.selectedScale) {
+      this.selectedScale = App.state.currentScale;
+    }
 
     this.viewportSize = App.state.viewportSize;
     this.showMenu = App.state.showMenu;
@@ -41,6 +58,24 @@ export class AppRoot {
     styleScrollbar(this.menuElem);
   }
 
+  @Listen('keyChanged', { target: 'body' })
+  async handleKeyChanged(event: any) {
+    this.selectedKey = event.detail.key;
+    await this.handleKeyOrScaleChanged();
+  }
+
+  @Listen('keyAlterationChanged', { target: 'body' })
+  async handleKeyAlterationChanged(event: any) {
+    this.selectedKeyAlteration = event.detail.keyAlteration;
+    await this.handleKeyOrScaleChanged();
+  }
+
+  @Listen('scaleChanged', { target: 'body' })
+  async handleScaleChanged(event: any) {
+    this.selectedScale = event.detail.scale;
+    await this.handleKeyOrScaleChanged();
+  }
+
   async loadAppManifest() {
 
     let manifestFile = await fetch('/manifest.json');
@@ -54,6 +89,20 @@ export class AppRoot {
     const appSettingsFile = await fetch('/app-settings.json');
     const appSettingsJson = await appSettingsFile.json();
     LocalStorageService.setLocalStoragePrefix(appSettingsJson['localStoragePrefix']);
+  }
+
+  async handleKeyOrScaleChanged() {
+    let notes = await TheoryService.generateKeyNotes(
+      this.selectedKey,
+      await TheoryService.getNoteAlterationSymbol(this.selectedKeyAlteration),
+      this.selectedScale.intervalPattern
+    );
+
+    if (notes && notes.length > 11) {
+      this.keyNotesChanged.emit({
+        keyNotes: notes
+      })
+    }
   }
 
   getShowMenu() {

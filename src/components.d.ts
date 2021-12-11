@@ -210,6 +210,7 @@ declare namespace LocalJSX {
     }
     interface AppRoot {
         "onDarkThemeEnabledChanged"?: (event: CustomEvent<any>) => void;
+        "onKeyNotesChanged"?: (event: CustomEvent<any>) => void;
     }
     interface ChordBox {
         "chordName"?: string;
@@ -254,7 +255,6 @@ declare namespace LocalJSX {
         "onNoteSelected"?: (event: CustomEvent<any>) => void;
     }
     interface NotesSection {
-        "onKeyNotesChanged"?: (event: CustomEvent<any>) => void;
         "onScaleNotesChanged"?: (event: CustomEvent<any>) => void;
     }
     interface PianoKey {

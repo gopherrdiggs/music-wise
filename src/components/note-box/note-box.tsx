@@ -57,14 +57,13 @@ export class NoteBox {
 
   @Listen('chordSelected', { target: 'body' })
   async handleChordSelected(event: any) {
-
     if (event.detail.notes.find(n => n.name == this.noteName)) {
       this.boxColor = event.detail.color;
     }
   }
 
   async updateNote() {
-  
+
     this.noteNumber = this.keyNotes[this.keyNoteIndex].intervalNumericReference;
     this.noteName = this.keyNotes[this.keyNoteIndex].name;
     this.noteSubtext = this.keyNotes[this.keyNoteIndex].intervalName;
@@ -107,9 +106,7 @@ export class NoteBox {
 
   async handleNoteColorSelected(color?: 'primary' | 'secondary' | 'tertiary') {
 
-    console.log('Color', color);
     if (!color) {
-      
       this.boxColor = 'light';
       this.noteDeselected.emit({
         noteName: this.noteName

@@ -1,68 +1,13 @@
-import { Component, h, Event, EventEmitter, Listen, State } from "@stencil/core";
-import { Note, Scale } from "../../interfaces/application";
-import { App } from "../../services/app-state";
-import { TheoryService } from "../../services/theory";
+import { Component, h, Event, EventEmitter, State } from "@stencil/core";
 
 @Component({
   tag: 'notes-section'
 })
 export class NotesSection {
 
-  @Event() keyNotesChanged: EventEmitter;
   @Event() scaleNotesChanged: EventEmitter;
 
-  @State() selectedKey: string;
-  @State() selectedKeyAlteration: 'natural' | 'flat' | 'sharp';
-  @State() selectedScale: Scale;
-  @State() notes: Note[] = [];
   @State() isCollapsed: boolean;
-
-  async componentWillLoad() {
-    this.selectedKey = App.state.currentKey;
-    this.selectedKeyAlteration = App.state.currentKeyAlteration;
-    this.selectedScale = App.state.currentScale;
-    await this.updateNotes();
-  }
-
-  @Listen('keyChanged', { target: 'body' })
-  async handleKeyChanged(event: any) {
-    this.selectedKey = event.detail.key;
-    console.log('notes-section key changed', this.selectedKey);
-    await this.updateNotes();
-  }
-
-  @Listen('keyAlterationChanged', { target: 'body' })
-  async handleKeyAlterationChanged(event: any) {
-    this.selectedKeyAlteration = event.detail.keyAlteration;
-    console.log('notes-section key alt changed', this.selectedKeyAlteration);
-    await this.updateNotes();
-  }
-
-  @Listen('scaleChanged', { target: 'body' })
-  async handleScaleChanged(event: any) {
-    this.selectedScale = event.detail.scale;
-    console.log('notes-section scale changed', this.selectedScale);
-    await this.updateNotes();
-  }
-
-  async updateNotes() {
-
-    if (!this.selectedKey || !this.selectedScale) { return }
-
-    this.notes = await TheoryService.generateKeyNotes(
-      this.selectedKey,
-      await TheoryService.getNoteAlterationSymbol(this.selectedKeyAlteration),
-      this.selectedScale.intervalPattern);
-
-    if (this.notes && this.notes.length > 11) {
-      this.keyNotesChanged.emit({
-        keyNotes: this.notes
-      })
-      this.scaleNotesChanged.emit({
-        scaleNotes: this.notes.filter(n => n.isDiatonic).slice(0,7)
-      });
-    }
-  }
 
   async handleSectionHeaderClicked() {
     this.isCollapsed = !this.isCollapsed;
@@ -83,11 +28,21 @@ export class NotesSection {
                     margin: '16px 44px', 
                     paddingBottom: '20px',
                     overflowX: 'scroll' }}>
-        {this.notes.map((note, indx) =>
-          <note-box id={`note_${note.intervalNumericReference}`}  
-                    key={`note_${note.intervalNumericReference}`} 
-                    keyNoteIndex={indx} />
-        )}
+        <note-box keyNoteIndex={0} />
+        <note-box keyNoteIndex={1} />
+        <note-box keyNoteIndex={2} />
+        <note-box keyNoteIndex={3} />
+        <note-box keyNoteIndex={4} />
+        <note-box keyNoteIndex={5} />
+        <note-box keyNoteIndex={6} />
+        <note-box keyNoteIndex={7} />
+        <note-box keyNoteIndex={8} />
+        <note-box keyNoteIndex={9} />
+        <note-box keyNoteIndex={10} />
+        <note-box keyNoteIndex={11} />
+        <note-box keyNoteIndex={12} />
+        <note-box keyNoteIndex={13} />
+        <note-box keyNoteIndex={14} />
       </div>
     ]
   }

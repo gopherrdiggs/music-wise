@@ -63,9 +63,7 @@ export class ChordBox {
 
   async handleChordColorSelected(color?: 'primary' | 'secondary' | 'tertiary') {
 
-    console.log('Color', color);
-    if (!color) {
-      
+    if (!color) {      
       this.boxColor = 'light';
       this.chordDeselected.emit({
         chordName: this.chordName,
@@ -73,7 +71,6 @@ export class ChordBox {
       });
     }
     else {
-
       this.boxColor = color;
       this.chordSelected.emit({
         chordName: this.chordName,
