@@ -18,26 +18,19 @@ export class GuitarSection {
     this.selectedScale = App.state.currentScale;
   }
 
-  async componentDidLoad() {
-    // await this.updateChords();
-  }
-
   @Listen('keyChanged', { target: 'body' })
   async handleKeyChanged(event: any) {
     this.selectedKey = event.detail.key;
-    // await this.updateChords();
   }
 
   @Listen('keyAlterationChanged', { target: 'body' })
   async handleKeyAlterationChanged(event: any) {
     this.selectedKeyAlteration = event.detail.keyAlteration;
-    // await this.updateChords();
   }
 
   @Listen('scaleChanged', { target: 'body' })
   async handleScaleChanged(event: any) {
     this.selectedScale = event.detail.scale;
-    // await this.updateChords();
   }
 
   async handleSectionHeaderClicked() {

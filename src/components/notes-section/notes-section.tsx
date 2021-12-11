@@ -12,7 +12,7 @@ export class NotesSection {
   @Event() scaleNotesChanged: EventEmitter;
 
   @State() selectedKey: string;
-  @State() selectedKeyAlteration: string;
+  @State() selectedKeyAlteration: 'natural' | 'flat' | 'sharp';
   @State() selectedScale: Scale;
   @State() notes: Note[] = [];
   @State() isCollapsed: boolean;
@@ -21,27 +21,27 @@ export class NotesSection {
     this.selectedKey = App.state.currentKey;
     this.selectedKeyAlteration = App.state.currentKeyAlteration;
     this.selectedScale = App.state.currentScale;
-  }
-
-  async componentDidLoad() {
     await this.updateNotes();
   }
 
   @Listen('keyChanged', { target: 'body' })
   async handleKeyChanged(event: any) {
     this.selectedKey = event.detail.key;
+    console.log('notes-section key changed', this.selectedKey);
     await this.updateNotes();
   }
 
   @Listen('keyAlterationChanged', { target: 'body' })
   async handleKeyAlterationChanged(event: any) {
     this.selectedKeyAlteration = event.detail.keyAlteration;
+    console.log('notes-section key alt changed', this.selectedKeyAlteration);
     await this.updateNotes();
   }
 
   @Listen('scaleChanged', { target: 'body' })
   async handleScaleChanged(event: any) {
     this.selectedScale = event.detail.scale;
+    console.log('notes-section scale changed', this.selectedScale);
     await this.updateNotes();
   }
 
@@ -51,7 +51,7 @@ export class NotesSection {
 
     this.notes = await TheoryService.generateKeyNotes(
       this.selectedKey,
-      this.selectedKeyAlteration == 'natural' ? '' : await TheoryService.getNoteAlterationSymbol(this.selectedKeyAlteration),
+      await TheoryService.getNoteAlterationSymbol(this.selectedKeyAlteration),
       this.selectedScale.intervalPattern);
 
     if (this.notes && this.notes.length > 11) {
@@ -83,8 +83,10 @@ export class NotesSection {
                     margin: '16px 44px', 
                     paddingBottom: '20px',
                     overflowX: 'scroll' }}>
-        {this.notes.map((_note, indx) =>
-          <note-box keyNoteIndex={indx} />
+        {this.notes.map((note, indx) =>
+          <note-box id={`note_${note.intervalNumericReference}`}  
+                    key={`note_${note.intervalNumericReference}`} 
+                    keyNoteIndex={indx} />
         )}
       </div>
     ]

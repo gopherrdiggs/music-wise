@@ -3,7 +3,6 @@ import { setDarkTheme, styleScrollbar } from '../../helpers/utils';
 import { App } from '../../services/app-state';
 import { LocalStorageService } from '../../services/local-storage';
 import { Switchboard } from '../../services/switchboard';
-import { TheoryService } from '../../services/theory';
 
 @Component({
   tag: 'app-root'
@@ -38,7 +37,6 @@ export class AppRoot {
     // Switchboard configuration for this root element
     Switchboard.setRootElement(this.el);
     await App.registerEventHandlers();
-    await this.setAppStateDefaults();
 
     styleScrollbar(this.menuElem);
   }
@@ -56,24 +54,6 @@ export class AppRoot {
     const appSettingsFile = await fetch('/app-settings.json');
     const appSettingsJson = await appSettingsFile.json();
     LocalStorageService.setLocalStoragePrefix(appSettingsJson['localStoragePrefix']);
-  }
-
-  async setAppStateDefaults() {
-    
-    if (!App.state.currentKey
-        || !App.state.currentKeyAlteration
-        || !App.state.currentScale
-        || !App.state.keyNotes) {
-      this.el.dispatchEvent(new CustomEvent('keyChanged', { detail: { key: 'C' }}));
-      this.el.dispatchEvent(new CustomEvent('keyAlterationChanged', { detail: { keyAlteration: 'natural' }}));
-      let defaultScale = (await TheoryService.getScaleGroups())[0].scales[0];
-      this.el.dispatchEvent(new CustomEvent('scaleChanged', { detail: { scale: defaultScale }}));
-      let notes = await TheoryService.generateKeyNotes(
-        'C', 'natural', defaultScale.intervalPattern
-      );
-      this.el.dispatchEvent(new CustomEvent('keyNotesChanged', { detail: notes }));
-      this.el.dispatchEvent(new CustomEvent('scaleNotesChanged', { detail: notes.filter(n => n.isDiatonic).slice(0,7) }));
-    } 
   }
 
   getShowMenu() {

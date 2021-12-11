@@ -28,6 +28,7 @@ class TheoryController {
   ];
 
   private noteAlterations: NoteAlteration[] = [
+    { id: 'natural', symbol: '', name: 'Natural' },
     { id: 'flat', symbol: '♭', name: 'Flat' },
     { id: 'sharp', symbol: '♯', name: 'Sharp' }
   ];
@@ -161,7 +162,7 @@ class TheoryController {
     return this.notes[noteIndex].name.split(' / ').find(n => n.includes(this.noteNaturals[noteNaturalIndex].name));
   }
 
-  async getNoteAlterationSymbol(alterationIdOrName: string) {
+  async getNoteAlterationSymbol(alterationIdOrName: 'natural' | 'flat' | 'sharp') {
 
     let noteAlt = this.noteAlterations.find(a => a.id == alterationIdOrName.toLowerCase());
 
@@ -211,14 +212,14 @@ class TheoryController {
         }
       }
 
-      // ♯ 
+      // If current interval is flat or next interval is sharp...
       if (!intervalNames[0].id.includes('♭') && !intervalNames[1].id.includes('♯')) {
-        // Shift index
+        // ...shift index for note natural
         noteNaturalIndex++;
         if (noteNaturalIndex >= this.noteNaturals.length) { noteNaturalIndex = 0 }
       }
 
-      // Shift indices
+      // Shift other indices
       noteIndex++;
       if (noteIndex >= this.notes.length) { noteIndex = 0 }
       scaleIntervalIndex++;

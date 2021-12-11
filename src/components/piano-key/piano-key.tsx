@@ -21,13 +21,9 @@ export class PianoKey {
   
   async componentWillLoad() {
     this.selectedKey = App.state.currentKey
-    await this.refreshKeyNotes();
+    this.keyNotes = App.state.keyNotes.slice(0,12);
     this.allNotes = await TheoryService.getNotes();
     await this.updateNote();
-  }
-
-  async refreshKeyNotes() {
-    this.keyNotes = App.state.keyNotes.slice(0,12);
   }
 
   @Listen('noteDeselected', { target: 'body' })

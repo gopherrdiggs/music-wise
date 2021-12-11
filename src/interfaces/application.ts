@@ -12,7 +12,7 @@ export interface ChordGroup {
 }
 
 export interface Note {
-  id: string,
+  id?: string,
   name: string,
   isDiatonic?: boolean,
   intervalNumericReference?: string,

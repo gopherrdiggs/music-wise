@@ -10,7 +10,7 @@ interface AppState {
   darkThemeEnabled: boolean,
   showMenu: boolean,
   currentKey: string,
-  currentKeyAlteration: string,
+  currentKeyAlteration: 'natural' | 'flat' | 'sharp',
   currentScale: Scale,
   keyNotes: Note[],
   scaleNotes: Note[],
@@ -57,11 +57,48 @@ class AppStateController {
 
   async setDefaults() {
 
-    if (!this.state.guitarTuning) {
-
+    if (!this.state.keyNotes) {
+      // Set default guitar tuning
       this.state = {...this.state,
-        guitarTuning: ['E','A','D','G','B','E']
-      };
+        "guitarTuning":["E","A","D","G","B","E"],
+        "currentKey":"C",
+        "currentKeyAlteration":"natural",
+        "currentScale":{"id":"major","name":"Major (Ionian)","intervalPattern":"1|-|2|-|3|4|-|5|-|6|-|7","chordPattern":["I","ii","iii","IV","V","vi","vii°"]},
+        "keyNotes":[
+          {"name":"C","isDiatonic":true,"intervalNumericReference":"1","intervalName":"Unison"},
+          {"name":"D♭","isDiatonic":false,"intervalNumericReference":"♭2","intervalName":"Minor 2nd"},
+          {"name":"D","isDiatonic":true,"intervalNumericReference":"2","intervalName":"Major 2nd"},
+          {"name":"E♭","isDiatonic":false,"intervalNumericReference":"♭3","intervalName":"Minor 3rd"},
+          {"name":"E","isDiatonic":true,"intervalNumericReference":"3","intervalName":"Major 3rd"},
+          {"name":"F","isDiatonic":true,"intervalNumericReference":"4","intervalName":"Perfect 4th"},
+          {"name":"G♭","isDiatonic":false,"intervalNumericReference":"♭5","intervalName":"Aug 4th / dim 5th"},
+          {"name":"G","isDiatonic":true,"intervalNumericReference":"5","intervalName":"Perfect 5th"},
+          {"name":"A♭","isDiatonic":false,"intervalNumericReference":"♭6","intervalName":"Minor 6th"},
+          {"name":"A","isDiatonic":true,"intervalNumericReference":"6","intervalName":"Major 6th"},
+          {"name":"B♭","isDiatonic":false,"intervalNumericReference":"♭7","intervalName":"Minor 7th"},
+          {"name":"B","isDiatonic":true,"intervalNumericReference":"7","intervalName":"Major 7th"},
+          {"name":"C","isDiatonic":true,"intervalNumericReference":"8","intervalName":"Octave"},
+          {"name":"D♭","isDiatonic":false,"intervalNumericReference":"♭9","intervalName":"Minor 9th"},
+          {"name":"D","isDiatonic":true,"intervalNumericReference":"9","intervalName":"Major 9th"},
+          {"name":"E♭","isDiatonic":false,"intervalNumericReference":"♭10","intervalName":"Minor 10th"},
+          {"name":"E","isDiatonic":true,"intervalNumericReference":"10","intervalName":"Major 10th"},
+          {"name":"F","isDiatonic":true,"intervalNumericReference":"11","intervalName":"Perfect 11th"},
+          {"name":"G♭","isDiatonic":false,"intervalNumericReference":"♭12","intervalName":"Aug 11th / dim 12th"},
+          {"name":"G","isDiatonic":true,"intervalNumericReference":"12","intervalName":"Perfect 12th"},
+          {"name":"A♭","isDiatonic":false,"intervalNumericReference":"♭13","intervalName":"Minor 13th"},
+          {"name":"A","isDiatonic":true,"intervalNumericReference":"13","intervalName":"Major 13th"},
+          {"name":"B♭","isDiatonic":false,"intervalNumericReference":"♭14","intervalName":"Minor 14th"},
+          {"name":"B","isDiatonic":true,"intervalNumericReference":"14","intervalName":"Major 14th"}],
+        "scaleNotes":[
+          {"name":"C","isDiatonic":true,"intervalNumericReference":"1","intervalName":"Unison"},
+          {"name":"D","isDiatonic":true,"intervalNumericReference":"2","intervalName":"Major 2nd"},
+          {"name":"E","isDiatonic":true,"intervalNumericReference":"3","intervalName":"Major 3rd"},
+          {"name":"F","isDiatonic":true,"intervalNumericReference":"4","intervalName":"Perfect 4th"},
+          {"name":"G","isDiatonic":true,"intervalNumericReference":"5","intervalName":"Perfect 5th"},
+          {"name":"A","isDiatonic":true,"intervalNumericReference":"6","intervalName":"Major 6th"},
+          {"name":"B","isDiatonic":true,"intervalNumericReference":"7","intervalName":"Major 7th"}]};
+      
+      LocalStorageService.set(this.localStorageKeySuffix, this.state);
     }
   }
 

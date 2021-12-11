@@ -9,7 +9,7 @@ import { TheoryService } from "../../services/theory";
 export class ChordsSection {
 
   @State() selectedKey: string;
-  @State() selectedKeyAlteration: string;
+  @State() selectedKeyAlteration: 'natural' | 'flat' | 'sharp';
   @State() selectedScale: Scale;
   @State() chordGroups: ChordGroup[] = [];
   @State() chords: Chord[] = [];
@@ -19,9 +19,6 @@ export class ChordsSection {
     this.selectedKey = App.state.currentKey;
     this.selectedKeyAlteration = App.state.currentKeyAlteration;
     this.selectedScale = App.state.currentScale;
-  }
-
-  async componentDidLoad() {
     await this.updateChords();
   }
 
@@ -49,7 +46,7 @@ export class ChordsSection {
 
     this.chordGroups = await TheoryService.generateKeyChordGroups(
       this.selectedKey,
-      this.selectedKeyAlteration == 'natural' ? '' : await TheoryService.getNoteAlterationSymbol(this.selectedKeyAlteration),
+      await TheoryService.getNoteAlterationSymbol(this.selectedKeyAlteration),
       this.selectedScale.intervalPattern
     );
 

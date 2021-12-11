@@ -31,8 +31,8 @@ export class NoteBox {
 
   @Listen('keyNotesChanged', { target: 'body' })
   async handleKeyNotesChanged(event: any) {
-    this.selectedKey = App.state.currentKey;
     this.keyNotes = event.detail.keyNotes;
+    this.selectedKey = this.keyNotes[0].name;
     await this.updateNote();
   }
 
