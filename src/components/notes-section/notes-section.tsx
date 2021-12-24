@@ -43,6 +43,15 @@ export class NotesSection {
         <note-box keyNoteIndex={12} />
         <note-box keyNoteIndex={13} />
         <note-box keyNoteIndex={14} />
+        <note-box keyNoteIndex={15} />
+        <note-box keyNoteIndex={16} />
+        <note-box keyNoteIndex={17} />
+        <note-box keyNoteIndex={18} />
+        <note-box keyNoteIndex={19} />
+        <note-box keyNoteIndex={20} />
+        <note-box keyNoteIndex={21} />
+        <note-box keyNoteIndex={22} />
+        <note-box keyNoteIndex={23} />
       </div>
     ]
   }
