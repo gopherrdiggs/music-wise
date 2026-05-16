@@ -67,6 +67,8 @@ export namespace Components {
     interface PopoverMenu {
         "content": any;
     }
+    interface ProgressionsSection {
+    }
 }
 export interface AppHeaderToolbarCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -91,6 +93,10 @@ export interface NoteBoxCustomEvent<T> extends CustomEvent<T> {
 export interface NotesSectionCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLNotesSectionElement;
+}
+export interface ProgressionsSectionCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLProgressionsSectionElement;
 }
 declare global {
     interface HTMLAppHeaderToolbarElementEventMap {
@@ -272,6 +278,24 @@ declare global {
         prototype: HTMLPopoverMenuElement;
         new (): HTMLPopoverMenuElement;
     };
+    interface HTMLProgressionsSectionElementEventMap {
+        "chordSelected": any;
+        "chordDeselected": any;
+    }
+    interface HTMLProgressionsSectionElement extends Components.ProgressionsSection, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLProgressionsSectionElementEventMap>(type: K, listener: (this: HTMLProgressionsSectionElement, ev: ProgressionsSectionCustomEvent<HTMLProgressionsSectionElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLProgressionsSectionElementEventMap>(type: K, listener: (this: HTMLProgressionsSectionElement, ev: ProgressionsSectionCustomEvent<HTMLProgressionsSectionElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLProgressionsSectionElement: {
+        prototype: HTMLProgressionsSectionElement;
+        new (): HTMLProgressionsSectionElement;
+    };
     interface HTMLElementTagNameMap {
         "app-header-toolbar": HTMLAppHeaderToolbarElement;
         "app-home": HTMLAppHomeElement;
@@ -291,6 +315,7 @@ declare global {
         "piano-key-group": HTMLPianoKeyGroupElement;
         "piano-section": HTMLPianoSectionElement;
         "popover-menu": HTMLPopoverMenuElement;
+        "progressions-section": HTMLProgressionsSectionElement;
     }
 }
 declare namespace LocalJSX {
@@ -364,6 +389,10 @@ declare namespace LocalJSX {
     interface PopoverMenu {
         "content"?: any;
     }
+    interface ProgressionsSection {
+        "onChordDeselected"?: (event: ProgressionsSectionCustomEvent<any>) => void;
+        "onChordSelected"?: (event: ProgressionsSectionCustomEvent<any>) => void;
+    }
     interface IntrinsicElements {
         "app-header-toolbar": AppHeaderToolbar;
         "app-home": AppHome;
@@ -383,6 +412,7 @@ declare namespace LocalJSX {
         "piano-key-group": PianoKeyGroup;
         "piano-section": PianoSection;
         "popover-menu": PopoverMenu;
+        "progressions-section": ProgressionsSection;
     }
 }
 export { LocalJSX as JSX };
@@ -407,6 +437,7 @@ declare module "@stencil/core" {
             "piano-key-group": LocalJSX.PianoKeyGroup & JSXBase.HTMLAttributes<HTMLPianoKeyGroupElement>;
             "piano-section": LocalJSX.PianoSection & JSXBase.HTMLAttributes<HTMLPianoSectionElement>;
             "popover-menu": LocalJSX.PopoverMenu & JSXBase.HTMLAttributes<HTMLPopoverMenuElement>;
+            "progressions-section": LocalJSX.ProgressionsSection & JSXBase.HTMLAttributes<HTMLProgressionsSectionElement>;
         }
     }
 }

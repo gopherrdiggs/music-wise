@@ -52,13 +52,18 @@ export class NoteBox {
   }
 
   @Listen('chordDeselected', { target: 'body' })
-  async handleChordDeselected(_event: any) {
-
+  async handleChordDeselected(event: any) {
+    const notes = event.detail?.notes;
+    if (!notes || notes.find((n: Note) => n.name === this.noteName)) {
+      this.boxColor = this.noteName === this.selectedKey
+        ? 'secondary'
+        : this.isDiatonic ? 'tertiary' : 'light';
+    }
   }
 
   @Listen('chordSelected', { target: 'body' })
   async handleChordSelected(event: any) {
-    if (event.detail.notes.find(n => n.name == this.noteName)) {
+    if (event.detail.notes.find((n: Note) => n.name == this.noteName)) {
       this.boxColor = event.detail.color;
     }
   }
@@ -140,10 +145,15 @@ export class NoteBox {
         </div>
         <div class="ion-activatable ripple-parent"
              style={{ backgroundColor: `var(--ion-color-${this.boxColor})`,
-                      color: `var(--ion-color-${this.boxColor}-contrast)`, 
+                      color: `var(--ion-color-${this.boxColor}-contrast)`,
                       fontSize: this.isDiatonic ? '1.5em' : '1em',
                       fontWeight: this.isDiatonic ? 'bold' : 'normal',
-                      padding: '24px', border: '2px solid gray', 
+                      padding: '24px', border: '2px solid gray',
+                      ...(this.noteName === this.selectedKey
+                        ? { borderLeft: '3px solid var(--ion-color-secondary)',
+                            borderRight: '3px solid var(--ion-color-secondary)',
+                            borderRadius: '5px' }
+                        : {}),
                       height: '60px',
                       display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           {this.noteName}

@@ -55,9 +55,25 @@ export class GuitarFretNote {
 
   @Listen('chordSelected', { target: 'body' })
   async handleChordSelected(event: any) {
-
-    if (event.detail.notes.find(n => n.name == this.noteName)) {
+    if (event.detail.notes.find((n: Note) => n.name == this.noteName)) {
       this.noteColor = event.detail.color;
+    }
+  }
+
+  @Listen('chordDeselected', { target: 'body' })
+  async handleChordDeselected(event: any) {
+    const notes = event.detail?.notes;
+    if (!notes || notes.find((n: Note) => n.name === this.noteName)) {
+      if (this.noteName === this.selectedKey) {
+        this.noteColor = 'secondary';
+        this.showButton = true;
+      } else if (this.isDiatonic) {
+        this.noteColor = 'tertiary';
+        this.showButton = true;
+      } else {
+        this.noteColor = 'transparent';
+        this.showButton = false;
+      }
     }
   }
 
@@ -124,13 +140,21 @@ export class GuitarFretNote {
                         '-moz-box-shadow': '4px 2px 1px 0px rgba(0,0,0,0.5)',
                         'box-shadow': '4px 2px 1px 0px rgba(0,0,0,0.5)' }} />
         }
-        {this.showButton &&
-          <ion-button color={this.noteColor} size='small' shape='round'
-                      style={{ padding: '0px', margin: '0px', 
-                               height: '22px', width: '40px' }}>
-          {this.noteName.replace('♭', '\u266D').replace('♯', '\u266F')}
-          </ion-button>
-        }
+        {this.showButton && (
+          <div style={{ display: 'inline-flex', alignItems: 'center',
+                        ...(this.noteName === this.selectedKey
+                          ? { borderLeft: '2px solid var(--ion-color-secondary)',
+                              borderRight: '2px solid var(--ion-color-secondary)',
+                              borderRadius: '14px',
+                              padding: '0 2px' }
+                          : {}) }}>
+            <ion-button color={this.noteColor} size='small' shape='round'
+                        style={{ padding: '0px', margin: '0px',
+                                 height: '22px', width: '40px' }}>
+              {this.noteName.replace('♭', '\u266D').replace('♯', '\u266F')}
+            </ion-button>
+          </div>
+        )}
       </div>
     ]    
   }

@@ -51,9 +51,22 @@ export class PianoKey {
 
   @Listen('chordSelected', { target: 'body' })
   async handleChordSelected(event: any) {
-
-    if (event.detail.notes.find(n => n.name == this.noteName)) {
+    if (event.detail.notes.find((n: Note) => n.name == this.noteName)) {
       this.noteColor = event.detail.color;
+    }
+  }
+
+  @Listen('chordDeselected', { target: 'body' })
+  async handleChordDeselected(event: any) {
+    const notes = event.detail?.notes;
+    if (!notes || notes.find((n: Note) => n.name === this.noteName)) {
+      if (this.noteName === this.selectedKey) {
+        this.noteColor = 'secondary';
+      } else if (this.isDiatonic) {
+        this.noteColor = 'tertiary';
+      } else {
+        this.noteColor = this.isBlack ? 'medium' : 'light';
+      }
     }
   }
 
@@ -103,12 +116,17 @@ export class PianoKey {
   }
 
   renderWhiteKey() {
+    const isTonic = this.noteName === this.selectedKey;
     return [
       <div class="ion-activatable ripple-parent"
            style={{ height: '200px', width: '60px',
                     backgroundColor: `var(--ion-color-${this.noteColor})`,
                     color: `var(--ion-color-${this.noteColor}-contrast)`,
                     border: '1px solid lightgray',
+                    ...(isTonic
+                      ? { borderLeft: '3px solid var(--ion-color-secondary)',
+                          borderRight: '3px solid var(--ion-color-secondary)' }
+                      : {}),
                     borderRadius: '0 0 5px 5px',
                     display: 'flex', alignItems: 'end', justifyContent: 'center',
                     paddingBottom: '10px' }} >
@@ -119,12 +137,17 @@ export class PianoKey {
   }
 
   renderBlackKey() {
+    const isTonic = this.noteName === this.selectedKey;
     return [
       <div class="ion-activatable ripple-parent"
            style={{ height: '125px', width: '35px',
                     position: 'relative', left: '-50px',
                     backgroundColor: `var(--ion-color-${this.noteColor})`,
                     color: `var(--ion-color-${this.noteColor}-contrast)`,
+                    ...(isTonic
+                      ? { borderLeft: '3px solid var(--ion-color-secondary)',
+                          borderRight: '3px solid var(--ion-color-secondary)' }
+                      : {}),
                     borderRadius: '0 0 5px 5px',
                     '-webkit-box-shadow': '1px 1px 1px 2px rgba(0,0,0,0.5)',
                     '-moz-box-shadow': '1px 1px 1px 2px rgba(0,0,0,0.5)',

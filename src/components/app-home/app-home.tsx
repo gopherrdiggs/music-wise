@@ -22,6 +22,7 @@ export class AppHome {
         <key-scale-selector />
         <notes-section />
         <chords-section />
+        <progressions-section />
         <piano-section />
         <guitar-section />
         <div style={{ height: '50px' }} />
