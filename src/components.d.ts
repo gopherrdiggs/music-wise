@@ -6,6 +6,7 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { Note } from "./interfaces/application";
+export { Note } from "./interfaces/application";
 export namespace Components {
     interface AppHeaderToolbar {
         "backCallback": Function;
@@ -67,8 +68,43 @@ export namespace Components {
         "content": any;
     }
 }
+export interface AppHeaderToolbarCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLAppHeaderToolbarElement;
+}
+export interface AppRootCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLAppRootElement;
+}
+export interface ChordBoxCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLChordBoxElement;
+}
+export interface KeyScaleSelectorCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLKeyScaleSelectorElement;
+}
+export interface NoteBoxCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLNoteBoxElement;
+}
+export interface NotesSectionCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLNotesSectionElement;
+}
 declare global {
+    interface HTMLAppHeaderToolbarElementEventMap {
+        "closeClicked": any;
+    }
     interface HTMLAppHeaderToolbarElement extends Components.AppHeaderToolbar, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLAppHeaderToolbarElementEventMap>(type: K, listener: (this: HTMLAppHeaderToolbarElement, ev: AppHeaderToolbarCustomEvent<HTMLAppHeaderToolbarElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLAppHeaderToolbarElementEventMap>(type: K, listener: (this: HTMLAppHeaderToolbarElement, ev: AppHeaderToolbarCustomEvent<HTMLAppHeaderToolbarElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLAppHeaderToolbarElement: {
         prototype: HTMLAppHeaderToolbarElement;
@@ -80,13 +116,37 @@ declare global {
         prototype: HTMLAppHomeElement;
         new (): HTMLAppHomeElement;
     };
+    interface HTMLAppRootElementEventMap {
+        "darkThemeEnabledChanged": any;
+        "keyNotesChanged": any;
+    }
     interface HTMLAppRootElement extends Components.AppRoot, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLAppRootElementEventMap>(type: K, listener: (this: HTMLAppRootElement, ev: AppRootCustomEvent<HTMLAppRootElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLAppRootElementEventMap>(type: K, listener: (this: HTMLAppRootElement, ev: AppRootCustomEvent<HTMLAppRootElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLAppRootElement: {
         prototype: HTMLAppRootElement;
         new (): HTMLAppRootElement;
     };
+    interface HTMLChordBoxElementEventMap {
+        "chordSelected": any;
+        "chordDeselected": any;
+    }
     interface HTMLChordBoxElement extends Components.ChordBox, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLChordBoxElementEventMap>(type: K, listener: (this: HTMLChordBoxElement, ev: ChordBoxCustomEvent<HTMLChordBoxElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLChordBoxElementEventMap>(type: K, listener: (this: HTMLChordBoxElement, ev: ChordBoxCustomEvent<HTMLChordBoxElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLChordBoxElement: {
         prototype: HTMLChordBoxElement;
@@ -128,7 +188,20 @@ declare global {
         prototype: HTMLGuitarSectionElement;
         new (): HTMLGuitarSectionElement;
     };
+    interface HTMLKeyScaleSelectorElementEventMap {
+        "keyChanged": any;
+        "keyAlterationChanged": any;
+        "scaleChanged": any;
+    }
     interface HTMLKeyScaleSelectorElement extends Components.KeyScaleSelector, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLKeyScaleSelectorElementEventMap>(type: K, listener: (this: HTMLKeyScaleSelectorElement, ev: KeyScaleSelectorCustomEvent<HTMLKeyScaleSelectorElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLKeyScaleSelectorElementEventMap>(type: K, listener: (this: HTMLKeyScaleSelectorElement, ev: KeyScaleSelectorCustomEvent<HTMLKeyScaleSelectorElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLKeyScaleSelectorElement: {
         prototype: HTMLKeyScaleSelectorElement;
@@ -140,13 +213,36 @@ declare global {
         prototype: HTMLModalHeaderToolbarElement;
         new (): HTMLModalHeaderToolbarElement;
     };
+    interface HTMLNoteBoxElementEventMap {
+        "noteSelected": any;
+        "noteDeselected": any;
+    }
     interface HTMLNoteBoxElement extends Components.NoteBox, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLNoteBoxElementEventMap>(type: K, listener: (this: HTMLNoteBoxElement, ev: NoteBoxCustomEvent<HTMLNoteBoxElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLNoteBoxElementEventMap>(type: K, listener: (this: HTMLNoteBoxElement, ev: NoteBoxCustomEvent<HTMLNoteBoxElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLNoteBoxElement: {
         prototype: HTMLNoteBoxElement;
         new (): HTMLNoteBoxElement;
     };
+    interface HTMLNotesSectionElementEventMap {
+        "scaleNotesChanged": any;
+    }
     interface HTMLNotesSectionElement extends Components.NotesSection, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLNotesSectionElementEventMap>(type: K, listener: (this: HTMLNotesSectionElement, ev: NotesSectionCustomEvent<HTMLNotesSectionElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLNotesSectionElementEventMap>(type: K, listener: (this: HTMLNotesSectionElement, ev: NotesSectionCustomEvent<HTMLNotesSectionElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLNotesSectionElement: {
         prototype: HTMLNotesSectionElement;
@@ -201,7 +297,7 @@ declare namespace LocalJSX {
     interface AppHeaderToolbar {
         "backCallback"?: Function;
         "headerTitle"?: string;
-        "onCloseClicked"?: (event: CustomEvent<any>) => void;
+        "onCloseClicked"?: (event: AppHeaderToolbarCustomEvent<any>) => void;
         "showBack"?: boolean;
         "showClose"?: boolean;
         "showMenu"?: boolean;
@@ -209,15 +305,15 @@ declare namespace LocalJSX {
     interface AppHome {
     }
     interface AppRoot {
-        "onDarkThemeEnabledChanged"?: (event: CustomEvent<any>) => void;
-        "onKeyNotesChanged"?: (event: CustomEvent<any>) => void;
+        "onDarkThemeEnabledChanged"?: (event: AppRootCustomEvent<any>) => void;
+        "onKeyNotesChanged"?: (event: AppRootCustomEvent<any>) => void;
     }
     interface ChordBox {
         "chordName"?: string;
         "chordNotes"?: Note[];
         "chordNumber"?: string;
-        "onChordDeselected"?: (event: CustomEvent<any>) => void;
-        "onChordSelected"?: (event: CustomEvent<any>) => void;
+        "onChordDeselected"?: (event: ChordBoxCustomEvent<any>) => void;
+        "onChordSelected"?: (event: ChordBoxCustomEvent<any>) => void;
     }
     interface ChordsSection {
     }
@@ -241,9 +337,9 @@ declare namespace LocalJSX {
     interface GuitarSection {
     }
     interface KeyScaleSelector {
-        "onKeyAlterationChanged"?: (event: CustomEvent<any>) => void;
-        "onKeyChanged"?: (event: CustomEvent<any>) => void;
-        "onScaleChanged"?: (event: CustomEvent<any>) => void;
+        "onKeyAlterationChanged"?: (event: KeyScaleSelectorCustomEvent<any>) => void;
+        "onKeyChanged"?: (event: KeyScaleSelectorCustomEvent<any>) => void;
+        "onScaleChanged"?: (event: KeyScaleSelectorCustomEvent<any>) => void;
     }
     interface ModalHeaderToolbar {
         "backCallback"?: Function;
@@ -251,11 +347,11 @@ declare namespace LocalJSX {
     }
     interface NoteBox {
         "keyNoteIndex"?: number;
-        "onNoteDeselected"?: (event: CustomEvent<any>) => void;
-        "onNoteSelected"?: (event: CustomEvent<any>) => void;
+        "onNoteDeselected"?: (event: NoteBoxCustomEvent<any>) => void;
+        "onNoteSelected"?: (event: NoteBoxCustomEvent<any>) => void;
     }
     interface NotesSection {
-        "onScaleNotesChanged"?: (event: CustomEvent<any>) => void;
+        "onScaleNotesChanged"?: (event: NotesSectionCustomEvent<any>) => void;
     }
     interface PianoKey {
         "isBlack"?: boolean;

@@ -17,6 +17,7 @@ export class NoteBox {
   @State() isDiatonic: boolean;
   @State() noteNumber: string = '';
   @State() noteName: string;
+  @State() noteDegreeName: string;
   @State() noteSubtext: string;
   @State() boxColor: string;
 
@@ -66,6 +67,7 @@ export class NoteBox {
 
     this.noteNumber = this.keyNotes[this.keyNoteIndex].intervalNumericReference;
     this.noteName = this.keyNotes[this.keyNoteIndex].name;
+    this.noteDegreeName = this.keyNotes[this.keyNoteIndex].degreeName;
     this.noteSubtext = this.keyNotes[this.keyNoteIndex].intervalName;
     this.isDiatonic = this.keyNotes[this.keyNoteIndex].isDiatonic;
     this.boxColor = this.noteName == this.selectedKey
@@ -147,10 +149,11 @@ export class NoteBox {
           {this.noteName}
           <ion-ripple-effect />
         </div>
-        <div style={{ color: 'var(--ion-color-medium)', 
+        <div style={{ color: 'var(--ion-color-medium)',
                       fontSize: '.6em',
                       padding: '8px', textAlign: 'center' }}>
-          {this.noteSubtext}
+          {this.noteDegreeName && <div>{this.noteDegreeName}</div>}
+          <div>{this.noteSubtext}</div>
         </div>
       </div>
     ];

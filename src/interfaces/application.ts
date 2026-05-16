@@ -16,7 +16,8 @@ export interface Note {
   name: string,
   isDiatonic?: boolean,
   intervalNumericReference?: string,
-  intervalName?: string
+  intervalName?: string,
+  degreeName?: string
 }
 
 export interface NoteAlteration {
@@ -29,7 +30,8 @@ export interface Scale {
   id: string,
   name: string,
   intervalPattern: string,
-  chordPattern?: string[]
+  chordPattern?: string[],
+  modeDescription?: string
 }
 
 export interface ScaleGroup {

@@ -37,22 +37,22 @@ class TheoryController {
     { "name": "7 Tone Scales",
       "scales": [
         { "id": "major", "name": "Major (Ionian)", "intervalPattern": "1|-|2|-|3|4|-|5|-|6|-|7", "chordPattern": ['I','ii','iii','IV','V','vi','vii°'] },
-        { "id": "aeolian", "name": "Natural Minor (Aeolian), Melodic Minor Desc.", "intervalPattern": "1|-|2|♭3|-|4|-|5|♭6|-|♭7|-", "chordPattern": ['i','ii°','III','iv','v','VI','VII'] },
+        { "id": "aeolian", "name": "Natural Minor (Aeolian), Melodic Minor Desc.", "intervalPattern": "1|-|2|♭3|-|4|-|5|♭6|-|♭7|-", "chordPattern": ['i','ii°','III','iv','v','VI','VII'], "modeDescription": "6th mode of Major" },
         { "id": "melodicMinorAsc", "name": "Melodic Minor Asc. (Ionian ♭3)", "intervalPattern": "1|-|2|♭3|-|4|-|5|-|6|-|7", "chordPattern": ['i', 'ii', 'III+', 'IV', 'V', 'vi°', 'vii°'] },
         { "id": "harmonicMinor", "name": "Harmonic Minor (Aeolian ♯7)", "intervalPattern": "1|-|2|♭3|-|4|-|5|♭6|-|-|7", "chordPattern": ['i', 'ii°', 'III+', 'iv', 'V', 'VI', 'vii°'] },
-        { "id": "dorian", "name": "Dorian (Alt. Minor)", "intervalPattern": "1|-|2|♭3|-|4|-|5|-|6|♭7|-", "chordPattern": ['i','ii','III','IV','v','vi°', 'VII'] },
-        { "id": "phrygian", "name": "Phrygian (Alt. Minor)", "intervalPattern": "1|♭2|-|♭3|-|4|-|5|♭6|-|♭7|-", "chordPattern": ['i','II','III','iv','v°','VI', 'vii'] },
-        { "id": "lydian", "name": "Lydian (Alt. Major)", "intervalPattern": "1|-|2|-|3|-|♯4|5|-|6|-|7", "chordPattern": ['I','II', 'iii', 'iv°', 'V', 'vi', 'vii'] },
-        { "id": "mixolydian", "name": "Mixolydian (Alt. Major)", "intervalPattern": "1|-|2|-|3|4|-|5|-|6|♭7|-" , "chordPattern": ['I', 'ii', 'iii°', 'IV', 'v', 'vi', 'VII'] },
-        { "id": "locrian", "name": "Locrian (Diminished)", "intervalPattern": "1|♭2|-|♭3|-|4|♭5|-|♭6|-|♭7|-", "chordPattern": ['i°', 'II', 'iii', 'iv', 'V', 'VI', 'vii'] }
+        { "id": "dorian", "name": "Dorian (Alt. Minor)", "intervalPattern": "1|-|2|♭3|-|4|-|5|-|6|♭7|-", "chordPattern": ['i','ii','III','IV','v','vi°', 'VII'], "modeDescription": "2nd mode of Major" },
+        { "id": "phrygian", "name": "Phrygian (Alt. Minor)", "intervalPattern": "1|♭2|-|♭3|-|4|-|5|♭6|-|♭7|-", "chordPattern": ['i','II','III','iv','v°','VI', 'vii'], "modeDescription": "3rd mode of Major" },
+        { "id": "lydian", "name": "Lydian (Alt. Major)", "intervalPattern": "1|-|2|-|3|-|♯4|5|-|6|-|7", "chordPattern": ['I','II', 'iii', 'iv°', 'V', 'vi', 'vii'], "modeDescription": "4th mode of Major" },
+        { "id": "mixolydian", "name": "Mixolydian (Alt. Major)", "intervalPattern": "1|-|2|-|3|4|-|5|-|6|♭7|-" , "chordPattern": ['I', 'ii', 'iii°', 'IV', 'v', 'vi', 'VII'], "modeDescription": "5th mode of Major" },
+        { "id": "locrian", "name": "Locrian (Diminished)", "intervalPattern": "1|♭2|-|♭3|-|4|♭5|-|♭6|-|♭7|-", "chordPattern": ['i°', 'II', 'iii', 'iv', 'V', 'VI', 'vii'], "modeDescription": "7th mode of Major" }
       ]},
     { "name": "5 Tone Scales (Pentatonic)",
       "scales": [
-        { "id": "minorPentatonic", "name": "Pentatonic (Minor)", "intervalPattern": "1|-|-|♭3|-|4|-|5|-|-|♭7|-"},
+        { "id": "minorPentatonic", "name": "Pentatonic (Minor)", "intervalPattern": "1|-|-|♭3|-|4|-|5|-|-|♭7|-", "modeDescription": "5th mode of Major Pentatonic"},
         { "id": "majorPentatonic", "name": "Pentatonic (Major)", "intervalPattern": "1|-|2|-|3|-|-|5|-|6|-|-"},
-        { "id": "modeIII", "name": "Mode III", "intervalPattern": "1|-|2|-|-|4|-|5|-|-|♭7|-"},
-        { "id": "modeIV", "name": "Mode IV", "intervalPattern": "1|-|-|♭3|-|4|-|-|♯5|-|♭7|-"},
-        { "id": "modeV", "name": "Mode V", "intervalPattern": "1|-|2|-|-|4|-|5|-|6|-|-"}
+        { "id": "modeII", "name": "Mode II (Egyptian)", "intervalPattern": "1|-|2|-|-|4|-|5|-|-|♭7|-", "modeDescription": "2nd mode of Major Pentatonic"},
+        { "id": "modeIII", "name": "Mode III (Man Gong)", "intervalPattern": "1|-|-|♭3|-|4|-|-|♭6|-|♭7|-", "modeDescription": "3rd mode of Major Pentatonic"},
+        { "id": "modeIV", "name": "Mode IV (Ritusen)", "intervalPattern": "1|-|2|-|-|4|-|5|-|6|-|-", "modeDescription": "4th mode of Major Pentatonic"}
       ]},
     { "name": "6 Tone Scales",
       "scales": [
@@ -62,9 +62,25 @@ class TheoryController {
     { "name": "8 Tone Scales",
       "scales": [
         { "id": "wholeHalfI", "name": "Whole-Half (I)", "intervalPattern": "1|-|2|♭3|-|4|♭5|-|♭6|6|-|7"},
-        { "id": "halfWholeII", "name": "Half-Whole (II)", "intervalPattern": "1|♭2|-|♭3|3|-|♯4|5|-|6|♭7|-"}
+        { "id": "halfWholeII", "name": "Half-Whole (II)", "intervalPattern": "1|♭2|-|♭3|3|-|♯4|5|-|6|♭7|-", "modeDescription": "2nd mode of Whole-Half"}
       ]}
   ];
+
+  private degreeNames: Record<string, string> = {
+    '1':  'Tonic',
+    '♭2': 'Super-tonic',
+    '2':  'Super-tonic',
+    '♭3': 'Mediant',
+    '3':  'Mediant',
+    '4':  'Sub-dominant',
+    '♯4': 'Sub-dominant',
+    '♭5': 'Dominant',
+    '5':  'Dominant',
+    '♭6': 'Sub-mediant',
+    '6':  'Sub-mediant',
+    '♭7': 'Sub-tonic',
+    '7':  'Leading Tone'
+  };
 
   private intervalNoteNames = [
     { id: '1', name: 'Unison' },
@@ -155,7 +171,7 @@ class TheoryController {
 
   async getNoteName(noteIndex: number, noteNaturalIndex: number) {
 
-    if (noteNaturalIndex > this.noteNaturals.length + 1) {
+    if (noteNaturalIndex >= this.noteNaturals.length) {
       noteNaturalIndex = 0;
     }
 
@@ -182,7 +198,7 @@ class TheoryController {
     let noteNaturalIndex = this.noteNaturals.findIndex(note => note.name === rootNatural);
     let scaleIntervals = intervalPattern.split('|');   // e.g., 1|-|2|-|3|4|-|5|-|6|-|7 for major
     let scaleIntervalIndex = 0;
-    let intervalNames = [...this.intervalNoteNames];   // i.e., 1-Unison, b2-Minor 2nd, etc.
+    let intervalNames = this.intervalNoteNames.map(n => ({ ...n }));   // i.e., 1-Unison, b2-Minor 2nd, etc.
     // Set intervals 6 and 18 to either sharp or flat based on scale interval pattern
     if (scaleIntervals[6].includes('♯')) {
       intervalNames[6].id = '♯4';
@@ -206,7 +222,8 @@ class TheoryController {
         name: noteName,
         isDiatonic: isDiatonic,
         intervalNumericReference: intervalNames[0].id,
-        intervalName: intervalNames[0].name
+        intervalName: intervalNames[0].name,
+        degreeName: isDiatonic ? this.degreeNames[intervalNames[0].id] : undefined
       } as Note);
 
       // If current interval is flat or next interval is sharp...
@@ -228,6 +245,12 @@ class TheoryController {
     return result;
   }
 
+  // Enharmonic equivalents that exist in chord patterns but not in intervalNoteNames
+  private enharmonicAliases: Record<string, string> = {
+    '♭♭7': '6',   // Diminished 7th = Major 6th (9 semitones)
+    '♯5':  '♭6',  // Augmented 5th  = Minor 6th  (8 semitones)
+  };
+
   async getChordNotes(scaleNotes: Note[], chordInterval: string): Promise<Note[]> {
 
     let result: Note[] = [];
@@ -242,11 +265,15 @@ class TheoryController {
       if (!note) {
         note = scaleNotes.find(n => n.intervalNumericReference.includes(interval));
       }
+      // Fall back to enharmonic equivalent (e.g. ♭♭7 → 6 for dim7)
+      if (!note && this.enharmonicAliases[interval]) {
+        note = scaleNotes.find(n => n.intervalNumericReference == this.enharmonicAliases[interval]);
+      }
 
       if (!note) { continue };
       result.push({
         name: note.name,
-        intervalNumericReference: interval
+        intervalNumericReference: interval  // preserve the theoretically correct label
       } as Note);
     }
     return result;

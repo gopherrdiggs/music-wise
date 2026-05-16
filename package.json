@@ -1,20 +1,14 @@
 {
   "name": "music-wise",
-  "private": true,
   "version": "0.0.1",
   "description": "music-wise",
-  "files": [
-    "dist/"
-  ],
+  "license": "UNLICENSED",
   "scripts": {
     "build": "stencil build",
-    "start": "stencil build --dev --watch --serve",
-    "test": "stencil test --spec --e2e",
-    "test.watch": "stencil test --spec --e2e --watch",
-    "generate": "stencil generate"
+    "start": "stencil build --dev --watch --serve"
   },
   "devDependencies": {
-    "@ionic/core": "6.5.2",
-    "@stencil/core": "2.6.0"
+    "@ionic/core": "8.8.7",
+    "@stencil/core": "4.21.0"
   }
 }

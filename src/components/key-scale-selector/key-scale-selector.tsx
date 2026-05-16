@@ -93,14 +93,12 @@ export class KeyScaleSelector {
 
   async handleScaleClicked(event: any) {
 
-    let menu = <div style={{ padding: '8px' }}>
-      <ion-content>
-        <ion-list>
-          {this.scaleGroups.map((group) =>
-            this.renderScaleGroupListSection(group)
-          )}
-        </ion-list>
-      </ion-content>
+    let menu = <div style={{ padding: '8px', maxHeight: '400px', overflowY: 'auto' }}>
+      <ion-list>
+        {this.scaleGroups.map((group) =>
+          this.renderScaleGroupListSection(group)
+        )}
+      </ion-list>
     </div>;
 
     await PopoverService.showMenu(event, menu);
@@ -188,9 +186,14 @@ export class KeyScaleSelector {
               <div style={{
                 height: '30px', fontSize: '.8em',
                 color: 'var(--ion-color-medium)',
-                display: 'flex', flexDirection: 'column', justifyContent: 'end'
+                display: 'flex', flexDirection: 'row', alignItems: 'end', gap: '6px'
               }}>
-                Scale
+                <span>Scale</span>
+                {this.selectedScale?.modeDescription &&
+                  <span style={{ fontStyle: 'italic', opacity: '0.75' }}>
+                    {this.selectedScale.modeDescription}
+                  </span>
+                }
               </div>
               <ion-item button detail={false} lines='none' style={{ border: '2px solid gray', borderRadius: '4px', maxWidth: '500px' }}
                 onClick={(e) => this.handleScaleClicked(e)}>
