@@ -87,7 +87,7 @@ export class ProgressionsSection {
   @State() selectedProgressionLabel: string = 'Axis of Awesome';
   @State() activeCategory: string | null = null;
   @State() activeStepIdx: number | null = null;
-  @State() activeAltKey: string | null = null;
+  @State() activeAltKeys: Set<string> = new Set();
   @State() isCollapsed: boolean;
 
   private activeChord: Chord | null = null;
@@ -128,7 +128,7 @@ export class ProgressionsSection {
       this.activeChord = null;
     }
     this.activeStepIdx = null;
-    this.activeAltKey = null;
+    this.activeAltKeys = new Set();
   }
 
   async updateChords() {
@@ -171,12 +171,23 @@ export class ProgressionsSection {
 
   private buildDia7th(degree: number): Chord | null {
     const groupChords = this.chordGroups[degree - 1]?.chords ?? [];
-    return groupChords.find(c => c.intervalPattern.split('|').length === 4) ?? null;
+    return groupChords.find(c => {
+      const tokens = c.intervalPattern.split('|');
+      return tokens.length === 4 && ['7', '♭7', '♭♭7'].includes(tokens[3]);
+    }) ?? null;
+  }
+
+  // Both adjacent secdom chips must be active simultaneously for a mismatch — the
+  // previous step's secondary dominant was built to resolve to this step's diatonic
+  // chord, so swapping this step to its own secdom breaks that resolution.
+  private isSecDomMismatched(stepIdx: number): boolean {
+    if (stepIdx === 0) return false;
+    return this.activeAltKeys.has(`${stepIdx - 1}-secdom`) && this.activeAltKeys.has(`${stepIdx}-secdom`);
   }
 
   private getDisplayChord(step: ProgressionStep, stepIdx: number): Chord | null {
-    if (this.activeAltKey === `${stepIdx}-secdom`) return step.secDom;
-    if (this.activeAltKey === `${stepIdx}-dia7th`) return step.dia7th;
+    if (this.activeAltKeys.has(`${stepIdx}-secdom`)) return step.secDom;
+    if (this.activeAltKeys.has(`${stepIdx}-dia7th`)) return step.dia7th;
     return step.chord;
   }
 
@@ -266,12 +277,12 @@ export class ProgressionsSection {
       this.chordDeselected.emit({ notes: displayChord.notes });
       this.activeStepIdx = null;
       this.activeChord = null;
-      // activeAltKey intentionally preserved — swap persists after deselection
+      // activeAltKeys intentionally preserved — swaps persist after deselection
     } else {
       if (this.activeChord) this.chordDeselected.emit({ notes: this.activeChord.notes });
       this.activeStepIdx = stepIdx;
       this.activeChord = displayChord;
-      // activeAltKey intentionally not cleared — respect chip selection
+      // activeAltKeys intentionally not cleared — respect chip selections
       this.chordSelected.emit({ chordName: displayChord.name, notes: displayChord.notes, color: 'primary' });
     }
   }
@@ -286,8 +297,16 @@ export class ProgressionsSection {
       this.activeChord = null;
     }
 
-    // Toggle the chip — note highlighting requires a separate chord button click
-    this.activeAltKey = this.activeAltKey === altKey ? null : altKey;
+    // Toggle the chip — enforce single selection per step, allow multiple across steps.
+    // Note highlighting requires a separate chord button click.
+    const next = new Set(this.activeAltKeys);
+    if (next.has(altKey)) {
+      next.delete(altKey);
+    } else {
+      next.delete(`${stepIdx}-${altType === 'secdom' ? 'dia7th' : 'secdom'}`);
+      next.add(altKey);
+    }
+    this.activeAltKeys = next;
   }
 
   handleProgressionListClicked(row: ProgressionRow) {
@@ -297,7 +316,7 @@ export class ProgressionsSection {
       this.activeChord = null;
     }
     this.activeStepIdx = null;
-    this.activeAltKey = null;
+    this.activeAltKeys = new Set();
     this.selectedProgressionLabel = row.label;
     this.featuredRow = row;
   }
@@ -313,7 +332,7 @@ export class ProgressionsSection {
     }
     this.activeCategory = category;
     this.activeStepIdx = null;
-    this.activeAltKey = null;
+    this.activeAltKeys = new Set();
     this.buildProgressionRows();
   }
 
@@ -350,8 +369,9 @@ export class ProgressionsSection {
               {this.featuredRow.steps.map((step, stepIdx) => {
                 if (!step.chord) return null;
                 const isStepActive = this.activeStepIdx === stepIdx;
-                const isSecDomActive = this.activeAltKey === `${stepIdx}-secdom`;
-                const isDia7thActive = this.activeAltKey === `${stepIdx}-dia7th`;
+                const isSecDomActive = this.activeAltKeys.has(`${stepIdx}-secdom`);
+                const isDia7thActive = this.activeAltKeys.has(`${stepIdx}-dia7th`);
+                const isSecDomMismatched = this.isSecDomMismatched(stepIdx);
                 const displayChord = this.getDisplayChord(step, stepIdx);
                 return (
                   <div style={{ minWidth: '80px', display: 'flex', flexDirection: 'column',
@@ -378,11 +398,11 @@ export class ProgressionsSection {
                       {step.secDom && (
                         <span style={{ fontSize: '.55em', padding: '2px 5px', borderRadius: '4px',
                                        cursor: 'pointer', userSelect: 'none',
-                                       backgroundColor: isSecDomActive ? 'var(--ion-color-primary)' : 'transparent',
-                                       color: isSecDomActive ? 'var(--ion-color-primary-contrast)' : 'var(--ion-color-medium)',
-                                       border: `1px solid ${isSecDomActive ? 'var(--ion-color-primary)' : 'var(--ion-color-medium-tint)'}` }}
+                                       backgroundColor: isSecDomMismatched ? 'rgba(var(--ion-color-warning-rgb), .15)' : isSecDomActive ? 'var(--ion-color-primary)' : 'transparent',
+                                       color: isSecDomMismatched ? 'var(--ion-color-warning-shade)' : isSecDomActive ? 'var(--ion-color-primary-contrast)' : 'var(--ion-color-medium)',
+                                       border: `1px solid ${isSecDomMismatched ? 'var(--ion-color-warning)' : isSecDomActive ? 'var(--ion-color-primary)' : 'var(--ion-color-medium-tint)'}` }}
                                onClick={(e) => { e.stopPropagation(); this.handleAltChipClicked(stepIdx, 'secdom'); }}>
-                          {step.secDom.name} {'→'}
+                          {isSecDomMismatched ? '⚠ ' : ''}{step.secDom.name} {'→'}
                         </span>
                       )}
                       {step.dia7th && (
@@ -399,6 +419,19 @@ export class ProgressionsSection {
                   </div>
                 );
               })}
+            </div>
+            <div style={{ marginTop: '10px', fontSize: '.58em', color: 'var(--ion-color-medium)',
+                          lineHeight: '1.5', borderTop: '1px solid rgba(var(--ion-color-medium-rgb), .15)',
+                          paddingTop: '8px' }}>
+              <span style={{ fontWeight: '600', color: 'var(--ion-color-dark-tint)' }}>Sec dom →</span>
+              {' replaces the chord with a secondary dominant — a dominant 7th that creates tension resolving into the next chord. '}
+              <span style={{ fontWeight: '600', color: 'var(--ion-color-dark-tint)' }}>Dia 7th</span>
+              {' adds a diatonic 7th to the chord, staying in key for extra color.'}
+              {this.featuredRow?.steps.some((_, i) => this.isSecDomMismatched(i)) && (
+                <div style={{ marginTop: '4px', color: 'var(--ion-color-warning-shade)' }}>
+                  {'⚠ A secondary dominant resolves to the next chord — using one on the following step breaks that resolution.'}
+                </div>
+              )}
             </div>
           </div>
         )}
