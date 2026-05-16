@@ -1,9 +1,12 @@
+export type ChordType = 'triad' | 'seventh' | 'extended' | 'added' | 'altered';
+
 export interface Chord {
   id: string,
   name: string,
   number?: string,
   notes?: Note[],
-  intervalPattern?: string
+  intervalPattern?: string,
+  chordType?: ChordType
 }
 
 export interface ChordGroup {

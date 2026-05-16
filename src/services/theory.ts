@@ -111,40 +111,50 @@ class TheoryController {
 
   private chordGroups: ChordGroup[] = [
     { name: 'Major', chords: [
-      { id: '', name: 'Major', intervalPattern: '1|3|5' },
-      { id: 'maj6', name: 'Major 6th', intervalPattern: '1|3|5|6' },
-      { id: 'maj7', name: 'Major 7th', intervalPattern: '1|3|5|7' },
-      { id: 'maj9', name: 'Major 9th', intervalPattern: '1|3|5|7|9' }
+      { id: '', name: 'Major', intervalPattern: '1|3|5', chordType: 'triad' },
+      { id: 'maj6', name: 'Major 6th', intervalPattern: '1|3|5|6', chordType: 'added' },
+      { id: 'maj7', name: 'Major 7th', intervalPattern: '1|3|5|7', chordType: 'seventh' },
+      { id: 'maj9', name: 'Major 9th', intervalPattern: '1|3|5|7|9', chordType: 'extended' }
     ]},
     { name: 'Minor', chords: [
-      { id: 'min', name: 'Minor', intervalPattern: '1|♭3|5' },
-      { id: 'min6', name: 'Minor 6th', intervalPattern: '1|♭3|5|6' },
-      { id: 'min7', name: 'Minor 7th', intervalPattern: '1|♭3|5|♭7' },
-      { id: 'min9', name: 'Minor 9th', intervalPattern: '1|♭3|5|♭7|9' }
+      { id: 'min', name: 'Minor', intervalPattern: '1|♭3|5', chordType: 'triad' },
+      { id: 'min6', name: 'Minor 6th', intervalPattern: '1|♭3|5|6', chordType: 'added' },
+      { id: 'min7', name: 'Minor 7th', intervalPattern: '1|♭3|5|♭7', chordType: 'seventh' },
+      { id: 'minMaj7', name: 'Minor-Major 7th', intervalPattern: '1|♭3|5|7', chordType: 'seventh' },
+      { id: 'min9', name: 'Minor 9th', intervalPattern: '1|♭3|5|♭7|9', chordType: 'extended' }
     ]},
     { name: 'Dominant', chords: [
-      { id: 'dom7', name: 'Dominant 7th', intervalPattern: '1|3|5|♭7' },
-      { id: 'dom9', name: 'Dominant 9th', intervalPattern: '1|3|5|♭7|9' },
-      { id: 'dom11', name: 'Dominant 11th', intervalPattern: '1|3|5|♭7|9|11' },
-      { id: 'dom13', name: 'Dominant 13th', intervalPattern: '1|3|5|♭7|9|11|13' }
+      { id: 'dom7', name: 'Dominant 7th', intervalPattern: '1|3|5|♭7', chordType: 'seventh' },
+      { id: 'dom9', name: 'Dominant 9th', intervalPattern: '1|3|5|♭7|9', chordType: 'extended' },
+      { id: 'dom11', name: 'Dominant 11th', intervalPattern: '1|3|5|♭7|9|11', chordType: 'extended' },
+      { id: 'dom13', name: 'Dominant 13th', intervalPattern: '1|3|5|♭7|9|11|13', chordType: 'extended' }
     ]},
     { name: 'Diminished', chords: [
-      { id: 'dim', name: 'Diminished', intervalPattern: '1|♭3|♭5' },
-      { id: 'dim7', name: 'Diminished 7th', intervalPattern: '1|♭3|♭5|♭♭7' },
-      { id: 'min7♭5', name: 'Half Diminished', intervalPattern: '1|♭3|♭5|♭7' }
+      { id: 'dim', name: 'Diminished', intervalPattern: '1|♭3|♭5', chordType: 'triad' },
+      { id: 'dim7', name: 'Diminished 7th', intervalPattern: '1|♭3|♭5|♭♭7', chordType: 'seventh' },
+      { id: 'min7♭5', name: 'Half Diminished', intervalPattern: '1|♭3|♭5|♭7', chordType: 'seventh' }
     ]},
-    { name: 'Major Add 9', chords: [
-      { id: 'add9', name: 'Major (Add 9)', intervalPattern: '1|3|5|9' },
-      { id: 'min add9', name: 'Minor (Add 9)', intervalPattern: '1|♭3|5|9' },
-      { id: '6 add9', name: 'Major 6 (Add 9)', intervalPattern: '1|3|5|6|9' },
-      { id: 'min6 add9', name: 'Minor 6 (Add 9)', intervalPattern: '1|♭3|5|6|9' }
+    { name: 'Add 9', chords: [
+      { id: 'add9', name: 'Major (Add 9)', intervalPattern: '1|3|5|9', chordType: 'added' },
+      { id: 'min add9', name: 'Minor (Add 9)', intervalPattern: '1|♭3|5|9', chordType: 'added' },
+      { id: '6 add9', name: 'Major 6 (Add 9)', intervalPattern: '1|3|5|6|9', chordType: 'added' },
+      { id: 'min6 add9', name: 'Minor 6 (Add 9)', intervalPattern: '1|♭3|5|6|9', chordType: 'added' }
     ]},
     { name: 'Augmented', chords: [
-      { id: 'aug', name: 'Augmented', intervalPattern: '1|3|♯5' }
+      { id: 'aug', name: 'Augmented', intervalPattern: '1|3|♯5', chordType: 'triad' },
+      { id: 'augMaj7', name: 'Augmented Major 7th', intervalPattern: '1|3|♯5|7', chordType: 'seventh' },
+      { id: 'aug7', name: 'Augmented 7th', intervalPattern: '1|3|♯5|♭7', chordType: 'seventh' }
     ]},
     { name: 'Suspended', chords: [
-      { id: 'sus2', name: 'Suspended 2', intervalPattern: '1|2|5' },
-      { id: 'sus4', name: 'Suspended 4', intervalPattern: '1|4|5' }
+      { id: 'sus2', name: 'Suspended 2', intervalPattern: '1|2|5', chordType: 'triad' },
+      { id: 'sus4', name: 'Suspended 4', intervalPattern: '1|4|5', chordType: 'triad' },
+      { id: '5', name: 'Power', intervalPattern: '1|5', chordType: 'triad' }
+    ]},
+    { name: 'Altered Dominant', chords: [
+      { id: 'dom7♭5',  name: 'Dominant 7th ♭5',  intervalPattern: '1|3|♭5|♭7',       chordType: 'altered' },
+      { id: 'dom7♭9',  name: 'Dominant 7th ♭9',  intervalPattern: '1|3|5|♭7|♭9',     chordType: 'altered' },
+      { id: 'dom7♯9',  name: 'Dominant 7th ♯9',  intervalPattern: '1|3|5|♭7|♯9',     chordType: 'altered' },
+      { id: 'dom7♯11', name: 'Dominant 7th ♯11', intervalPattern: '1|3|5|♭7|♯11',    chordType: 'altered' }
     ]}
   ];
 
@@ -247,8 +257,10 @@ class TheoryController {
 
   // Enharmonic equivalents that exist in chord patterns but not in intervalNoteNames
   private enharmonicAliases: Record<string, string> = {
-    '♭♭7': '6',   // Diminished 7th = Major 6th (9 semitones)
-    '♯5':  '♭6',  // Augmented 5th  = Minor 6th  (8 semitones)
+    '♭♭7': '6',    // Diminished 7th  = Major 6th       (9 semitones)
+    '♯5':  '♭6',   // Augmented 5th   = Minor 6th        (8 semitones)
+    '♯9':  '♭10',  // Augmented 9th   = Minor 10th      (15 semitones)
+    '♯11': '♭12',  // Augmented 11th  = Diminished 12th (18 semitones)
   };
 
   async getChordNotes(scaleNotes: Note[], chordInterval: string): Promise<Note[]> {
@@ -304,7 +316,8 @@ class TheoryController {
             id: `${note.name}${chord.id}`,
             name: `${note.name} ${chord.name}`,
             notes: await this.getChordNotes(noteScale, chord.intervalPattern),
-            intervalPattern: chord.intervalPattern
+            intervalPattern: chord.intervalPattern,
+            chordType: chord.chordType
           } as Chord);
         }
       }
