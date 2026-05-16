@@ -1,6 +1,6 @@
 import { Component, h, Event, EventEmitter, Listen, Prop, State } from "@stencil/core";
 import { Note } from "../../interfaces/application";
-import { PopoverService } from "../../services/popover";
+import { TheoryService } from "../../services/theory";
 
 @Component({
   tag: 'chord-box',
@@ -13,100 +13,102 @@ export class ChordBox {
 
   @Prop() chordNumber: string;
   @Prop() chordName: string;
-  @Prop() chordNotes: Note[]; // = 'C • E • G';
+  @Prop() chordNotes: Note[];
 
-  @State() boxColor: string = 'light';
+  @State() isSelected: boolean = false;
+
+  private allNotes: Note[] = [];
+
+  async componentWillLoad() {
+    this.allNotes = await TheoryService.getNotes();
+  }
 
   @Listen('keyChanged', { target: 'body' })
-  async handleKeyChanged(_event: any) {
-    this.boxColor = 'light';
+  handleKeyChanged(_event: any) {
+    this.isSelected = false;
   }
 
   @Listen('keyAlterationChanged', { target: 'body' })
-  async handleKeyAlterationChanged(_event: any) {
-    this.boxColor = 'light';
+  handleKeyAlterationChanged(_event: any) {
+    this.isSelected = false;
   }
 
   @Listen('scaleChanged', { target: 'body' })
-  async handleScaleChanged(_event: any) {
-    this.boxColor = 'light';
+  handleScaleChanged(_event: any) {
+    this.isSelected = false;
   }
 
-  async handleBoxClicked(event: any) {
-
-    let content = <div style={{ padding: '8px'}}>
-      <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <ion-button color='light' 
-                    onClick={()=>this.handleChordColorSelected()} >
-          <ion-icon slot='icon-only' name='close-circle-outline' />
-        </ion-button>
-        <ion-button color='primary' style={{ width: '55px' }}
-                    onClick={()=>this.handleChordColorSelected('primary')} />
-        <ion-button color='secondary' style={{ width: '55px' }}
-                    onClick={()=>this.handleChordColorSelected('secondary')} />
-        <ion-button color='tertiary' style={{ width: '55px' }}
-                    onClick={()=>this.handleChordColorSelected('tertiary')} />
-      </div>
-    </div>;
-
-    let popover = await PopoverService.create({
-      component: 'popover-menu',
-      componentProps: {
-        content: content
-      },
-      event: event,
-      showBackdrop: false
-    });
-
-    await popover.present();
-  }
-
-  async handleChordColorSelected(color?: 'primary' | 'secondary' | 'tertiary') {
-
-    if (!color) {      
-      this.boxColor = 'light';
-      this.chordDeselected.emit({
-        chordName: this.chordName,
-        notes: this.chordNotes
-      });
+  @Listen('chordSelected', { target: 'body' })
+  handleGlobalChordSelected(event: any) {
+    if (event.detail.chordName !== this.chordName && this.isSelected) {
+      this.isSelected = false;
     }
-    else {
-      this.boxColor = color;
+  }
+
+  @Listen('chordDeselected', { target: 'body' })
+  handleGlobalChordDeselected(_event: any) {
+    if (this.isSelected) {
+      this.isSelected = false;
+    }
+  }
+
+  private buildEnharmonicMap(): Record<string, string> {
+    const map: Record<string, string> = {};
+    for (const chordNote of this.chordNotes) {
+      const chromIdx = this.allNotes.findIndex(n => n.name.split(' / ').includes(chordNote.name));
+      if (chromIdx < 0) continue;
+      for (const altName of this.allNotes[chromIdx].name.split(' / ')) {
+        if (altName !== chordNote.name) map[altName] = chordNote.name;
+      }
+    }
+    return map;
+  }
+
+  handleBoxClicked() {
+    if (this.isSelected) {
+      this.isSelected = false;
+      this.chordDeselected.emit({ chordName: this.chordName, notes: this.chordNotes });
+    } else {
+      this.isSelected = true;
       this.chordSelected.emit({
         chordName: this.chordName,
         notes: this.chordNotes,
-        color: color
+        enharmonicMap: this.buildEnharmonicMap(),
+        color: 'primary'
       });
     }
-
-    await PopoverService.dismiss();
   }
 
   render() {
+    const color = this.isSelected ? 'primary' : 'light';
     return [
-      <div style={{ width: '100px', 
-                    display: 'flex', flexDirection: 'column' }}
-           onClick={(e)=>this.handleBoxClicked(e)}>
-        <div style={{ color: 'var(--ion-color-dark)', 
+      <div style={{ width: '100px', display: 'flex', flexDirection: 'column',
+                    userSelect: 'none', cursor: 'pointer' }}
+           onClick={() => this.handleBoxClicked()}>
+        <div style={{ color: 'var(--ion-color-dark)',
                       height: '40px', padding: '8px',
                       display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           {this.chordNumber}
         </div>
         <div class="ion-activatable ripple-parent"
-             style={{ backgroundColor: `var(--ion-color-${this.boxColor})`,
-                      color: `var(--ion-color-${this.boxColor}-contrast)`, 
-                      padding: '24px', border: '2px solid gray', 
-                      height: '80px', textAlign: 'center',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          {this.chordName.replace('♭', '\u266D').replace('♯', '\u266F')}
+             style={{ backgroundColor: `var(--ion-color-${color})`,
+                      color: `var(--ion-color-${color}-contrast)`,
+                      border: '2px solid gray',
+                      height: '90px', boxSizing: 'border-box',
+                      display: 'flex', flexDirection: 'column',
+                      alignItems: 'center', justifyContent: 'center',
+                      gap: '5px', padding: '6px', textAlign: 'center' }}>
+          <div style={{ fontSize: '.85em', fontWeight: 'bold', lineHeight: '1.2' }}>
+            {this.chordName.replace('♭', '♭').replace('♯', '♯')}
+          </div>
+          <div style={{ fontSize: '.52em', lineHeight: '1.4', opacity: '0.9',
+                        display: 'flex', flexWrap: 'wrap',
+                        justifyContent: 'center', gap: '10px' }}>
+            {this.chordNotes.map(n => <span>{n.name}</span>)}
+          </div>
           <ion-ripple-effect />
         </div>
-        <div style={{ color: 'var(--ion-color-medium)', 
-                      fontSize: '.6em',
-                      padding: '8px', textAlign: 'center' }}>
-          {this.chordNotes.map(n => n.name).join(' • ')}
-        </div>
       </div>
-    ]
+    ];
   }
 }

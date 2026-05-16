@@ -23,6 +23,7 @@ export class NoteBox {
 
   selectedKey: string;
   keyNotes: Note[] = [];
+  private originalNoteName: string | null = null;
   
   async componentWillLoad() {
     this.selectedKey = App.state.currentKey
@@ -53,18 +54,31 @@ export class NoteBox {
 
   @Listen('chordDeselected', { target: 'body' })
   async handleChordDeselected(event: any) {
+    const wasEnharmonic = this.originalNoteName !== null;
+    const restoreName = this.originalNoteName ?? this.noteName;
+    if (wasEnharmonic) {
+      this.noteName = this.originalNoteName;
+      this.originalNoteName = null;
+    }
     const notes = event.detail?.notes;
-    if (!notes || notes.find((n: Note) => n.name === this.noteName)) {
-      this.boxColor = this.noteName === this.selectedKey
-        ? 'secondary'
-        : this.isDiatonic ? 'tertiary' : 'light';
+    const isTonic = restoreName === this.selectedKey;
+    if (wasEnharmonic || isTonic || !notes || notes.find((n: Note) => n.name === restoreName)) {
+      this.boxColor = isTonic ? 'secondary' : this.isDiatonic ? 'tertiary' : 'light';
     }
   }
 
   @Listen('chordSelected', { target: 'body' })
   async handleChordSelected(event: any) {
-    if (event.detail.notes.find((n: Note) => n.name == this.noteName)) {
+    const notes: Note[] = event.detail.notes;
+    const enharmonicMap: Record<string, string> = event.detail.enharmonicMap ?? {};
+    if (notes.find((n: Note) => n.name === this.noteName)) {
       this.boxColor = event.detail.color;
+    } else if (enharmonicMap[this.noteName]) {
+      this.originalNoteName = this.noteName;
+      this.noteName = enharmonicMap[this.noteName];
+      this.boxColor = event.detail.color;
+    } else if (this.isDiatonic || this.noteName === this.selectedKey) {
+      this.boxColor = 'tertiary';
     }
   }
 

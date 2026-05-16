@@ -177,6 +177,18 @@ export class ProgressionsSection {
     }) ?? null;
   }
 
+  private buildEnharmonicMap(chordNotes: Note[]): Record<string, string> {
+    const map: Record<string, string> = {};
+    for (const chordNote of chordNotes) {
+      const chromIdx = this.allNotes.findIndex(n => n.name.split(' / ').includes(chordNote.name));
+      if (chromIdx < 0) continue;
+      for (const altName of this.allNotes[chromIdx].name.split(' / ')) {
+        if (altName !== chordNote.name) map[altName] = chordNote.name;
+      }
+    }
+    return map;
+  }
+
   // Both adjacent secdom chips must be active simultaneously for a mismatch — the
   // previous step's secondary dominant was built to resolve to this step's diatonic
   // chord, so swapping this step to its own secdom breaks that resolution.
@@ -283,7 +295,7 @@ export class ProgressionsSection {
       this.activeStepIdx = stepIdx;
       this.activeChord = displayChord;
       // activeAltKeys intentionally not cleared — respect chip selections
-      this.chordSelected.emit({ chordName: displayChord.name, notes: displayChord.notes, color: 'primary' });
+      this.chordSelected.emit({ chordName: displayChord.name, notes: displayChord.notes, enharmonicMap: this.buildEnharmonicMap(displayChord.notes), color: 'primary' });
     }
   }
 
@@ -374,7 +386,7 @@ export class ProgressionsSection {
                 const isSecDomMismatched = this.isSecDomMismatched(stepIdx);
                 const displayChord = this.getDisplayChord(step, stepIdx);
                 return (
-                  <div style={{ minWidth: '80px', display: 'flex', flexDirection: 'column',
+                  <div style={{ minWidth: '110px', display: 'flex', flexDirection: 'column',
                                 alignItems: 'center', userSelect: 'none' }}>
                     <div style={{ color: 'var(--ion-color-medium)', fontSize: '.6em',
                                   height: '20px', display: 'flex', alignItems: 'center',
@@ -385,12 +397,20 @@ export class ProgressionsSection {
                          style={{ backgroundColor: `var(--ion-color-${isStepActive ? 'primary' : 'light'})`,
                                   color: `var(--ion-color-${isStepActive ? 'primary' : 'light'}-contrast)`,
                                   border: '2px solid gray',
-                                  height: '55px', width: '100%', position: 'relative', overflow: 'hidden',
-                                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                  textAlign: 'center', fontSize: '.78em', borderRadius: '2px',
-                                  padding: '4px', cursor: 'pointer', boxSizing: 'border-box' }}
+                                  height: '75px', width: '100%', position: 'relative', overflow: 'hidden',
+                                  display: 'flex', flexDirection: 'column',
+                                  alignItems: 'center', justifyContent: 'center',
+                                  textAlign: 'center', borderRadius: '2px',
+                                  gap: '4px', padding: '4px', cursor: 'pointer', boxSizing: 'border-box' }}
                          onClick={() => this.handleFeaturedStepClicked(stepIdx)}>
-                      {displayChord?.name}
+                      <div style={{ fontSize: '.78em', fontWeight: 'bold', lineHeight: '1.2' }}>
+                        {displayChord?.name}
+                      </div>
+                      <div style={{ fontSize: '.48em', lineHeight: '1.3', opacity: '0.9',
+                                    display: 'flex', flexWrap: 'wrap',
+                                    justifyContent: 'center', gap: '10px' }}>
+                        {displayChord?.notes.map(n => <span>{n.name}</span>)}
+                      </div>
                       <ion-ripple-effect />
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'row', gap: '3px',
