@@ -1,6 +1,7 @@
 import { Component, h, Listen, State } from "@stencil/core";
-import { Scale } from "../../interfaces/application";
+import { Note, Scale } from "../../interfaces/application";
 import { App } from "../../services/app-state";
+import { ChordVoicing, generateChordVoicings } from "../../services/chord-voicings";
 
 @Component({
   tag: 'guitar-section'
@@ -11,6 +12,9 @@ export class GuitarSection {
   @State() selectedKeyAlteration: string;
   @State() selectedScale: Scale;
   @State() isCollapsed: boolean;
+  @State() chordVoicings: ChordVoicing[] = [];
+  @State() activeVoicingIdx: number = -1;
+  @State() activeChordName: string = '';
 
   async componentWillLoad() {
     this.selectedKey = App.state.currentKey;
@@ -21,20 +25,84 @@ export class GuitarSection {
   @Listen('keyChanged', { target: 'body' })
   async handleKeyChanged(event: any) {
     this.selectedKey = event.detail.key;
+    this.clearVoicings();
   }
 
   @Listen('keyAlterationChanged', { target: 'body' })
   async handleKeyAlterationChanged(event: any) {
     this.selectedKeyAlteration = event.detail.keyAlteration;
+    this.clearVoicings();
   }
 
   @Listen('scaleChanged', { target: 'body' })
   async handleScaleChanged(event: any) {
     this.selectedScale = event.detail.scale;
+    this.clearVoicings();
+  }
+
+  @Listen('chordSelected', { target: 'body' })
+  handleChordSelected(event: any) {
+    const notes: Note[] = event.detail.notes;
+    const tuning = App.state.guitarTuning;
+    this.activeChordName = event.detail.chordName ?? '';
+    this.chordVoicings = generateChordVoicings(notes, tuning);
+    this.activeVoicingIdx = -1;
+    this.dispatchVoicingEvent(null);
+  }
+
+  @Listen('chordDeselected', { target: 'body' })
+  handleChordDeselected() {
+    this.clearVoicings();
+  }
+
+  private clearVoicings() {
+    this.chordVoicings = [];
+    this.activeVoicingIdx = -1;
+    this.activeChordName = '';
+    this.dispatchVoicingEvent(null);
+  }
+
+  private dispatchVoicingEvent(voicing: ChordVoicing | null) {
+    document.body.dispatchEvent(new CustomEvent('chordVoicingSelected', {
+      bubbles: true,
+      detail: voicing
+    }));
+  }
+
+  private handleVoicingChipClicked(idx: number) {
+    if (this.activeVoicingIdx === idx) {
+      this.activeVoicingIdx = -1;
+      this.dispatchVoicingEvent(null);
+    } else {
+      this.activeVoicingIdx = idx;
+      this.dispatchVoicingEvent(this.chordVoicings[idx]);
+    }
   }
 
   async handleSectionHeaderClicked() {
     this.isCollapsed = !this.isCollapsed;
+  }
+
+  renderVoicingChips() {
+    if (this.chordVoicings.length === 0) return null;
+    return (
+      <div style={{ margin: '4px 44px 0', display: 'flex', flexWrap: 'wrap',
+                    gap: '8px', alignItems: 'center' }}>
+        <span style={{ fontSize: '.8em', color: 'var(--ion-color-medium)',
+                       fontStyle: 'italic', marginRight: '4px' }}>
+          {this.activeChordName} voicings:
+        </span>
+        {this.chordVoicings.map((v, i) => (
+          <ion-chip
+            color={this.activeVoicingIdx === i ? 'primary' : 'medium'}
+            onClick={() => this.handleVoicingChipClicked(i)}
+            style={{ cursor: 'pointer', fontSize: '.8em' }}
+          >
+            {v.label}
+          </ion-chip>
+        ))}
+      </div>
+    );
   }
 
   render() {
@@ -47,10 +115,11 @@ export class GuitarSection {
           GUITAR
         </h1>
       </div>,
+      !this.isCollapsed && this.renderVoicingChips(),
       !this.isCollapsed &&
-      <div style={{ display: 'flex', flexDirection: 'row', 
-                    alignItems: 'center', 
-                    margin: '24px 44px', 
+      <div style={{ display: 'flex', flexDirection: 'row',
+                    alignItems: 'center',
+                    margin: '24px 44px',
                     paddingBottom: '20px',
                     overflowX: 'scroll' }}>
         <guitar-nut />

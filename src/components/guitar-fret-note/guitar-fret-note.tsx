@@ -2,6 +2,7 @@ import { Component, h, Listen, Prop, State } from "@stencil/core";
 import { Note } from "../../interfaces/application";
 import { App } from "../../services/app-state";
 import { TheoryService } from "../../services/theory";
+import { ChordVoicing } from "../../services/chord-voicings";
 
 @Component({
   tag: 'guitar-fret-note'
@@ -13,10 +14,13 @@ export class GuitarFretNote {
   @Prop({ mutable: true }) noteColor: string = 'tertiary';
   @Prop() stringSize: 'small' | 'medium' | 'large' = 'medium';
   @Prop() isNut: boolean;
-  
+
   @State() noteName: string;
   @State() isDiatonic: boolean;
   @State() showButton: boolean;
+  @State() voicingActive: boolean = false;
+  @State() isVoicingFingered: boolean = false;
+  @State() isVoicingBarre: boolean = false;
 
   selectedKey: string;
   keyNotes: Note[] = [];
@@ -93,6 +97,30 @@ export class GuitarFretNote {
         this.showButton = false;
       }
     }
+    this.voicingActive = false;
+    this.isVoicingFingered = false;
+    this.isVoicingBarre = false;
+  }
+
+  @Listen('chordVoicingSelected', { target: 'body' })
+  handleChordVoicingSelected(event: any) {
+    const voicing: ChordVoicing | null = event.detail;
+    if (!voicing) {
+      this.voicingActive = false;
+      this.isVoicingFingered = false;
+      this.isVoicingBarre = false;
+      return;
+    }
+    this.voicingActive = true;
+    this.isVoicingFingered = voicing.positions.some(
+      p => p.fret === this.fretNumber && p.string === this.stringNumber
+    );
+    this.isVoicingBarre =
+      voicing.barreFret === this.fretNumber &&
+      voicing.barreHighString !== undefined &&
+      voicing.barreLowString  !== undefined &&
+      this.stringNumber >= voicing.barreHighString &&
+      this.stringNumber <= voicing.barreLowString;
   }
 
   async updateNote() {
@@ -109,7 +137,7 @@ export class GuitarFretNote {
       case 5: { stringStartNote = this.currentTuning[1]; break; }
       case 6: { stringStartNote = this.currentTuning[0]; break; }
     }
-    
+
     // Find the index of ALL notes that matches what the standard open note name would be for the string
     let allNotesIndex = await TheoryService.getNoteIndex(stringStartNote);
     // Get index of key notes where key note matches one of the possible all note names for the current fret/string note
@@ -125,7 +153,7 @@ export class GuitarFretNote {
 
     this.noteName = this.keyNotes[0].name;
     this.isDiatonic = this.keyNotes[0].isDiatonic;
-    
+
     if (this.noteName == this.selectedKey) {
       this.noteColor = 'secondary';
       this.showButton = true;
@@ -141,6 +169,8 @@ export class GuitarFretNote {
   }
 
   render() {
+    const buttonOpacity = this.voicingActive && !this.isVoicingFingered ? '0.25' : '1';
+
     return [
       <div style={{ height: '30px', width: '60px',
                     padding: '2px',
@@ -149,9 +179,9 @@ export class GuitarFretNote {
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     borderLeft: this.isNut ? 'none' : '3px solid rgb(161, 161, 161)',
                     borderRight: '2px solid rgb(190, 190, 190)' }}>
-        {!this.isNut && 
+        {!this.isNut &&
           <div style={{ position: 'absolute', top: '45%', left: '-4px',
-                        width: '110%', height: 
+                        width: '110%', height:
                         this.stringSize == 'small' ? '2px' : this.stringSize == 'medium' ? '3px' : '5px',
                         background: 'linear-gradient(0deg, rgba(153,153,153,1) 0%, rgba(235,235,235,1) 52%, rgba(153,153,153,1) 100%)',
                         '-webkit-box-shadow': '4px 2px 1px 0px rgba(0,0,0,0.5)',
@@ -160,6 +190,7 @@ export class GuitarFretNote {
         }
         {this.showButton && (
           <div style={{ display: 'inline-flex', alignItems: 'center',
+                        opacity: buttonOpacity,
                         ...(this.noteName === this.selectedKey
                           ? { borderLeft: '2px solid var(--ion-color-secondary)',
                               borderRight: '2px solid var(--ion-color-secondary)',
@@ -169,11 +200,39 @@ export class GuitarFretNote {
             <ion-button color={this.noteColor} size='small' shape='round'
                         style={{ padding: '0px', margin: '0px',
                                  height: '22px', width: '40px' }}>
-              {this.noteName.replace('♭', '\u266D').replace('♯', '\u266F')}
+              {this.noteName.replace('♭', '♭').replace('♯', '♯')}
             </ion-button>
           </div>
         )}
+
+        {/* Barre bar segment — left edge of cell, spans full height, joins with adjacent cells */}
+        {this.isVoicingBarre && !this.isNut && (
+          <div style={{
+            position: 'absolute',
+            top: '0px', bottom: '0px', left: '5px',
+            width: '10px',
+            backgroundColor: 'var(--ion-color-primary)',
+            opacity: '0.65',
+            zIndex: '9',
+            pointerEvents: 'none'
+          }} />
+        )}
+
+        {/* Fingering dot — centered in cell, on top of everything */}
+        {this.isVoicingFingered && (
+          <div style={{
+            position: 'absolute',
+            top: '50%', left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '20px', height: '20px',
+            backgroundColor: 'var(--ion-color-dark)',
+            border: '2px solid white',
+            borderRadius: '50%',
+            zIndex: '12',
+            pointerEvents: 'none'
+          }} />
+        )}
       </div>
-    ]    
+    ]
   }
 }
