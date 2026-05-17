@@ -2,6 +2,7 @@ import { Component, h, Listen, Prop, State } from "@stencil/core";
 import { Note } from "../../interfaces/application";
 import { App } from "../../services/app-state";
 import { TheoryService } from "../../services/theory";
+import { PianoVoicing } from "../../services/piano-voicings";
 
 @Component({
   tag: 'piano-key'
@@ -10,10 +11,13 @@ export class PianoKey {
 
   @Prop() keyNumber: number;
   @Prop() isBlack: boolean;
+  @Prop() octave: number = 1;
 
   @State() noteName: string;
   @State() isDiatonic: boolean;
   @State() noteColor: string;
+  @State() voicingActive: boolean = false;
+  @State() isVoicingNote: boolean = false;
 
   selectedKey: string;
   keyNotes: Note[] = [];
@@ -65,6 +69,20 @@ export class PianoKey {
     }
   }
 
+  @Listen('pianoVoicingSelected', { target: 'body' })
+  handlePianoVoicingSelected(event: any) {
+    const voicing: PianoVoicing | null = event.detail;
+    if (!voicing) {
+      this.voicingActive = false;
+      this.isVoicingNote = false;
+      return;
+    }
+    this.voicingActive = true;
+    this.isVoicingNote = voicing.notes.some(
+      n => n.keyNumber === this.keyNumber && n.octave === this.octave
+    );
+  }
+
   @Listen('chordDeselected', { target: 'body' })
   async handleChordDeselected(event: any) {
     const wasEnharmonic = this.originalNoteName !== null;
@@ -84,6 +102,8 @@ export class PianoKey {
         this.noteColor = this.isBlack ? 'medium' : 'light';
       }
     }
+    this.voicingActive = false;
+    this.isVoicingNote = false;
   }
 
   async updateNote() {
@@ -133,9 +153,12 @@ export class PianoKey {
 
   renderWhiteKey() {
     const isTonic = this.noteName === this.selectedKey;
+    const opacity = this.voicingActive && !this.isVoicingNote ? '0.25' : '1';
     return [
       <div class="ion-activatable ripple-parent"
            style={{ height: '200px', width: '60px',
+                    position: 'relative',
+                    opacity,
                     backgroundColor: `var(--ion-color-${this.noteColor})`,
                     color: `var(--ion-color-${this.noteColor}-contrast)`,
                     border: '1px solid lightgray',
@@ -147,6 +170,15 @@ export class PianoKey {
                     display: 'flex', alignItems: 'end', justifyContent: 'center',
                     paddingBottom: '10px' }} >
         {this.noteName}
+        {this.isVoicingNote && (
+          <div style={{ position: 'absolute', bottom: '30px', left: '50%',
+                        transform: 'translateX(-50%)',
+                        width: '18px', height: '18px',
+                        backgroundColor: 'var(--ion-color-dark)',
+                        border: '2px solid white',
+                        borderRadius: '50%',
+                        zIndex: '5', pointerEvents: 'none' }} />
+        )}
         <ion-ripple-effect />
       </div>
     ]
@@ -154,10 +186,12 @@ export class PianoKey {
 
   renderBlackKey() {
     const isTonic = this.noteName === this.selectedKey;
+    const opacity = this.voicingActive && !this.isVoicingNote ? '0.25' : '1';
     return [
       <div class="ion-activatable ripple-parent"
            style={{ height: '125px', width: '35px',
                     position: 'relative', left: '-50px',
+                    opacity,
                     backgroundColor: `var(--ion-color-${this.noteColor})`,
                     color: `var(--ion-color-${this.noteColor}-contrast)`,
                     ...(isTonic
@@ -171,6 +205,15 @@ export class PianoKey {
                     display: 'flex', alignItems: 'end', justifyContent: 'center',
                     paddingBottom: '10px' }} >
         {this.noteName.replace('♭', '\u266D').replace('♯', '\u266F')}
+        {this.isVoicingNote && (
+          <div style={{ position: 'absolute', bottom: '30px', left: '50%',
+                        transform: 'translateX(-50%)',
+                        width: '14px', height: '14px',
+                        backgroundColor: 'white',
+                        border: '2px solid var(--ion-color-dark)',
+                        borderRadius: '50%',
+                        zIndex: '5', pointerEvents: 'none' }} />
+        )}
         <ion-ripple-effect />
       </div>
     ]

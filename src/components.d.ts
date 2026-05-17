@@ -59,8 +59,10 @@ export namespace Components {
     interface PianoKey {
         "isBlack": boolean;
         "keyNumber": number;
+        "octave": number;
     }
     interface PianoKeyGroup {
+        "octave": number;
     }
     interface PianoSection {
     }
@@ -381,8 +383,10 @@ declare namespace LocalJSX {
     interface PianoKey {
         "isBlack"?: boolean;
         "keyNumber"?: number;
+        "octave"?: number;
     }
     interface PianoKeyGroup {
+        "octave"?: number;
     }
     interface PianoSection {
     }
