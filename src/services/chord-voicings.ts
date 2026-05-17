@@ -41,6 +41,87 @@ function findFret(noteSemi: number, openSemi: number): number {
   return ((noteSemi - openSemi) % 12 + 12) % 12;
 }
 
+function nearestFretFor(targetSemi: number, openSemi: number, nearFret: number): number {
+  const base = ((targetSemi - openSemi) % 12 + 12) % 12;
+  const candidates = [base, base + 12, base + 24].filter(f => f <= 22);
+  if (candidates.length === 0) return -1;
+  return candidates.reduce((best, c) =>
+    Math.abs(c - nearFret) < Math.abs(best - nearFret) ? c : best);
+}
+
+function intervalToRole(interval: number): VoicingPosition['role'] {
+  if (interval === 0) return 'root';
+  if (interval === 3 || interval === 4) return '3rd';
+  if (interval === 6 || interval === 7 || interval === 8) return '5th';
+  return '7th';
+}
+
+function buildExtSuffix(extIntervals: number[]): string {
+  if (extIntervals.includes(11)) return '+M7';
+  if (extIntervals.includes(10)) return '+7';
+  if (extIntervals.includes(9)) return '+°7';
+  if (extIntervals.includes(2)) return '+9';
+  return '';
+}
+
+function tryExtendPositions(
+  positions: VoicingPosition[],
+  strOpen: number[],
+  rootSemi: number,
+  targetInterval: number,
+  barreFret?: number
+): VoicingPosition[] | null {
+  const targetSemi = (rootSemi + targetInterval) % 12;
+
+  const roleCounts: Record<string, number> = {};
+  for (const p of positions) {
+    roleCounts[p.role] = (roleCounts[p.role] ?? 0) + 1;
+  }
+
+  const candidates: Array<{ posIdx: number; newFret: number; priority: number }> = [];
+
+  for (let i = 0; i < positions.length; i++) {
+    const p = positions[i];
+    const si = 6 - p.string; // string 1 (high E) → si=5; string 6 (low E) → si=0
+
+    let basePriority: number;
+    if (p.role === 'root' && roleCounts['root'] > 1)      basePriority = 0;
+    else if (p.role === '5th' && roleCounts['5th'] > 1)   basePriority = 1;
+    else if (p.role === '5th')                             basePriority = 2;
+    else if (p.role === '3rd' && roleCounts['3rd'] > 1)   basePriority = 3;
+    else continue; // never substitute single root or single 3rd
+
+    const newFret = nearestFretFor(targetSemi, strOpen[si], p.fret);
+    if (newFret < 0 || newFret > 22) continue;
+    if (barreFret !== undefined && newFret < barreFret) continue;
+
+    // Lower priority number = better candidate; prefer high strings (lower string number)
+    candidates.push({ posIdx: i, newFret, priority: basePriority * 10 + p.string });
+  }
+
+  if (candidates.length === 0) return null;
+  candidates.sort((a, b) => a.priority - b.priority);
+
+  for (const cand of candidates) {
+    const newPositions = positions.map((p, i) => {
+      if (i !== cand.posIdx) return p;
+      const si = 6 - p.string;
+      const noteInterval = ((strOpen[si] + cand.newFret - rootSemi) % 12 + 12) % 12;
+      return { ...p, fret: cand.newFret, role: intervalToRole(noteInterval) };
+    });
+
+    const frettedFrets = newPositions.filter(p => p.fret > 0).map(p => p.fret);
+    if (frettedFrets.length > 0) {
+      const span = Math.max(...frettedFrets) - Math.min(...frettedFrets);
+      if (span > 4) continue;
+    }
+
+    return newPositions;
+  }
+
+  return null;
+}
+
 function fretToRoman(fret: number): string {
   const r = ['Open','I','II','III','IV','V','VI','VII','VIII','IX','X',
              'XI','XII','XIII','XIV','XV','XVI','XVII','XVIII','XIX','XX','XXI','XXII'];
@@ -131,10 +212,6 @@ export function generateChordVoicings(chordNotes: Note[], tuning: string[]): Cho
       const has5th  = positions.some(p => p.role === '5th');
       if (!hasRoot || !has3rd || !has5th || positions.length < 3) continue;
 
-      const frettedFrets = positions.filter(p => p.fret > 0).map(p => p.fret);
-      const minFret = frettedFrets.length > 0 ? Math.min(...frettedFrets) : 0;
-      const maxFret = positions.length > 0 ? Math.max(...positions.map(p => p.fret)) : 0;
-
       let barreFret: number | undefined;
       let barreHighString: number | undefined;
       let barreLowString: number | undefined;
@@ -146,10 +223,28 @@ export function generateChordVoicings(chordNotes: Note[], tuning: string[]): Cho
         barreLowString  = Math.max(...barreNums);
       }
 
+      // Attempt to add 7th or other extended intervals
+      const extIntervals = intervals.filter(i => ![0, 3, 4, 6, 7, 8].includes(i));
+      let finalPositions = positions;
+      let extSuffix = '';
+
+      if (extIntervals.length > 0) {
+        const targetInterval = [11, 10, 9, 2].find(i => extIntervals.includes(i)) ?? extIntervals[0];
+        const extended = tryExtendPositions(positions, strOpen, rootSemi, targetInterval, barreFret);
+        if (extended !== null) {
+          finalPositions = extended;
+          extSuffix = buildExtSuffix(extIntervals);
+        }
+      }
+
+      const frettedFrets = finalPositions.filter(p => p.fret > 0).map(p => p.fret);
+      const minFret = frettedFrets.length > 0 ? Math.min(...frettedFrets) : 0;
+      const maxFret = finalPositions.length > 0 ? Math.max(...finalPositions.map(p => p.fret)) : 0;
+
       voicings.push({
         shapeName: shape.name,
-        label: `${shape.name} · ${fretToRoman(rootFret)}`,
-        positions,
+        label: `${shape.name} · ${fretToRoman(rootFret)}${extSuffix}`,
+        positions: finalPositions,
         barreFret,
         barreHighString,
         barreLowString,
