@@ -78,10 +78,14 @@ function tryExtendPositions(
     roleCounts[p.role] = (roleCounts[p.role] ?? 0) + 1;
   }
 
+  // Never substitute the lowest sounding string — it defines the bass note
+  const lowestString = Math.max(...positions.map(p => p.string));
+
   const candidates: Array<{ posIdx: number; newFret: number; priority: number }> = [];
 
   for (let i = 0; i < positions.length; i++) {
     const p = positions[i];
+    if (p.string === lowestString) continue;
     const si = 6 - p.string; // string 1 (high E) → si=5; string 6 (low E) → si=0
 
     let basePriority: number;
