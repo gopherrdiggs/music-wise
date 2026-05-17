@@ -85,7 +85,7 @@ export class ProgressionsSection {
   @State() progressionRows: ProgressionRow[] = [];
   @State() featuredRow: ProgressionRow | null = null;
   @State() selectedProgressionLabel: string = 'Axis of Awesome';
-  @State() activeCategory: string | null = null;
+  @State() activeCategory: string | null = 'Pop / Rock';
   @State() activeStepIdx: number | null = null;
   @State() activeAltKeys: Set<string> = new Set();
   @State() isCollapsed: boolean;
